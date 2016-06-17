@@ -2,13 +2,14 @@
 using AngleSharp.Dom;
 using OverwatchDotNet.Internal;
 using System.Threading.Tasks;
+using System;
 
 namespace OverwatchDotNet.OverwatchData
 {
     /// <summary>
     /// The featured stats of an Overwatch player - Averages across all heroes in all games.
     /// </summary>
-    public class FeaturedStats : IStatModule
+    public class FeaturedStats
     {
         public float Eliminations { get; private set; }
         public float DamageDone { get; private set; }

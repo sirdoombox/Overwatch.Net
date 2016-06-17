@@ -1,25 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using AngleSharp.Dom;
 using OverwatchDotNet.Internal;
 using AngleSharp;
+using OverwatchDotNet.Core;
+using System;
 
 namespace OverwatchDotNet.OverwatchData
 {
-    public class AverageData : IStatModule
+    public class AverageStats
     {
+        [OverwatchStat("Melee Final Blows - Average")]
         public float MeleeFinalBlows { get; private set; }
+
+        [OverwatchStat("Final Blows - Average")]
         public float FinalBlows { get; private set; }
+
+        [OverwatchStat("Time Spent on Fire - Average")]
         public float TimeSpentonFire { get; private set; }
+
+        [OverwatchStat("Solo Kills - Average")]
         public float SoloKills { get; private set; }
+
+        [OverwatchStat("Objective Time - Average")]
         public float ObjectiveTime { get; private set; }
+
+        [OverwatchStat("Objective Kills - Average")]
         public float ObjectiveKills { get; private set; }
+
+        [OverwatchStat("Healing Done - Average")]
         public float HealingDone { get; private set; }
+
+        [OverwatchStat("Final Blows - Average")]
         public float Deaths { get; private set; }
+
+        [OverwatchStat("Deaths - Average")]
         public float DamageDone { get; private set; }
+
+        [OverwatchStat("Eliminations - Average")]
         public float Eliminations { get; private set; }
 
         public void LoadFromURL(string url)

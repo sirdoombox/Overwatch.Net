@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OverwatchDotNet.OverwatchData
 {
-    public class DeathData : IStatModule
+    public class DeathStats
     {
         public float Deaths { get; private set; }
         public float EnvironmentalDeaths { get; private set; }

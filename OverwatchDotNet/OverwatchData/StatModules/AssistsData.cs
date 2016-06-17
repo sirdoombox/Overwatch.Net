@@ -1,18 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using AngleSharp.Dom;
 using OverwatchDotNet.Internal;
 using AngleSharp;
+using OverwatchDotNet.Core;
 
 namespace OverwatchDotNet.OverwatchData
 {
-    class AssistsData : IStatModule
+    public class AssistsStats
     {
+        [OverwatchStat("Healing Done")]
         public float HealingDone { get; private set; }
+
+        [OverwatchStat("Recon Assists")]
         public float ReconAssists { get; private set; }
+
+        [OverwatchStat("Teleporter Pads Destroyed")]
         public float TeleporterPadsDestroyed { get; private set; }
 
         public void LoadFromURL(string url)

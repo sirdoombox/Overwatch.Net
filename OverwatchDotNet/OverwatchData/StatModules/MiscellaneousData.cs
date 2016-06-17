@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using AngleSharp.Dom;
 using AngleSharp;
 using OverwatchDotNet.Internal;
 
-namespace OverwatchDotNet.OverwatchData.StatModules
+namespace OverwatchDotNet.OverwatchData
 {
-    class MiscellaneousData :IStatModule
+    public class MiscellaneousStats
     {
         public float MostMeleeFinalBlows { get; private set; }
         public float DefensiveAssists { get; private set; }

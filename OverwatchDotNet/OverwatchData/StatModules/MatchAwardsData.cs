@@ -6,7 +6,7 @@ using OverwatchDotNet.Internal;
 
 namespace OverwatchDotNet.OverwatchData
 {
-    public class MatchAwardsData : IStatModule
+    public class MatchAwardsStats
     {
         public float Cards { get; private set; }
         public float Medals { get; private set; }

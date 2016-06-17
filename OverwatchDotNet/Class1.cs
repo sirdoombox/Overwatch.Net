@@ -14,5 +14,10 @@ namespace OverwatchDotNet
 
             return cards.ToDictionary(d => d.QuerySelector(".card-copy").TextContent.Replace(" - Average", ""), d => d.QuerySelector(".card-heading").TextContent);
         }       
+
+        public void StatTest(string url)
+        {
+
+        }
     }
 }
