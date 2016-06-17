@@ -4,15 +4,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F680E79A-5DB1-42AB-9A30-FBB2D7396D63}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{4FDD015A-D097-4D9A-A204-6B1614DA7824}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OverwatchDotNet</RootNamespace>
-    <AssemblyName>OverwatchDotNet</AssemblyName>
+    <RootNamespace>OverwatchDotNetTestbed</RootNamespace>
+    <AssemblyName>OverwatchDotNetTestbed</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +24,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -30,10 +33,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AngleSharp, Version=0.9.6.41832, Culture=neutral, PublicKeyToken=e83494dcdc6d31ea, processorArchitecture=MSIL">
-      <HintPath>..\packages\AngleSharp.0.9.6\lib\net45\AngleSharp.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -44,23 +43,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
-    <Compile Include="Misc\Extensions.cs" />
-    <Compile Include="OverwatchData\IStatModule.cs" />
-    <Compile Include="OverwatchData\StatModules\AssistsData.cs" />
-    <Compile Include="OverwatchData\StatModules\AverageData.cs" />
-    <Compile Include="OverwatchData\StatModules\CombatData.cs" />
-    <Compile Include="OverwatchData\StatModules\DeathData.cs" />
-    <Compile Include="OverwatchData\StatModules\FeaturedData.cs" />
-    <Compile Include="OverwatchData\StatModules\MatchAwardsData.cs" />
-    <Compile Include="OverwatchData\StatModules\MiscellaneousData.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Core\" />
+    <ProjectReference Include="..\OverwatchDotNet\OverwatchDotNet.csproj">
+      <Project>{f680e79a-5db1-42ab-9a30-fbb2d7396d63}</Project>
+      <Name>OverwatchDotNet</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

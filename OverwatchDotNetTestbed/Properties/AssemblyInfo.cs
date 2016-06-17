@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("OverwatchDotNet")]
+[assembly: AssemblyTitle("OverwatchDotNetTestbed")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("OverwatchDotNet")]
+[assembly: AssemblyProduct("OverwatchDotNetTestbed")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -19,7 +19,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("f680e79a-5db1-42ab-9a30-fbb2d7396d63")]
+[assembly: Guid("4fdd015a-d097-4d9a-a204-6b1614da7824")]
 
 // Version information for an assembly consists of the following four values:
 //
