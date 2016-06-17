@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace OverwatchDotNet.Core
+namespace OverwatchAPI.Internal
 {
     [AttributeUsage(AttributeTargets.Property)]
     class OverwatchStatGroup : Attribute

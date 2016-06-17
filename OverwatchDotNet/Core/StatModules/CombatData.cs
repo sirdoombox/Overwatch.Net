@@ -1,6 +1,6 @@
-﻿using OverwatchDotNet.Core;
+﻿using OverwatchAPI.Internal;
 
-namespace OverwatchDotNet.OverwatchData
+namespace OverwatchAPI.Data
 {
     public class CombatStats
     {

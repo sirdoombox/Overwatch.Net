@@ -45,16 +45,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Atributes.cs" />
-    <Compile Include="OverwatchData\PlayerData.cs" />
-    <Compile Include="OverwatchData\StatModules\AssistsData.cs" />
-    <Compile Include="OverwatchData\StatModules\AverageData.cs" />
-    <Compile Include="OverwatchData\StatModules\BestData.cs" />
-    <Compile Include="OverwatchData\StatModules\CombatData.cs" />
-    <Compile Include="OverwatchData\StatModules\DeathData.cs" />
-    <Compile Include="OverwatchData\StatModules\FeaturedData.cs" />
-    <Compile Include="OverwatchData\StatModules\GameData.cs" />
-    <Compile Include="OverwatchData\StatModules\MatchAwardsData.cs" />
-    <Compile Include="OverwatchData\StatModules\MiscellaneousData.cs" />
+    <Compile Include="Core\PlayerData.cs" />
+    <Compile Include="Core\StatModules\AssistsData.cs" />
+    <Compile Include="Core\StatModules\AverageData.cs" />
+    <Compile Include="Core\StatModules\BestData.cs" />
+    <Compile Include="Core\StatModules\CombatData.cs" />
+    <Compile Include="Core\StatModules\DeathData.cs" />
+    <Compile Include="Core\StatModules\FeaturedData.cs" />
+    <Compile Include="Core\StatModules\GameData.cs" />
+    <Compile Include="Core\StatModules\MatchAwardsData.cs" />
+    <Compile Include="Core\StatModules\MiscellaneousData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

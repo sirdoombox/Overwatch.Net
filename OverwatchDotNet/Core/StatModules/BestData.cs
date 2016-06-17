@@ -1,7 +1,7 @@
-﻿using OverwatchDotNet.Core;
+﻿using OverwatchAPI.Internal;
 using System;
 
-namespace OverwatchDotNet.OverwatchData
+namespace OverwatchAPI.Data
 {
     public class BestStats
     {

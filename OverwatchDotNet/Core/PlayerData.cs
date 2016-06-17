@@ -1,12 +1,13 @@
 ﻿using AngleSharp;
-using OverwatchDotNet.Core;
+using OverwatchAPI.Data;
+using OverwatchAPI.Internal;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
 
-namespace OverwatchDotNet.OverwatchData
+namespace OverwatchAPI
 {
     public enum Region { NA, EU, OCE }
 

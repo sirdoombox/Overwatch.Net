@@ -1,4 +1,4 @@
-﻿using OverwatchDotNet.OverwatchData;
+﻿using OverwatchAPI;
 using System.Diagnostics;
 using static System.Console;
 

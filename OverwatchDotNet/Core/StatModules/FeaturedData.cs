@@ -3,7 +3,7 @@ using AngleSharp.Dom;
 using System;
 using System.Threading.Tasks;
 
-namespace OverwatchDotNet.OverwatchData
+namespace OverwatchAPI.Data
 {
     /// <summary>
     /// The featured stats of an Overwatch player - Averages across all heroes in all games.
