@@ -1,14 +1,8 @@
-﻿using AngleSharp;
-using AngleSharp.Dom;
-using OverwatchDotNet.Internal;
-using System.Linq;
-using System.Threading.Tasks;
-using System;
-using OverwatchDotNet.Core;
+﻿using OverwatchDotNet.Core;
 
 namespace OverwatchDotNet.OverwatchData
 {
-    public class CombatStats : IStatModule
+    public class CombatStats
     {
         [OverwatchStat("Melee Final Blows")]
         public int MeleeFinalBlows { get; private set; }
@@ -33,10 +27,5 @@ namespace OverwatchDotNet.OverwatchData
 
         [OverwatchStat("Multikills")]
         public int Multikills { get; private set; }
-        
-        public void PopulateFromTableData(OverwatchDataTable dataTable)
-        {
-            
-        }
     }
 }

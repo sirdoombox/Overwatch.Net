@@ -5,8 +5,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OverwatchDotNet.OverwatchData
 {
@@ -18,11 +16,14 @@ namespace OverwatchDotNet.OverwatchData
         public Dictionary<string, string> Stats { get; set; }
     }
 
-    public class PlayerData
+    public class PlayerStats
     {
         public string BattleTag { get; private set; }
         
         public FeaturedStats Featured { get; private set; }
+
+        [OverwatchStatGroup("Game")]
+        public GameStats Game { get; private set; }
 
         [OverwatchStatGroup("Assists")]
         public AssistsStats Assists { get; private set; }
@@ -41,6 +42,9 @@ namespace OverwatchDotNet.OverwatchData
 
         [OverwatchStatGroup("Miscellaneous")]
         public MiscellaneousStats Miscellaneous { get; private set; }
+
+        [OverwatchStatGroup("Best")]
+        public BestStats Best { get; private set; }
 
         public void PopulatePlayer(string url)
         {
@@ -81,9 +85,9 @@ namespace OverwatchDotNet.OverwatchData
             else if (cleanInput.Contains(":"))
             {
                 TimeSpan outputTime;
-                if (TimeSpan.TryParseExact(cleanInput, "hh:mm", CultureInfo.CurrentCulture, out outputTime))
+                if (TimeSpan.TryParseExact(cleanInput, @"mm\:ss", CultureInfo.CurrentCulture, out outputTime))
                     return outputTime;
-                else if (TimeSpan.TryParseExact(cleanInput, "hh:mm:ss", CultureInfo.CurrentCulture, out outputTime))
+                else if (TimeSpan.TryParseExact(cleanInput, @"hh\:mm\:ss", CultureInfo.CurrentCulture, out outputTime))
                     return outputTime;
             }
             else

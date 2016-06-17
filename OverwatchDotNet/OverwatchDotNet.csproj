@@ -44,15 +44,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
     <Compile Include="Core\Atributes.cs" />
-    <Compile Include="Misc\Extensions.cs" />
     <Compile Include="OverwatchData\PlayerData.cs" />
     <Compile Include="OverwatchData\StatModules\AssistsData.cs" />
     <Compile Include="OverwatchData\StatModules\AverageData.cs" />
+    <Compile Include="OverwatchData\StatModules\BestData.cs" />
     <Compile Include="OverwatchData\StatModules\CombatData.cs" />
     <Compile Include="OverwatchData\StatModules\DeathData.cs" />
     <Compile Include="OverwatchData\StatModules\FeaturedData.cs" />
+    <Compile Include="OverwatchData\StatModules\GameData.cs" />
     <Compile Include="OverwatchData\StatModules\MatchAwardsData.cs" />
     <Compile Include="OverwatchData\StatModules\MiscellaneousData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

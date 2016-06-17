@@ -1,8 +1,7 @@
 ﻿using AngleSharp;
 using AngleSharp.Dom;
-using OverwatchDotNet.Internal;
-using System.Threading.Tasks;
 using System;
+using System.Threading.Tasks;
 
 namespace OverwatchDotNet.OverwatchData
 {
@@ -12,12 +11,12 @@ namespace OverwatchDotNet.OverwatchData
     public class FeaturedStats
     {
         public float Eliminations { get; private set; }
-        public float DamageDone { get; private set; }
+        public int DamageDone { get; private set; }
         public float Deaths { get; private set; }
         public float FinalBlows { get; private set; }
-        public float HealingDone { get; private set; }
+        public int HealingDone { get; private set; }
         public float ObjectiveKills { get; private set; }
-        public float ObjectiveTime { get; private set; }
+        public TimeSpan ObjectiveTime { get; private set; }
         public float SoloKills { get; private set; }
 
         public void LoadFromURL(string url)
@@ -27,7 +26,7 @@ namespace OverwatchDotNet.OverwatchData
             var cards = document.QuerySelectorAll(".card");
             foreach(var card in cards)
             {
-                AssignValue(card.QuerySelector(".card-copy").TextContent.Replace(" - Average", ""), card.QuerySelector(".card-heading").TextContent.OverwatchValueStringToFloat());
+                //AssignValue(card.QuerySelector(".card-copy").TextContent.Replace(" - Average", ""), card.QuerySelector(".card-heading").TextContent);
             }
         }
 
@@ -38,7 +37,7 @@ namespace OverwatchDotNet.OverwatchData
             var cards = document.QuerySelectorAll(".card");
             foreach (var card in cards)
             {
-                AssignValue(card.QuerySelector(".card-copy").TextContent.Replace(" - Average", ""), card.QuerySelector(".card-heading").TextContent.OverwatchValueStringToFloat());
+                //AssignValue(card.QuerySelector(".card-copy").TextContent.Replace(" - Average", ""), card.QuerySelector(".card-heading").TextContent);
             }
         }
 
@@ -47,38 +46,7 @@ namespace OverwatchDotNet.OverwatchData
             var cards = document.QuerySelectorAll(".card");
             foreach (var card in cards)
             {
-                AssignValue(card.QuerySelector(".card-copy").TextContent.Replace(" - Average", ""), card.QuerySelector(".card-heading").TextContent.OverwatchValueStringToFloat());
-            }
-        }
-
-        void AssignValue(string statName, float statValue)
-        {
-            switch(statName)
-            {
-                case "Eliminations":
-                    Eliminations = statValue;
-                    break;
-                case "Damage Done":
-                    DamageDone = statValue;
-                    break;
-                case "Deaths":
-                    Deaths = statValue;
-                    break;
-                case "Final Blows":
-                    FinalBlows = statValue;
-                    break;
-                case "Healing Done":
-                    HealingDone = statValue;
-                    break;
-                case "Objective Kills":
-                    ObjectiveKills = statValue;
-                    break;
-                case "Objective Time":
-                    ObjectiveTime = statValue;
-                    break;
-                case "Solo Kills":
-                    SoloKills = statValue;
-                    break;
+                //AssignValue(card.QuerySelector(".card-copy").TextContent.Replace(" - Average", ""), card.QuerySelector(".card-heading").TextContent);
             }
         }
     }
