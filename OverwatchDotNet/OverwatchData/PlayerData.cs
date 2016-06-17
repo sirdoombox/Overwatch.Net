@@ -65,15 +65,6 @@ namespace OverwatchDotNet.OverwatchData
                 var statProp = statGroupProps.FirstOrDefault(x => ((OverwatchStat)x.GetCustomAttribute(typeof(OverwatchStat))).StatName == item.Key);
                 if(statProp != null)
                 {
-                    object tempVal;
-                    if (item.Value.Contains("."))
-                        tempVal = float.Parse(item.Value);
-                    else if (item.Value.Contains(":"))
-                        tempVal = TimeSpan.Parse(item.Value);
-                    else if (item.Value.ToLower().Contains("hours"))
-                        tempVal = TimeSpan.FromHours(int.Parse(item.Value.Substring(0, item.Value.IndexOf(" ") - 1)));
-                    else
-                        tempVal = int.Parse(item.Value.Replace(",", ""));
                     statProp.SetValue(statGroup, ParseValue(item.Value));
                 }                
             }
