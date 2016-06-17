@@ -11,11 +11,7 @@ namespace OverwatchAPI
 {
     public enum Region { NA, EU, OCE }
 
-    public class OverwatchDataTable
-    {
-        public string Name { get; set; }
-        public Dictionary<string, string> Stats { get; set; }
-    }
+
 
     public class PlayerStats
     {
@@ -56,24 +52,11 @@ namespace OverwatchAPI
                 var prop = props.FirstOrDefault(x => ((OverwatchStatGroup)x.GetCustomAttribute(typeof(OverwatchStatGroup))).StatGroupName == item.Name);
                 if (prop != null)
                 {
-                    PopulateStat(prop, item);
+                    var statProp = (IStatModule)Activator.CreateInstance(prop.PropertyType);
+                    statProp.SendTable(item);
+                    prop.SetValue(this, statProp);
                 }
             }
-        }
-
-        void PopulateStat(PropertyInfo prop, OverwatchDataTable table)
-        {
-            var statGroup = Activator.CreateInstance(prop.PropertyType);
-            var statGroupProps = statGroup.GetType().GetProperties().Where(p => Attribute.IsDefined(p, typeof(OverwatchStat)));
-            foreach(var item in table.Stats)
-            {
-                var statProp = statGroupProps.FirstOrDefault(x => ((OverwatchStat)x.GetCustomAttribute(typeof(OverwatchStat))).StatName == item.Key);
-                if(statProp != null)
-                {
-                    statProp.SetValue(statGroup, ParseValue(item.Value));
-                }                
-            }
-            prop.SetValue(this, statGroup);
         }
 
         object ParseValue(string input)

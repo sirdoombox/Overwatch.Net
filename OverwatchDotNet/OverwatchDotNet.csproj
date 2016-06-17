@@ -48,6 +48,9 @@
     <Compile Include="Core\PlayerData.cs" />
     <Compile Include="Core\StatModules\AllHeroesData.cs" />
     <Compile Include="Core\StatModules\FeaturedData.cs" />
+    <Compile Include="Core\StatModules\Interface\IStatModule.cs" />
+    <Compile Include="Core\StatModules\OverwatchTableData.cs" />
+    <Compile Include="Misc\Extensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
