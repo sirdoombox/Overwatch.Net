@@ -14,6 +14,8 @@ namespace OverwatchAPI.Internal
         {
             if (input.ToLower().Contains("hour"))
                 return TimeSpan.FromHours(int.Parse(input.Substring(0, input.IndexOf(" ") - 1)));
+            else if (input.ToLower().Contains("minute"))
+                return TimeSpan.FromMinutes(int.Parse(input.Substring(0, input.IndexOf(" ") - 1)));
             else if (input.Contains(":"))
             {
                 TimeSpan outputTime;

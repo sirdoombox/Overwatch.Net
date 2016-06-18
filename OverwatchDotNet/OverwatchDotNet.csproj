@@ -7,8 +7,8 @@
     <ProjectGuid>{F680E79A-5DB1-42AB-9A30-FBB2D7396D63}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OverwatchDotNet</RootNamespace>
-    <AssemblyName>OverwatchDotNet</AssemblyName>
+    <RootNamespace>OverwatchAPI</RootNamespace>
+    <AssemblyName>Overwatch.Net</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -20,6 +20,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -45,9 +47,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Atributes.cs" />
+    <Compile Include="Core\OverwatchPlayer.cs" />
     <Compile Include="Core\PlayerData.cs" />
     <Compile Include="Core\StatModules\AllHeroesData.cs" />
-    <Compile Include="Core\StatModules\FeaturedData.cs" />
     <Compile Include="Core\StatModules\Interface\IStatModule.cs" />
     <Compile Include="Core\StatModules\OverwatchTableData.cs" />
     <Compile Include="Misc\Extensions.cs" />

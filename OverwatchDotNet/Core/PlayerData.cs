@@ -1,4 +1,5 @@
 ﻿using AngleSharp;
+using AngleSharp.Dom;
 using OverwatchAPI.Data;
 using OverwatchAPI.Internal;
 using System;
@@ -6,19 +7,14 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace OverwatchAPI
 {
-    public enum Region { NA, EU, OCE }
-
-
+    public enum Region { US, EU, None }
 
     public class PlayerStats
     {
-        public string BattleTag { get; private set; }
-        
-        public FeaturedStats Featured { get; private set; }
-
         [OverwatchStatGroup("Game")]
         public GameStats Game { get; private set; }
 
@@ -59,25 +55,14 @@ namespace OverwatchAPI
             }
         }
 
-        object ParseValue(string input)
+        public async Task GetPlayerFromBtag(string battletag, Region region = Region.None)
         {
-            string cleanInput = input.Replace(",", "").ToLower();
-            if (cleanInput.Contains("."))
-                return float.Parse(cleanInput);
-            else if (cleanInput.Contains("hour"))
-                return TimeSpan.FromHours(int.Parse(cleanInput.Substring(0, cleanInput.IndexOf(" ") - 1)));
-            else if (cleanInput.Contains(":"))
-            {
-                TimeSpan outputTime;
-                if (TimeSpan.TryParseExact(cleanInput, @"mm\:ss", CultureInfo.CurrentCulture, out outputTime))
-                    return outputTime;
-                else if (TimeSpan.TryParseExact(cleanInput, @"hh\:mm\:ss", CultureInfo.CurrentCulture, out outputTime))
-                    return outputTime;
-            }
-            else
-                return int.Parse(cleanInput);
-            return null;
-        }
+            OverwatchPlayer _owp = new OverwatchPlayer(battletag, region);
+            if (_owp.Region == Region.None)
+                await _owp.DetectRegion();
+            //if(_owp.Region != Region.None)
+                
+        }       
 
         IEnumerable<OverwatchDataTable> GetOverwatchStats(string url)
         {
