@@ -47,6 +47,6 @@ string profileUrl = OverwatchAPIHelpers.ProfileUrl("SomePlayer#1234", Region.eu)
 ```
 
 ## Contact
-If you wish to contact me about contributing to the project, or have any questions / suggestions please feel free to come find me on the [C# discord server.](https://discord.gg/0np62rq4o8GnQO9l "C# Discord")
+If you wish to contact me about contributing to the project, or have any questions / suggestions please feel free to come find me on the [C# discord server.](https://discord.gg/0np62rq4o8GnQO9l "C# Discord") - @Doombox#0661
 
 Please report any issues or bugs that you may find at your earliest convenience so I can get them fixed ASAP.
