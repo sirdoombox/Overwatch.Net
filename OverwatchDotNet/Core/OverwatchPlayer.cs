@@ -7,13 +7,12 @@ namespace OverwatchAPI
 {
     public class OverwatchPlayer
     {
-        public OverwatchPlayer(string battletag, Region region = Region.None)
+        public OverwatchPlayer(string battletag, Region region = Region.None, string profileurl = null)
         {
             Battletag = battletag;
             BattletagUrlFriendly = battletag.Replace("#", "-");
             Region = region;
-            if (region != Region.None)
-                ProfileURL = $"http://playoverwatch.com/en-gb/career/pc/{region}/{BattletagUrlFriendly}";
+            ProfileURL = profileurl;
         }
 
         /// <summary>
@@ -77,7 +76,7 @@ namespace OverwatchAPI
             var responseNA = await _client.GetAsync($"us/{BattletagUrlFriendly}");
             if (responseNA.IsSuccessStatusCode)
             {
-                Region = Region.us;
+                Region = Region.US;
                 ProfileURL = ProfileURL ?? baseUrl + $"us/{BattletagUrlFriendly}";
                 return;
             }
@@ -86,7 +85,7 @@ namespace OverwatchAPI
                 var responseEU = await _client.GetAsync($"eu/{BattletagUrlFriendly}");
                 if (responseEU.IsSuccessStatusCode)
                 {
-                    Region = Region.eu;
+                    Region = Region.EU;
                     ProfileURL = ProfileURL ?? baseUrl + $"eu/{BattletagUrlFriendly}";
                     return;
                 }
@@ -106,5 +105,5 @@ namespace OverwatchAPI
         }  
     }
 
-    public enum Region { us, eu, None }
+    public enum Region { US, EU, None }
 }

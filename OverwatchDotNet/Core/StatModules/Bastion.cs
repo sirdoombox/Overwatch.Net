@@ -32,24 +32,24 @@ namespace OverwatchAPI.Data
 
 		public class HeroSpecificStats : IStatModule
 		{
-			public float ReconKills { get; private set; }
-			public float SentryKills { get; private set; }
-			public float TankKills { get; private set; }
-			public float SentryKillsMostinGame { get; private set; }
-			public float ReconKillsMostinGame { get; private set; }
-			public float TankKillsMostinGame { get; private set; }
+			public int ReconKills { get; private set; }
+			public int SentryKills { get; private set; }
+			public int TankKills { get; private set; }
+			public int SentryKillsMostinGame { get; private set; }
+			public int ReconKillsMostinGame { get; private set; }
+			public int TankKillsMostinGame { get; private set; }
 			public float TankKillsAverage { get; private set; }
 			public float SentryKillsAverage { get; private set; }
 			public float ReconKillsAverage { get; private set; }
 
 			public void SendTable(OverwatchDataTable table)
 			{
-				ReconKills = table.Stats["Recon Kills"].OWValToFloat();
-				SentryKills = table.Stats["Sentry Kills"].OWValToFloat();
-				TankKills = table.Stats["Tank Kills"].OWValToFloat();
-				SentryKillsMostinGame = table.Stats["Sentry Kills - Most in Game"].OWValToFloat();
-				ReconKillsMostinGame = table.Stats["Recon Kills - Most in Game"].OWValToFloat();
-				TankKillsMostinGame = table.Stats["Tank Kills - Most in Game"].OWValToFloat();
+				ReconKills = table.Stats["Recon Kills"].OWValToInt();
+				SentryKills = table.Stats["Sentry Kills"].OWValToInt();
+				TankKills = table.Stats["Tank Kills"].OWValToInt();
+				SentryKillsMostinGame = table.Stats["Sentry Kills - Most in Game"].OWValToInt();
+				ReconKillsMostinGame = table.Stats["Recon Kills - Most in Game"].OWValToInt();
+				TankKillsMostinGame = table.Stats["Tank Kills - Most in Game"].OWValToInt();
 				TankKillsAverage = table.Stats["Tank Kills - Average"].OWValToFloat();
 				SentryKillsAverage = table.Stats["Sentry Kills - Average"].OWValToFloat();
 				ReconKillsAverage = table.Stats["Recon Kills - Average"].OWValToFloat();
@@ -58,67 +58,67 @@ namespace OverwatchAPI.Data
 
 		public class CombatStats : IStatModule
 		{
-			public float Eliminations { get; private set; }
-			public float FinalBlows { get; private set; }
-			public float SoloKills { get; private set; }
-			public float ShotsFired { get; private set; }
-			public float ShotsHit { get; private set; }
-			public float CriticalHits { get; private set; }
-			public float DamageDone { get; private set; }
-			public float ObjectiveKills { get; private set; }
+			public int Eliminations { get; private set; }
+			public int FinalBlows { get; private set; }
+			public int SoloKills { get; private set; }
+			public int ShotsFired { get; private set; }
+			public int ShotsHit { get; private set; }
+			public int CriticalHits { get; private set; }
+			public int DamageDone { get; private set; }
+			public int ObjectiveKills { get; private set; }
 			public float CriticalHitsperMinute { get; private set; }
-			public float CriticalHitAccuracy { get; private set; }
-			public float EliminationsperLife { get; private set; }
-			public float WeaponAccuracy { get; private set; }
+			public int CriticalHitAccuracy { get; private set; }
+			public int EliminationsperLife { get; private set; }
+			public int WeaponAccuracy { get; private set; }
 
 			public void SendTable(OverwatchDataTable table)
 			{
-				Eliminations = table.Stats["Eliminations"].OWValToFloat();
-				FinalBlows = table.Stats["Final Blows"].OWValToFloat();
-				SoloKills = table.Stats["Solo Kills"].OWValToFloat();
-				ShotsFired = table.Stats["Shots Fired"].OWValToFloat();
-				ShotsHit = table.Stats["Shots Hit"].OWValToFloat();
-				CriticalHits = table.Stats["Critical Hits"].OWValToFloat();
-				DamageDone = table.Stats["Damage Done"].OWValToFloat();
-				ObjectiveKills = table.Stats["Objective Kills"].OWValToFloat();
+				Eliminations = table.Stats["Eliminations"].OWValToInt();
+				FinalBlows = table.Stats["Final Blows"].OWValToInt();
+				SoloKills = table.Stats["Solo Kills"].OWValToInt();
+				ShotsFired = table.Stats["Shots Fired"].OWValToInt();
+				ShotsHit = table.Stats["Shots Hit"].OWValToInt();
+				CriticalHits = table.Stats["Critical Hits"].OWValToInt();
+				DamageDone = table.Stats["Damage Done"].OWValToInt();
+				ObjectiveKills = table.Stats["Objective Kills"].OWValToInt();
 				CriticalHitsperMinute = table.Stats["Critical Hits per Minute"].OWValToFloat();
-				CriticalHitAccuracy = table.Stats["Critical Hit Accuracy"].OWValToFloat();
-				EliminationsperLife = table.Stats["Eliminations per Life"].OWValToFloat();
-				WeaponAccuracy = table.Stats["Weapon Accuracy"].OWValToFloat();
+				CriticalHitAccuracy = table.Stats["Critical Hit Accuracy"].OWValToInt();
+				EliminationsperLife = table.Stats["Eliminations per Life"].OWValToInt();
+				WeaponAccuracy = table.Stats["Weapon Accuracy"].OWValToInt();
 			}
 		}
 
 		public class BestStats : IStatModule
 		{
-			public float EliminationsMostinLife { get; private set; }
-			public float MostScorewithinoneLife { get; private set; }
-			public float DamageDoneMostinLife { get; private set; }
-			public float WeaponAccuracyBestinGame { get; private set; }
-			public float KillStreakBest { get; private set; }
-			public float DamageDoneMostinGame { get; private set; }
-			public float EliminationsMostinGame { get; private set; }
-			public float FinalBlowsMostinGame { get; private set; }
-			public float ObjectiveKillsMostinGame { get; private set; }
-			public float ObjectiveTimeMostinGame { get; private set; }
-			public float SoloKillsMostinGame { get; private set; }
-			public float CriticalHitsMostinGame { get; private set; }
-			public float CriticalHitsMostinLife { get; private set; }
+			public int EliminationsMostinLife { get; private set; }
+			public int MostScorewithinoneLife { get; private set; }
+			public int DamageDoneMostinLife { get; private set; }
+			public int WeaponAccuracyBestinGame { get; private set; }
+			public int KillStreakBest { get; private set; }
+			public int DamageDoneMostinGame { get; private set; }
+			public int EliminationsMostinGame { get; private set; }
+			public int FinalBlowsMostinGame { get; private set; }
+			public int ObjectiveKillsMostinGame { get; private set; }
+			public int ObjectiveTimeMostinGame { get; private set; }
+			public int SoloKillsMostinGame { get; private set; }
+			public int CriticalHitsMostinGame { get; private set; }
+			public int CriticalHitsMostinLife { get; private set; }
 
 			public void SendTable(OverwatchDataTable table)
 			{
-				EliminationsMostinLife = table.Stats["Eliminations - Most in Life"].OWValToFloat();
-				MostScorewithinoneLife = table.Stats["Most Score within one Life"].OWValToFloat();
-				DamageDoneMostinLife = table.Stats["Damage Done - Most in Life"].OWValToFloat();
-				WeaponAccuracyBestinGame = table.Stats["Weapon Accuracy - Best in Game"].OWValToFloat();
-				KillStreakBest = table.Stats["Kill Streak - Best"].OWValToFloat();
-				DamageDoneMostinGame = table.Stats["Damage Done - Most in Game"].OWValToFloat();
-				EliminationsMostinGame = table.Stats["Eliminations - Most in Game"].OWValToFloat();
-				FinalBlowsMostinGame = table.Stats["Final Blows - Most in Game"].OWValToFloat();
-				ObjectiveKillsMostinGame = table.Stats["Objective Kills - Most in Game"].OWValToFloat();
-				ObjectiveTimeMostinGame = table.Stats["Objective Time - Most in Game"].OWValToFloat();
-				SoloKillsMostinGame = table.Stats["Solo Kills - Most in Game"].OWValToFloat();
-				CriticalHitsMostinGame = table.Stats["Critical Hits - Most in Game"].OWValToFloat();
-				CriticalHitsMostinLife = table.Stats["Critical Hits - Most in Life"].OWValToFloat();
+				EliminationsMostinLife = table.Stats["Eliminations - Most in Life"].OWValToInt();
+				MostScorewithinoneLife = table.Stats["Most Score within one Life"].OWValToInt();
+				DamageDoneMostinLife = table.Stats["Damage Done - Most in Life"].OWValToInt();
+				WeaponAccuracyBestinGame = table.Stats["Weapon Accuracy - Best in Game"].OWValToInt();
+				KillStreakBest = table.Stats["Kill Streak - Best"].OWValToInt();
+				DamageDoneMostinGame = table.Stats["Damage Done - Most in Game"].OWValToInt();
+				EliminationsMostinGame = table.Stats["Eliminations - Most in Game"].OWValToInt();
+				FinalBlowsMostinGame = table.Stats["Final Blows - Most in Game"].OWValToInt();
+				ObjectiveKillsMostinGame = table.Stats["Objective Kills - Most in Game"].OWValToInt();
+				ObjectiveTimeMostinGame = table.Stats["Objective Time - Most in Game"].OWValToInt();
+				SoloKillsMostinGame = table.Stats["Solo Kills - Most in Game"].OWValToInt();
+				CriticalHitsMostinGame = table.Stats["Critical Hits - Most in Game"].OWValToInt();
+				CriticalHitsMostinLife = table.Stats["Critical Hits - Most in Life"].OWValToInt();
 			}
 		}
 
@@ -146,51 +146,51 @@ namespace OverwatchAPI.Data
 
 		public class DeathsStats : IStatModule
 		{
-			public float Deaths { get; private set; }
-			public float EnvironmentalDeaths { get; private set; }
+			public int Deaths { get; private set; }
+			public int EnvironmentalDeaths { get; private set; }
 
 			public void SendTable(OverwatchDataTable table)
 			{
-				Deaths = table.Stats["Deaths"].OWValToFloat();
-				EnvironmentalDeaths = table.Stats["Environmental Deaths"].OWValToFloat();
+				Deaths = table.Stats["Deaths"].OWValToInt();
+				EnvironmentalDeaths = table.Stats["Environmental Deaths"].OWValToInt();
 			}
 		}
 
 		public class MatchAwardsStats : IStatModule
 		{
-			public float MedalsBronze { get; private set; }
-			public float MedalsSilver { get; private set; }
-			public float MedalsGold { get; private set; }
-			public float Medals { get; private set; }
+			public int MedalsBronze { get; private set; }
+			public int MedalsSilver { get; private set; }
+			public int MedalsGold { get; private set; }
+			public int Medals { get; private set; }
 
 			public void SendTable(OverwatchDataTable table)
 			{
-				MedalsBronze = table.Stats["Medals - Bronze"].OWValToFloat();
-				MedalsSilver = table.Stats["Medals - Silver"].OWValToFloat();
-				MedalsGold = table.Stats["Medals - Gold"].OWValToFloat();
-				Medals = table.Stats["Medals"].OWValToFloat();
+				MedalsBronze = table.Stats["Medals - Bronze"].OWValToInt();
+				MedalsSilver = table.Stats["Medals - Silver"].OWValToInt();
+				MedalsGold = table.Stats["Medals - Gold"].OWValToInt();
+				Medals = table.Stats["Medals"].OWValToInt();
 			}
 		}
 
 		public class GameStats : IStatModule
 		{
 			public TimeSpan TimePlayed { get; private set; }
-			public float GamesPlayed { get; private set; }
-			public float GamesWon { get; private set; }
-			public float Score { get; private set; }
-			public float ObjectiveTime { get; private set; }
-			public float TimeSpentonFire { get; private set; }
-			public float WinPercentage { get; private set; }
+			public int GamesPlayed { get; private set; }
+			public int GamesWon { get; private set; }
+			public int Score { get; private set; }
+			public int ObjectiveTime { get; private set; }
+			public int TimeSpentonFire { get; private set; }
+			public int WinPercentage { get; private set; }
 
 			public void SendTable(OverwatchDataTable table)
 			{
 				TimePlayed = table.Stats["Time Played"].OWValToTimeSpan();
-				GamesPlayed = table.Stats["Games Played"].OWValToFloat();
-				GamesWon = table.Stats["Games Won"].OWValToFloat();
-				Score = table.Stats["Score"].OWValToFloat();
-				ObjectiveTime = table.Stats["Objective Time"].OWValToFloat();
-				TimeSpentonFire = table.Stats["Time Spent on Fire"].OWValToFloat();
-				WinPercentage = table.Stats["Win Percentage"].OWValToFloat();
+				GamesPlayed = table.Stats["Games Played"].OWValToInt();
+				GamesWon = table.Stats["Games Won"].OWValToInt();
+				Score = table.Stats["Score"].OWValToInt();
+				ObjectiveTime = table.Stats["Objective Time"].OWValToInt();
+				TimeSpentonFire = table.Stats["Time Spent on Fire"].OWValToInt();
+				WinPercentage = table.Stats["Win Percentage"].OWValToInt();
 			}
 		}
 	}
