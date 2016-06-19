@@ -54,6 +54,9 @@ namespace OverwatchAPI
         /// </summary>
         public DateTime ProfileLastDownloaded { get; private set; }
 
+        /// <summary>
+        /// The URL friendly version of the users Battletag.
+        /// </summary>
         private string BattletagUrlFriendly { get; }
 
         /// <summary>
