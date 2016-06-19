@@ -17,7 +17,7 @@ It's a simple wrapper that grabs player stats from a users PlayOverwatch.com pro
 
 ## Planned Features
 Currently this is a very early working version with very few features beyond the ability to get and store data. However here is a list of things I hope to add in the near future, and I'm also happy to take suggestions/requests for features.
-* JSON Serialisation out of the box courtesy of JSON.NET
+* User batching and some threading support
 * Events for refreshing cached data after a given amount of time
 * Full proper error and exception handling
 * Investigate the possibility of adding support for console players
