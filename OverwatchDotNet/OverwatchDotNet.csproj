@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Exceptions.cs" />
     <Compile Include="Core\OverwatchPlayer.cs" />
     <Compile Include="Core\PlayerStats.cs" />
     <Compile Include="Core\StatModules\AllHeroes.cs" />
@@ -72,6 +73,7 @@
     <Compile Include="Core\StatModules\Zarya.cs" />
     <Compile Include="Core\StatModules\Zenyatta.cs" />
     <Compile Include="Misc\Extensions.cs" />
+    <Compile Include="Misc\Helpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

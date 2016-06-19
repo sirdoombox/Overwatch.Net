@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OverwatchAPI.Internal;
+using System;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -9,6 +10,8 @@ namespace OverwatchAPI
     {
         public OverwatchPlayer(string battletag, Region region = Region.None, string profileurl = null)
         {
+            if (new Regex(@"\w+#\d+").IsMatch(battletag))
+                throw new InvalidBattletagException();
             Battletag = battletag;
             BattletagUrlFriendly = battletag.Replace("#", "-");
             Region = region;
@@ -50,17 +53,6 @@ namespace OverwatchAPI
         /// The last time the profile was downloaded from PlayOverwatch.
         /// </summary>
         public DateTime ProfileLastDownloaded { get; private set; }
-               
-        /// <summary>
-        /// Check if the players Battletag is valid. - e.g. "SomeUser#1234"
-        /// </summary>
-        public bool BattletagIsValid
-        {
-            get
-            {
-                return new Regex(@"\w+#\d+").IsMatch(Battletag);
-            }
-        }
 
         private string BattletagUrlFriendly { get; }
 
@@ -99,6 +91,8 @@ namespace OverwatchAPI
         /// <returns></returns>
         public async Task UpdateStats()
         {
+            if (Region == Region.None)
+                throw new UserRegionNotDefinedException();
             Stats = new PlayerStats();
             await Stats.UpdateStats(this);
             ProfileLastDownloaded = DateTime.UtcNow;
