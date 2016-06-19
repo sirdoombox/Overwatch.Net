@@ -2,6 +2,9 @@
 
 An unofficial player stats API for the Blizzard game "Overwatch". **Currently only supports PC players.**
 
+[Available on Nuget](https://www.nuget.org/packages/Overwatch.Net "Overwatch.Net on Nuget")
+`install-package Overwatch.Net`
+
 ## What is it?
 
 It's a simple wrapper that grabs player stats from a users PlayOverwatch.com profile and parses it into a nice set of objects to be used however you like. It's written entirely in C# using AngleSharp to parse the data from the page. The only limiting factor is the speed at which the PlayOverwatch profile can be loaded.
@@ -10,10 +13,10 @@ It's a simple wrapper that grabs player stats from a users PlayOverwatch.com pro
 * Entirely async operation
 * Auto-generated objects - No need to compare strings, just use the statically typed objects.
 * Serializable - No complex data.
-* Region detection - Easily find the correct region for the pl
+* Region detection - Easily find the correct region for a player.
 
 ## Planned Features
-Currently this is a very early working version with very few features beyond the ability to get and store data.
+Currently this is a very early working version with very few features beyond the ability to get and store data. However here is a list of things I hope to add in the near future, and I'm also happy to take suggestions/requests for features.
 * JSON Serialisation out of the box courtesy of JSON.NET
 * Events for refreshing cached data after a given amount of time
 * Full proper error and exception handling
@@ -47,6 +50,6 @@ string profileUrl = OverwatchAPIHelpers.ProfileUrl("SomePlayer#1234", Region.eu)
 ```
 
 ## Contact
-If you wish to contact me about contributing to the project, or have any questions / suggestions please feel free to come find me on the [C# discord server.](https://discord.gg/0np62rq4o8GnQO9l "C# Discord")
+If you wish to contact me about contributing to the project, or have any questions / suggestions please feel free to come find me on the [C# discord server.](https://discord.gg/0np62rq4o8GnQO9l "C# Discord") - @Doombox#0661
 
 Please report any issues or bugs that you may find at your earliest convenience so I can get them fixed ASAP.
