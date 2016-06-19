@@ -1,10 +1,8 @@
 ﻿using AngleSharp;
-using AngleSharp.Dom;
 using OverwatchAPI.Data;
 using OverwatchAPI.Internal;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -15,29 +13,27 @@ namespace OverwatchAPI
 
     public class PlayerStats
     {
-        [OverwatchStatGroup("Game")]
-        public GameStats Game { get; private set; }
-
-        [OverwatchStatGroup("Assists")]
-        public AssistsStats Assists { get; private set; }
-
-        [OverwatchStatGroup("Average")]
-        public AverageStats Average { get; private set; }
-
-        [OverwatchStatGroup("Combat")]
-        public CombatStats Combat { get; private set; }
-
-        [OverwatchStatGroup("Deaths")]
-        public DeathStats Deaths { get; private set; }
-
-        [OverwatchStatGroup("Match Awards")]
-        public MatchAwardsStats MatchAwards { get; private set; }
-
-        [OverwatchStatGroup("Miscellaneous")]
-        public MiscellaneousStats Miscellaneous { get; private set; }
-
-        [OverwatchStatGroup("Best")]
-        public BestStats Best { get; private set; }
+        public AllHeroes AllHeroes { get; private set; }
+        public Bastion Bastion { get; private set; }
+        public DVa DVa { get; private set; }
+        public Genji Genji { get; private set; }
+        public Junkrat Junkrat { get; private set; }
+        public Lucio Lucio { get; private set; }
+        public McCree McRee { get; private set; }
+        public Mei Mei { get; private set; }
+        public Mercy Mercy { get; private set; }
+        public Pharah Pharah { get; private set; }
+        public Reaper Reaper { get; private set; }
+        public Reinhardt Reinhardt { get; private set; }
+        public Roadhog Roadhog { get; private set; }
+        public Soldier76 Soldier76 { get; private set; }
+        public Symmetra Symmetra { get; private set; }
+        public Torbjorn Torbjorn { get; private set; }
+        public Tracer Tracer { get; private set; }
+        public Widowmaker Widowmaker { get; private set; }
+        public Winston Winston { get; private set; }
+        public Zarya Zarya { get; private set; }
+        public Zenyatta Zenyatta { get; private set; }
 
         public void PopulatePlayer(string url)
         {

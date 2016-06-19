@@ -1,5 +1,4 @@
 ﻿using AngleSharp;
-using OverwatchAPI.Internal;
 using System;
 using System.Net.Http;
 using System.Text.RegularExpressions;

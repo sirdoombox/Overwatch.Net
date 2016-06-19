@@ -1,4 +1,4 @@
-﻿namespace OverwatchAPI
+﻿namespace OverwatchAPI.Internal
 {
     public interface IStatModule
     {
