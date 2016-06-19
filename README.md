@@ -2,6 +2,9 @@
 
 An unofficial player stats API for the Blizzard game "Overwatch". **Currently only supports PC players.**
 
+[Available on Nuget](https://www.nuget.org/packages/Overwatch.Net "Overwatch.Net on Nuget")
+`install-package Overwatch.Net`
+
 ## What is it?
 
 It's a simple wrapper that grabs player stats from a users PlayOverwatch.com profile and parses it into a nice set of objects to be used however you like. It's written entirely in C# using AngleSharp to parse the data from the page. The only limiting factor is the speed at which the PlayOverwatch profile can be loaded.
