@@ -43,6 +43,7 @@ TimeSpan timePlayed = player.Stats.AllHeroes.Game.TimePlayed
 There are also some helper methods available for use to simplify some common operations
 ```csharp
 bool validTag = OverwatchAPIHelpers.IsValidBattletag("SomePlayer#1234"); // Returns true.
+string profileUrl = OverwatchAPIHelpers.ProfileUrl("SomePlayer#1234", Region.eu); // Returns a PlayOverwatch profile URL.
 ```
 
 ## Contact
