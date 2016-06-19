@@ -5,11 +5,6 @@ namespace OverwatchAPI.Internal
 {
     public static class Extensions
     {
-        public static int OWValToInt(this string input)
-        {
-            return int.Parse(input.Replace(",", "").Replace("%", ""));
-        }
-
         public static TimeSpan OWValToTimeSpan(this string input)
         {
             if (input.ToLower().Contains("hour"))
@@ -29,7 +24,7 @@ namespace OverwatchAPI.Internal
 
         public static float OWValToFloat(this string input)
         {
-            return float.Parse(input.Replace(",", ""));
+            return float.Parse(input.Replace(",", "").Replace("%", ""));
         }
     }
 }
