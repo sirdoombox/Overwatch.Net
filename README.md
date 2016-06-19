@@ -1,6 +1,6 @@
 # Overwatch.Net
 
-An unofficial player stats API for the Blizzard game "Overwatch".
+An unofficial player stats API for the Blizzard game "Overwatch". **Currently only supports PC players.**
 
 ## What is it?
 
@@ -17,6 +17,7 @@ Currently this is a very early working version with very few features beyond the
 * JSON Serialisation out of the box courtesy of JSON.NET
 * Events for refreshing cached data after a given amount of time
 * Full proper error and exception handling
+* Investigate the possibility of adding support for console players
 
 ## Dependencies
 
@@ -39,6 +40,10 @@ OverwatchPlayer player = new OverwatchPlayer("SirDoombox#2603", Region.eu);
 player.UpdateStats().GetAwaiter().GetResult();
 TimeSpan timePlayed = player.Stats.AllHeroes.Game.TimePlayed
 ````
+There are also some helper methods available for use to simplify some common operations
+```csharp
+bool validTag = OverwatchAPIHelpers.IsValidBattletag("SomePlayer#1234"); // Returns true.
+```
 
 ## Contact
 If you wish to contact me about contributing to the project, or have any questions / suggestions please feel free to come find me on the [C# discord server.](https://discord.gg/0np62rq4o8GnQO9l "C# Discord")
