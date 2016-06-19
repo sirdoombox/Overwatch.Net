@@ -28,7 +28,7 @@ namespace OverwatchAPI
         {
             get
             {
-                return Battletag.Substring(0, Battletag.IndexOf('#') - 1);
+                return Battletag.Substring(0, Battletag.IndexOf('#'));
             }
         }
 
@@ -41,6 +41,11 @@ namespace OverwatchAPI
         /// The players region - EU/US/None
         /// </summary>
         public Region Region { get; private set; } 
+
+        /// <summary>
+        /// The players stats.
+        /// </summary>
+        public PlayerStats Stats { get; private set; }
 
         /// <summary>
         /// The last time the profile was downloaded from PlayOverwatch.
@@ -93,11 +98,13 @@ namespace OverwatchAPI
         /// Downloads the Users Profile and parses it to
         /// </summary>
         /// <returns></returns>
-        public async Task DownloadUserProfile()
+        public async Task UpdateStats()
         {
-            var config = Configuration.Default.WithDefaultLoader();
-            var document = await BrowsingContext.New(config).OpenAsync(ProfileURL);
+            Stats = new PlayerStats();
+            await Stats.UpdateStats(this);
             ProfileLastDownloaded = DateTime.UtcNow;
         }  
     }
+
+    public enum Region { US, EU, None }
 }

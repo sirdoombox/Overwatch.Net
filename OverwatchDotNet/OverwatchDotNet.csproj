@@ -46,22 +46,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\Atributes.cs" />
     <Compile Include="Core\OverwatchPlayer.cs" />
-    <Compile Include="Core\PlayerData.cs" />
+    <Compile Include="Core\PlayerStats.cs" />
     <Compile Include="Core\StatModules\AllHeroes.cs" />
-    <Compile Include="Core\StatModules\AllHeroesData.cs" />
     <Compile Include="Core\StatModules\Bastion.cs" />
     <Compile Include="Core\StatModules\DVa.cs" />
     <Compile Include="Core\StatModules\Genji.cs" />
-    <Compile Include="Core\StatModules\Interface\IStatGroup.cs" />
-    <Compile Include="Core\StatModules\Interface\IStatModule.cs" />
+    <Compile Include="Core\StatModules\Interface\Interfaces.cs" />
+    <Compile Include="Core\OverwatchTableData.cs" />
     <Compile Include="Core\StatModules\Junkrat.cs" />
     <Compile Include="Core\StatModules\Lucio.cs" />
     <Compile Include="Core\StatModules\McCree.cs" />
     <Compile Include="Core\StatModules\Mei.cs" />
     <Compile Include="Core\StatModules\Mercy.cs" />
-    <Compile Include="Core\OverwatchTableData.cs" />
     <Compile Include="Core\StatModules\Pharah.cs" />
     <Compile Include="Core\StatModules\Reaper.cs" />
     <Compile Include="Core\StatModules\Reinhardt.cs" />

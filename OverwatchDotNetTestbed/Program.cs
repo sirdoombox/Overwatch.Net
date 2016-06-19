@@ -5,19 +5,16 @@ using static System.Console;
 namespace OverwatchDotNetTestbed
 {
     class Program
-    {
-        static string profileUrl = "https://playoverwatch.com/en-gb/career/pc/eu/SirDoombox-2603";
-        static void Main(string[] args)
+    {      
+        static void Main(string[] args) => new Program().Start();
+
+        void Start()
         {
-            PlayerStats temp = new PlayerStats();
+            OverwatchPlayer player = new OverwatchPlayer("SirDoombox#2603");
             Stopwatch stopwatch = Stopwatch.StartNew();
-            temp.PopulatePlayer(profileUrl);
-            stopwatch.Stop();
-            WriteLine($"Completed In: {stopwatch.Elapsed}");
-            WriteLine($"Deaths: {temp.Deaths.Deaths}");
-            WriteLine($"Best Eliminations: {temp.Best.Eliminations}");
-            WriteLine($"Assists Healing Done: {temp.Assists.HealingDone}");
-            WriteLine($"Time Spent On Fire Total: {temp.Game.TimeSpentOnFire}");
+            player.DetectRegion().GetAwaiter().GetResult();
+            player.UpdateStats().GetAwaiter().GetResult();
+            WriteLine(player.Stats.AllHeroes.Best.DamageDoneMostinGame);
             ReadKey();
         }
     }

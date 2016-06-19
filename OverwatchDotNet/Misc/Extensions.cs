@@ -7,15 +7,15 @@ namespace OverwatchAPI.Internal
     {
         public static int OWValToInt(this string input)
         {
-            return int.Parse(input.Replace(",", ""));
+            return int.Parse(input.Replace(",", "").Replace("%", ""));
         }
 
         public static TimeSpan OWValToTimeSpan(this string input)
         {
             if (input.ToLower().Contains("hour"))
-                return TimeSpan.FromHours(int.Parse(input.Substring(0, input.IndexOf(" ") - 1)));
+                return TimeSpan.FromHours(int.Parse(input.Substring(0, input.IndexOf(" "))));
             else if (input.ToLower().Contains("minute"))
-                return TimeSpan.FromMinutes(int.Parse(input.Substring(0, input.IndexOf(" ") - 1)));
+                return TimeSpan.FromMinutes(int.Parse(input.Substring(0, input.IndexOf(" "))));
             else if (input.Contains(":"))
             {
                 TimeSpan outputTime;

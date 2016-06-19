@@ -22,10 +22,10 @@ namespace OverwatchAPI.Data
 		{
 			foreach(var item in tableCollection)
 			{
-				var prop = GetType().GetProperty(item.Name);
-				if (typeof(IStatModule).IsAssignableFrom(prop.GetType()))
+				var prop = GetType().GetProperty(item.Name.Replace(" ", ""));
+				if (typeof(IStatModule).IsAssignableFrom(prop.PropertyType))
 				{
-					IStatModule statModule = (IStatModule)Activator.CreateInstance(prop.GetType());
+					IStatModule statModule = (IStatModule)Activator.CreateInstance(prop.PropertyType);
 					statModule.SendTable(item);
 					prop.SetValue(this, statModule);
 				}

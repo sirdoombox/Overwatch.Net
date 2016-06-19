@@ -6,4 +6,9 @@ namespace OverwatchAPI.Internal
     {
         void SendPage(IEnumerable<OverwatchDataTable> TableCollection);
     }
+
+    public interface IStatModule
+    {
+        void SendTable(OverwatchDataTable table);
+    }
 }

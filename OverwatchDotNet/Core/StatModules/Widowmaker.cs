@@ -21,10 +21,10 @@ namespace OverwatchAPI.Data
 		{
 			foreach(var item in tableCollection)
 			{
-				var prop = GetType().GetProperty(item.Name);
-				if (typeof(IStatModule).IsAssignableFrom(prop.GetType()))
+				var prop = GetType().GetProperty(item.Name.Replace(" ", ""));
+				if (typeof(IStatModule).IsAssignableFrom(prop.PropertyType))
 				{
-					IStatModule statModule = (IStatModule)Activator.CreateInstance(prop.GetType());
+					IStatModule statModule = (IStatModule)Activator.CreateInstance(prop.PropertyType);
 					statModule.SendTable(item);
 					prop.SetValue(this, statModule);
 				}
@@ -185,7 +185,7 @@ namespace OverwatchAPI.Data
 
 		public class GameStats : IStatModule
 		{
-			public int TimePlayed { get; private set; }
+			public TimeSpan TimePlayed { get; private set; }
 			public int GamesPlayed { get; private set; }
 			public int GamesWon { get; private set; }
 			public int Score { get; private set; }
@@ -195,7 +195,7 @@ namespace OverwatchAPI.Data
 
 			public void SendTable(OverwatchDataTable table)
 			{
-				TimePlayed = table.Stats["Time Played"].OWValToInt();
+				TimePlayed = table.Stats["Time Played"].OWValToTimeSpan();
 				GamesPlayed = table.Stats["Games Played"].OWValToInt();
 				GamesWon = table.Stats["Games Won"].OWValToInt();
 				Score = table.Stats["Score"].OWValToInt();
