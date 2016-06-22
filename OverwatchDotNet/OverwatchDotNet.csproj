@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Core\Exceptions.cs" />
     <Compile Include="Core\OverwatchPlayer.cs" />
+    <Compile Include="Core\OverwatchPlayerCollection.cs" />
     <Compile Include="Core\PlayerStats.cs" />
     <Compile Include="Core\StatModules\AllHeroes.cs" />
     <Compile Include="Core\StatModules\Bastion.cs" />

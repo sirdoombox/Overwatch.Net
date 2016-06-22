@@ -10,7 +10,7 @@ namespace OverwatchAPI
     {
         public OverwatchPlayer(string battletag, Region region = Region.None, string profileurl = null)
         {
-            if (new Regex(@"\w+#\d+").IsMatch(battletag))
+            if (!new Regex(@"\w+#\d+").IsMatch(battletag))
                 throw new InvalidBattletagException();
             Battletag = battletag;
             BattletagUrlFriendly = battletag.Replace("#", "-");
