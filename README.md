@@ -34,7 +34,7 @@ The below code will create a new Overwatch player with the given Battletag, it w
 ```csharp
 OverwatchPlayer player = new OverwatchPlayer("SirDoombox#2603");
 await player.DetectRegion();
-await UpdateStats();
+await player.UpdateStats();
 TimeSpan timePlayed = player.Stats.AllHeroes.Game.TimePlayed
 ```
 You can cut down on some of the requests you need to make (and the time that those requests take up) by specifying the region at creation (if known). This snippet also uses `.GetAwaiter().GetResult()` to make the method run in a synchronous fashion.
