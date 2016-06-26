@@ -15,7 +15,10 @@ namespace OverwatchAPI
             Battletag = battletag;
             BattletagUrlFriendly = battletag.Replace("#", "-");
             Region = region;
-            ProfileURL = profileurl;
+            if(Region != Region.None && profileurl == null)
+            {
+                ProfileURL = OverwatchAPIHelpers.ProfileURL(Battletag, Region);
+            }
         }
 
         /// <summary>
@@ -71,7 +74,7 @@ namespace OverwatchAPI
             var responseNA = await _client.GetAsync($"us/{BattletagUrlFriendly}");
             if (responseNA.IsSuccessStatusCode)
             {
-                Region = Region.US;
+                Region = Region.us;
                 ProfileURL = ProfileURL ?? baseUrl + $"us/{BattletagUrlFriendly}";
                 return;
             }
@@ -80,7 +83,7 @@ namespace OverwatchAPI
                 var responseEU = await _client.GetAsync($"eu/{BattletagUrlFriendly}");
                 if (responseEU.IsSuccessStatusCode)
                 {
-                    Region = Region.EU;
+                    Region = Region.eu;
                     ProfileURL = ProfileURL ?? baseUrl + $"eu/{BattletagUrlFriendly}";
                     return;
                 }
@@ -102,5 +105,5 @@ namespace OverwatchAPI
         }  
     }
 
-    public enum Region { US, EU, None }
+    public enum Region { us, eu, None }
 }

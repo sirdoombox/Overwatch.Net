@@ -15,7 +15,6 @@ namespace OverwatchCodeGenerator
         static void Main(string[] args)
         {
             GetOverwatchStats("https://playoverwatch.com/en-gb/career/pc/eu/SirDoombox-2603");
-            Console.ReadKey();
         }
         static Dictionary<string, string> idDictionary = new Dictionary<string, string>();
         static string filePath = @"D:\Projects\C#\Visual Studio 2015\Projects\OverwatchDotNet\OverwatchDotNet\Core\StatModules";
@@ -63,7 +62,6 @@ namespace OverwatchCodeGenerator
         static void CreateClass(string heroName, IEnumerable<OverwatchDataTable> heroStats)
         {
             string thisPath = $"{filePath}/{heroName}.cs";
-            Stopwatch _stopwatch = Stopwatch.StartNew();
             using (TextWriter ts = File.CreateText(thisPath))
             {
                 ts.Write(header);
@@ -94,8 +92,6 @@ namespace OverwatchCodeGenerator
                 }
                 ts.Write("\t}\n}");
             }
-            _stopwatch.Stop();
-            Console.WriteLine($"Finished Generating {heroName} in {_stopwatch.Elapsed}");
         }
 
         static string ParseClassName(string input)
@@ -112,22 +108,18 @@ namespace OverwatchCodeGenerator
 
         static string GetValueType(string inputValue)
         {
-            if (inputValue.Contains("."))
-                return "float";
-            else if (inputValue.Contains(":") || inputValue.ToLower().Contains("hour") || inputValue.ToLower().Contains("minute"))
+            if (inputValue.Contains(":") || inputValue.ToLower().Contains("hour") || inputValue.ToLower().Contains("minute"))
                 return "TimeSpan";
             else
-                return "int";
+                return "float";
         }
 
         static string ExtensionType(string inputValue)
         {
-            if (inputValue.Contains("."))
-                return ".OWValToFloat();";
-            else if (inputValue.Contains(":") || inputValue.ToLower().Contains("hour") || inputValue.ToLower().Contains("minute"))
+            if (inputValue.Contains(":") || inputValue.ToLower().Contains("hour") || inputValue.ToLower().Contains("minute"))
                 return ".OWValToTimeSpan();";
             else
-                return ".OWValToInt();";
+                return ".OWValToFloat();";
         }
 
         static string header = "using OverwatchAPI.Internal;\n" +

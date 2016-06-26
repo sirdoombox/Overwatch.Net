@@ -31,10 +31,11 @@ namespace OverwatchAPI
         public Zarya Zarya { get; private set; }
         public Zenyatta Zenyatta { get; private set; }
         
-
         internal async Task UpdateStats(OverwatchPlayer player)
         {
             var config = Configuration.Default.WithDefaultLoader();
+            if (player.ProfileURL == null)
+                throw new UserProfileUrlNullException();
             var document = await BrowsingContext.New(config).OpenAsync(player.ProfileURL);
             Dictionary<string, string> idDictionary = new Dictionary<string, string>();
             foreach (var dropdownitem in document.QuerySelectorAll("select > option"))

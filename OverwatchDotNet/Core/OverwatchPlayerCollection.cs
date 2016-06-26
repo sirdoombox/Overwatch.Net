@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OverwatchAPI.Internal;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -81,6 +82,7 @@ namespace OverwatchAPI
         /// <returns>True: Player removed | False: No player removed</returns>
         public bool Remove(string battletag)
         {
+            if(!OverwatchAPIHelpers.IsValidBattletag(battletag)) throw new InvalidBattletagException();
             return OverwatchPlayers.RemoveAll(x => x.Battletag.Equals(battletag, StringComparison.OrdinalIgnoreCase)) > 0;
         }
 

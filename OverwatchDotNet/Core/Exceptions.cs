@@ -13,4 +13,10 @@ namespace OverwatchAPI.Internal
         static string messageString = "OverwatchPlayer's Battletag is not valid - Format is 'User#1234`";
         public InvalidBattletagException() : base(messageString) { }
     }
+
+    class UserProfileUrlNullException : Exception
+    {
+        static string messageString = "OverwatchPlayer's profile URL has not been set - If no region/URL was entered when constructing the OverwatchPlayer then use 'player.DetectRegion();'";
+        public UserProfileUrlNullException() : base(messageString) { }
+    }
 }

@@ -11,7 +11,7 @@ namespace OverwatchAPI
 
         public static string ProfileURL(string battletag, Region region)
         {
-            return $"http://playoverwatch.com/en-gb/career/pc/{region}/{battletag.Replace("#", "-")}";
+            return $"https://playoverwatch.com/en-gb/career/pc/{region}/{battletag.Replace("#", "-")}";
         }
     }
 }
