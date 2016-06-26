@@ -2,7 +2,7 @@
 
 namespace OverwatchAPI
 {
-    static class OverwatchAPIHelpers
+    public static class OverwatchAPIHelpers
     {
         public static bool IsValidBattletag(string battletag)
         {
