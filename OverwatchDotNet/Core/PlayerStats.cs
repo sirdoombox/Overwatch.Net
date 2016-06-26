@@ -13,6 +13,7 @@ namespace OverwatchAPI
         public Bastion Bastion { get; private set; }
         public DVa DVa { get; private set; }
         public Genji Genji { get; private set; }
+        public Hanzo Hanzo { get; private set; }
         public Junkrat Junkrat { get; private set; }
         public Lucio Lucio { get; private set; }
         public McCree McCree { get; private set; }
@@ -68,7 +69,7 @@ namespace OverwatchAPI
                 if (typeof(IStatGroup).IsAssignableFrom(prop.PropertyType))
                 {
                     IStatGroup statGroup = (IStatGroup)Activator.CreateInstance(prop.PropertyType);
-                    statGroup.SendPage(heroTableCollection);
+                    statGroup?.SendPage(heroTableCollection);
                     prop.SetValue(this, statGroup);
                 }
             }

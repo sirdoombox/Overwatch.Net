@@ -45,7 +45,7 @@ namespace OverwatchAPI
         private async void UpdateIntervalTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             foreach(var player in OverwatchPlayers)           
-                if(player.Region != Region.None)
+                if(player.Region != Region.none)
                     await player.UpdateStats();           
             StatsUpdated?.Invoke(this, e);
         }
@@ -59,7 +59,7 @@ namespace OverwatchAPI
         /// <returns>True: Player added | False: Player already exists in the collection</returns>
         public bool Add(OverwatchPlayer player)
         {
-            var listContains = OverwatchPlayers.Any(x => x.Battletag.Equals(player.Battletag, StringComparison.OrdinalIgnoreCase));
+            var listContains = OverwatchPlayers.Any(x => x.Username.Equals(player.Username, StringComparison.OrdinalIgnoreCase));
             if (!listContains)
                 OverwatchPlayers.Add(player);
             return !listContains;
@@ -83,7 +83,7 @@ namespace OverwatchAPI
         public bool Remove(string battletag)
         {
             if(!OverwatchAPIHelpers.IsValidBattletag(battletag)) throw new InvalidBattletagException();
-            return OverwatchPlayers.RemoveAll(x => x.Battletag.Equals(battletag, StringComparison.OrdinalIgnoreCase)) > 0;
+            return OverwatchPlayers.RemoveAll(x => x.Username.Equals(battletag, StringComparison.OrdinalIgnoreCase)) > 0;
         }
 
         public OverwatchPlayer this[int index]

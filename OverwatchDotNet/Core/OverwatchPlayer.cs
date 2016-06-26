@@ -8,34 +8,24 @@ namespace OverwatchAPI
 {
     public class OverwatchPlayer
     {
-        public OverwatchPlayer(string battletag, Region region = Region.None, string profileurl = null)
+        public OverwatchPlayer(string username, Platform platform = Platform.pc, Region region = Region.none, string profileurl = null)
         {
-            if (!new Regex(@"\w+#\d+").IsMatch(battletag))
+            if (!new Regex(@"\w+#\d+").IsMatch(username) && platform == Platform.pc)
                 throw new InvalidBattletagException();
-            Battletag = battletag;
-            BattletagUrlFriendly = battletag.Replace("#", "-");
+            Username = username;
+            BattletagUrlFriendly = username.Replace("#", "-");
             Region = region;
-            if(Region != Region.None && profileurl == null)
+            Platform = platform;
+            if((Region != Region.none || platform != Platform.pc) && profileurl == null)
             {
-                ProfileURL = OverwatchAPIHelpers.ProfileURL(Battletag, Region);
+                ProfileURL = OverwatchAPIHelpers.ProfileURL(Username, Region, Platform);
             }
         }
 
         /// <summary>
         /// The players Battletag with Discriminator - e.g. "SomeUser#1234"
         /// </summary>
-        public string Battletag { get; private set; }
-
-        /// <summary>
-        /// The players nickname - e.g. "SomeUser"
-        /// </summary>
-        public string Username
-        {
-            get
-            {
-                return Battletag.Substring(0, Battletag.IndexOf('#'));
-            }
-        }
+        public string Username { get; private set; }
 
         /// <summary>
         /// The PlayOverwatch profile of the player - This is only available if the user has set a region
@@ -43,9 +33,14 @@ namespace OverwatchAPI
         public string ProfileURL { get; private set; }
 
         /// <summary>
-        /// The players region - EU/US/None
+        /// The player's region - EU/US/None
         /// </summary>
         public Region Region { get; private set; } 
+
+        /// <summary>
+        /// The player's platform - PC/XBL/PSN
+        /// </summary>
+        public Platform Platform { get; private set; }
 
         /// <summary>
         /// The players stats.
@@ -63,32 +58,32 @@ namespace OverwatchAPI
         private string BattletagUrlFriendly { get; }
 
         /// <summary>
-        /// Detect the region of the player (Also sets the players ProfileURL if it is currently un-set)
+        /// Detect the region of the player (Also sets the players ProfileURL if it is currently un-set) - THIS ONLY WORKS FOR PC PLAYERS. CONSOLE PLAYERS DO NOT HAVE REGIONS.
         /// </summary>
         /// <returns></returns>
-        public async Task DetectRegion()
+        public async Task DetectRegionPC()
         {
-            string baseUrl = "http://playoverwatch.com/en-gb/career/pc/";
+            string baseUrl = "http://playoverwatch.com/en-gb/career/";
             HttpClient _client = new HttpClient();
             _client.BaseAddress = new Uri(baseUrl);
-            var responseNA = await _client.GetAsync($"us/{BattletagUrlFriendly}");
+            var responseNA = await _client.GetAsync($"{Platform}/us/{BattletagUrlFriendly}");
             if (responseNA.IsSuccessStatusCode)
             {
                 Region = Region.us;
-                ProfileURL = ProfileURL ?? baseUrl + $"us/{BattletagUrlFriendly}";
+                ProfileURL = ProfileURL ?? baseUrl + $"{Platform}/us/{BattletagUrlFriendly}";
                 return;
             }
             else
             {
-                var responseEU = await _client.GetAsync($"eu/{BattletagUrlFriendly}");
+                var responseEU = await _client.GetAsync($"{Platform}/eu/{BattletagUrlFriendly}");
                 if (responseEU.IsSuccessStatusCode)
                 {
                     Region = Region.eu;
-                    ProfileURL = ProfileURL ?? baseUrl + $"eu/{BattletagUrlFriendly}";
+                    ProfileURL = ProfileURL ?? baseUrl + $"{Platform}/eu/{BattletagUrlFriendly}";
                     return;
                 }
             }
-            Region = Region.None;
+            Region = Region.none;
         }      
         
         /// <summary>
@@ -97,7 +92,7 @@ namespace OverwatchAPI
         /// <returns></returns>
         public async Task UpdateStats()
         {
-            if (Region == Region.None)
+            if (Region == Region.none && Platform == Platform.pc)
                 throw new UserRegionNotDefinedException();
             Stats = new PlayerStats();
             await Stats.UpdateStats(this);
@@ -105,5 +100,4 @@ namespace OverwatchAPI
         }  
     }
 
-    public enum Region { us, eu, None }
 }

@@ -14,7 +14,7 @@ namespace OverwatchCodeGenerator
     {
         static void Main(string[] args)
         {
-            GetOverwatchStats("https://playoverwatch.com/en-gb/career/pc/eu/SirDoombox-2603");
+            GetOverwatchStats("https://playoverwatch.com/en-gb/career/xbl/VeLo%20InFerno");
         }
         static Dictionary<string, string> idDictionary = new Dictionary<string, string>();
         static string filePath = @"D:\Projects\C#\Visual Studio 2015\Projects\OverwatchDotNet\OverwatchDotNet\Core\StatModules";
@@ -85,7 +85,9 @@ namespace OverwatchCodeGenerator
                     ts.Write("\n\t\t\tpublic void SendTable(OverwatchDataTable table)\n\t\t\t{\n");
                     foreach (var row in table.Stats)
                     {
-                        ts.Write($"\t\t\t\t{CleansePropertyName(row.Key)} = table.Stats[\"{row.Key}\"]{ExtensionType(row.Value)}\n");
+                        ts.Write($"\t\t\t\tif(table.Stats.ContainsKey(\"{row.Key}\"))\n");
+                        ts.Write($"\t\t\t\t\t{CleansePropertyName(row.Key)} = table.Stats[\"{row.Key}\"]{ExtensionType(row.Value)}\n");
+                        ts.Write($"\t\t\t\telse{{ {CleansePropertyName(row.Key)} = {DefaultValue(row.Value)}; }}\n");
                     }
                     ts.Write("\t\t\t}\n");
                     ts.Write("\t\t}\n");
@@ -122,6 +124,14 @@ namespace OverwatchCodeGenerator
                 return ".OWValToFloat();";
         }
 
+        static string DefaultValue(string inputValue)
+        {
+            if (inputValue.Contains(":") || inputValue.ToLower().Contains("hour") || inputValue.ToLower().Contains("minute"))
+                return "TimeSpan.FromSeconds(0);";
+            else
+                return "0";
+        }
+
         static string header = "using OverwatchAPI.Internal;\n" +
                                "using System;\n" +
                                "using System.Collections.Generic;\n\n" +
@@ -131,7 +141,7 @@ namespace OverwatchCodeGenerator
         static string statGroupImplement = "\n\t\tpublic void SendPage(IEnumerable<OverwatchDataTable> tableCollection)\n\t\t{\n" +
                                             "\t\t\tforeach(var item in tableCollection)\n\t\t\t{\n" +
                                             "\t\t\t\tvar prop = GetType().GetProperty(item.Name.Replace(\" \", \"\"));\n" +
-                                            "\t\t\t\tif (typeof(IStatModule).IsAssignableFrom(prop.PropertyType))\n\t\t\t\t{\n" +
+                                            "\t\t\t\tif (prop != null && typeof(IStatModule).IsAssignableFrom(prop.PropertyType))\n\t\t\t\t{\n" +
                                             "\t\t\t\t\tIStatModule statModule = (IStatModule)Activator.CreateInstance(prop.PropertyType);\n" +
                                             "\t\t\t\t\tstatModule.SendTable(item);\n" +
                                             "\t\t\t\t\tprop.SetValue(this, statModule);\n\t\t\t\t}\n\t\t\t}\n\t\t}\n";

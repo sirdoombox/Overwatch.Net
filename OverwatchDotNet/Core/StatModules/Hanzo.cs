@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace OverwatchAPI.Data
 {
-	public class Lucio : IStatGroup
+	public class Hanzo : IStatGroup
 	{
 		public HeroSpecificStats HeroSpecific { get; private set; }
 		public CombatStats Combat { get; private set; }
@@ -34,25 +34,41 @@ namespace OverwatchAPI.Data
 
 		public class HeroSpecificStats : IStatModule
 		{
-			public float SoundBarriersProvided { get; private set; }
-			public float SoundBarriersProvidedMostinGame { get; private set; }
+			public float DragonstrikeKills { get; private set; }
+			public float DragonstrikeKillsMostinGame { get; private set; }
+			public float ScatterArrowKills { get; private set; }
+			public float ScatterArrowKillsMostinGame { get; private set; }
+			public float ReconAssistsMostinGame { get; private set; }
 			public float MeleeFinalBlowsMostinGame { get; private set; }
-			public float SoundBarriersProvidedAverage { get; private set; }
+			public float ScatterArrowKillsAverage { get; private set; }
+			public float DragonstrikeKillsAverage { get; private set; }
 
 			public void SendTable(OverwatchDataTable table)
 			{
-				if(table.Stats.ContainsKey("Sound Barriers Provided"))
-					SoundBarriersProvided = table.Stats["Sound Barriers Provided"].OWValToFloat();
-				else{ SoundBarriersProvided = 0; }
-				if(table.Stats.ContainsKey("Sound Barriers Provided - Most in Game"))
-					SoundBarriersProvidedMostinGame = table.Stats["Sound Barriers Provided - Most in Game"].OWValToFloat();
-				else{ SoundBarriersProvidedMostinGame = 0; }
+				if(table.Stats.ContainsKey("Dragonstrike Kills"))
+					DragonstrikeKills = table.Stats["Dragonstrike Kills"].OWValToFloat();
+				else{ DragonstrikeKills = 0; }
+				if(table.Stats.ContainsKey("Dragonstrike Kills - Most in Game"))
+					DragonstrikeKillsMostinGame = table.Stats["Dragonstrike Kills - Most in Game"].OWValToFloat();
+				else{ DragonstrikeKillsMostinGame = 0; }
+				if(table.Stats.ContainsKey("Scatter Arrow Kills"))
+					ScatterArrowKills = table.Stats["Scatter Arrow Kills"].OWValToFloat();
+				else{ ScatterArrowKills = 0; }
+				if(table.Stats.ContainsKey("Scatter Arrow Kills - Most in Game"))
+					ScatterArrowKillsMostinGame = table.Stats["Scatter Arrow Kills - Most in Game"].OWValToFloat();
+				else{ ScatterArrowKillsMostinGame = 0; }
+				if(table.Stats.ContainsKey("Recon Assists - Most in Game"))
+					ReconAssistsMostinGame = table.Stats["Recon Assists - Most in Game"].OWValToFloat();
+				else{ ReconAssistsMostinGame = 0; }
 				if(table.Stats.ContainsKey("Melee Final Blows - Most in Game"))
 					MeleeFinalBlowsMostinGame = table.Stats["Melee Final Blows - Most in Game"].OWValToFloat();
 				else{ MeleeFinalBlowsMostinGame = 0; }
-				if(table.Stats.ContainsKey("Sound Barriers Provided - Average"))
-					SoundBarriersProvidedAverage = table.Stats["Sound Barriers Provided - Average"].OWValToFloat();
-				else{ SoundBarriersProvidedAverage = 0; }
+				if(table.Stats.ContainsKey("Scatter Arrow Kills - Average"))
+					ScatterArrowKillsAverage = table.Stats["Scatter Arrow Kills - Average"].OWValToFloat();
+				else{ ScatterArrowKillsAverage = 0; }
+				if(table.Stats.ContainsKey("Dragonstrike Kills - Average"))
+					DragonstrikeKillsAverage = table.Stats["Dragonstrike Kills - Average"].OWValToFloat();
+				else{ DragonstrikeKillsAverage = 0; }
 			}
 		}
 
@@ -67,7 +83,6 @@ namespace OverwatchAPI.Data
 			public float DamageDone { get; private set; }
 			public float ObjectiveKills { get; private set; }
 			public float Multikills { get; private set; }
-			public float EnvironmentalKills { get; private set; }
 			public float MeleeFinalBlows { get; private set; }
 			public float CriticalHitsperMinute { get; private set; }
 			public float CriticalHitAccuracy { get; private set; }
@@ -103,9 +118,6 @@ namespace OverwatchAPI.Data
 				if(table.Stats.ContainsKey("Multikills"))
 					Multikills = table.Stats["Multikills"].OWValToFloat();
 				else{ Multikills = 0; }
-				if(table.Stats.ContainsKey("Environmental Kills"))
-					EnvironmentalKills = table.Stats["Environmental Kills"].OWValToFloat();
-				else{ EnvironmentalKills = 0; }
 				if(table.Stats.ContainsKey("Melee Final Blows"))
 					MeleeFinalBlows = table.Stats["Melee Final Blows"].OWValToFloat();
 				else{ MeleeFinalBlows = 0; }
@@ -126,25 +138,13 @@ namespace OverwatchAPI.Data
 
 		public class AssistsStats : IStatModule
 		{
-			public float HealingDone { get; private set; }
-			public float TeleporterPadsDestroyed { get; private set; }
 			public float TurretsDestroyed { get; private set; }
-			public float SelfHealing { get; private set; }
 
 			public void SendTable(OverwatchDataTable table)
 			{
-				if(table.Stats.ContainsKey("Healing Done"))
-					HealingDone = table.Stats["Healing Done"].OWValToFloat();
-				else{ HealingDone = 0; }
-				if(table.Stats.ContainsKey("Teleporter Pads Destroyed"))
-					TeleporterPadsDestroyed = table.Stats["Teleporter Pads Destroyed"].OWValToFloat();
-				else{ TeleporterPadsDestroyed = 0; }
 				if(table.Stats.ContainsKey("Turrets Destroyed"))
 					TurretsDestroyed = table.Stats["Turrets Destroyed"].OWValToFloat();
 				else{ TurretsDestroyed = 0; }
-				if(table.Stats.ContainsKey("Self Healing"))
-					SelfHealing = table.Stats["Self Healing"].OWValToFloat();
-				else{ SelfHealing = 0; }
 			}
 		}
 
@@ -153,11 +153,9 @@ namespace OverwatchAPI.Data
 			public float EliminationsMostinLife { get; private set; }
 			public float MostScorewithinoneLife { get; private set; }
 			public float DamageDoneMostinLife { get; private set; }
-			public float HealingDoneMostinLife { get; private set; }
 			public float WeaponAccuracyBestinGame { get; private set; }
 			public float KillStreakBest { get; private set; }
 			public float DamageDoneMostinGame { get; private set; }
-			public float HealingDoneMostinGame { get; private set; }
 			public float EliminationsMostinGame { get; private set; }
 			public float FinalBlowsMostinGame { get; private set; }
 			public float ObjectiveKillsMostinGame { get; private set; }
@@ -165,7 +163,6 @@ namespace OverwatchAPI.Data
 			public float SoloKillsMostinGame { get; private set; }
 			public float CriticalHitsMostinGame { get; private set; }
 			public float CriticalHitsMostinLife { get; private set; }
-			public float SelfHealingMostinGame { get; private set; }
 
 			public void SendTable(OverwatchDataTable table)
 			{
@@ -178,9 +175,6 @@ namespace OverwatchAPI.Data
 				if(table.Stats.ContainsKey("Damage Done - Most in Life"))
 					DamageDoneMostinLife = table.Stats["Damage Done - Most in Life"].OWValToFloat();
 				else{ DamageDoneMostinLife = 0; }
-				if(table.Stats.ContainsKey("Healing Done - Most in Life"))
-					HealingDoneMostinLife = table.Stats["Healing Done - Most in Life"].OWValToFloat();
-				else{ HealingDoneMostinLife = 0; }
 				if(table.Stats.ContainsKey("Weapon Accuracy - Best in Game"))
 					WeaponAccuracyBestinGame = table.Stats["Weapon Accuracy - Best in Game"].OWValToFloat();
 				else{ WeaponAccuracyBestinGame = 0; }
@@ -190,9 +184,6 @@ namespace OverwatchAPI.Data
 				if(table.Stats.ContainsKey("Damage Done - Most in Game"))
 					DamageDoneMostinGame = table.Stats["Damage Done - Most in Game"].OWValToFloat();
 				else{ DamageDoneMostinGame = 0; }
-				if(table.Stats.ContainsKey("Healing Done - Most in Game"))
-					HealingDoneMostinGame = table.Stats["Healing Done - Most in Game"].OWValToFloat();
-				else{ HealingDoneMostinGame = 0; }
 				if(table.Stats.ContainsKey("Eliminations - Most in Game"))
 					EliminationsMostinGame = table.Stats["Eliminations - Most in Game"].OWValToFloat();
 				else{ EliminationsMostinGame = 0; }
@@ -214,29 +205,21 @@ namespace OverwatchAPI.Data
 				if(table.Stats.ContainsKey("Critical Hits - Most in Life"))
 					CriticalHitsMostinLife = table.Stats["Critical Hits - Most in Life"].OWValToFloat();
 				else{ CriticalHitsMostinLife = 0; }
-				if(table.Stats.ContainsKey("Self Healing - Most in Game"))
-					SelfHealingMostinGame = table.Stats["Self Healing - Most in Game"].OWValToFloat();
-				else{ SelfHealingMostinGame = 0; }
 			}
 		}
 
 		public class AverageStats : IStatModule
 		{
-			public float SelfHealingAverage { get; private set; }
 			public float DeathsAverage { get; private set; }
 			public float SoloKillsAverage { get; private set; }
 			public float ObjectiveTimeAverage { get; private set; }
 			public float ObjectiveKillsAverage { get; private set; }
-			public float HealingDoneAverage { get; private set; }
 			public float FinalBlowsAverage { get; private set; }
 			public float EliminationsAverage { get; private set; }
 			public float DamageDoneAverage { get; private set; }
 
 			public void SendTable(OverwatchDataTable table)
 			{
-				if(table.Stats.ContainsKey("Self Healing - Average"))
-					SelfHealingAverage = table.Stats["Self Healing - Average"].OWValToFloat();
-				else{ SelfHealingAverage = 0; }
 				if(table.Stats.ContainsKey("Deaths - Average"))
 					DeathsAverage = table.Stats["Deaths - Average"].OWValToFloat();
 				else{ DeathsAverage = 0; }
@@ -249,9 +232,6 @@ namespace OverwatchAPI.Data
 				if(table.Stats.ContainsKey("Objective Kills - Average"))
 					ObjectiveKillsAverage = table.Stats["Objective Kills - Average"].OWValToFloat();
 				else{ ObjectiveKillsAverage = 0; }
-				if(table.Stats.ContainsKey("Healing Done - Average"))
-					HealingDoneAverage = table.Stats["Healing Done - Average"].OWValToFloat();
-				else{ HealingDoneAverage = 0; }
 				if(table.Stats.ContainsKey("Final Blows - Average"))
 					FinalBlowsAverage = table.Stats["Final Blows - Average"].OWValToFloat();
 				else{ FinalBlowsAverage = 0; }
@@ -347,44 +327,16 @@ namespace OverwatchAPI.Data
 		public class MiscellaneousStats : IStatModule
 		{
 			public float MultikillBest { get; private set; }
-			public float OffensiveAssists { get; private set; }
-			public float OffensiveAssistsMostinGame { get; private set; }
-			public float DefensiveAssists { get; private set; }
-			public float DefensiveAssistsMostinGame { get; private set; }
-			public float HealingDone { get; private set; }
-			public float HealingDoneAverage { get; private set; }
-			public float DefensiveAssistsAverage { get; private set; }
-			public float OffensiveAssistsAverage { get; private set; }
+			public float ReconAssistsAverage { get; private set; }
 
 			public void SendTable(OverwatchDataTable table)
 			{
 				if(table.Stats.ContainsKey("Multikill - Best"))
 					MultikillBest = table.Stats["Multikill - Best"].OWValToFloat();
 				else{ MultikillBest = 0; }
-				if(table.Stats.ContainsKey("Offensive Assists"))
-					OffensiveAssists = table.Stats["Offensive Assists"].OWValToFloat();
-				else{ OffensiveAssists = 0; }
-				if(table.Stats.ContainsKey("Offensive Assists - Most in Game"))
-					OffensiveAssistsMostinGame = table.Stats["Offensive Assists - Most in Game"].OWValToFloat();
-				else{ OffensiveAssistsMostinGame = 0; }
-				if(table.Stats.ContainsKey("Defensive Assists"))
-					DefensiveAssists = table.Stats["Defensive Assists"].OWValToFloat();
-				else{ DefensiveAssists = 0; }
-				if(table.Stats.ContainsKey("Defensive Assists - Most in Game"))
-					DefensiveAssistsMostinGame = table.Stats["Defensive Assists - Most in Game"].OWValToFloat();
-				else{ DefensiveAssistsMostinGame = 0; }
-				if(table.Stats.ContainsKey("Healing Done"))
-					HealingDone = table.Stats["Healing Done"].OWValToFloat();
-				else{ HealingDone = 0; }
-				if(table.Stats.ContainsKey("Healing Done - Average"))
-					HealingDoneAverage = table.Stats["Healing Done - Average"].OWValToFloat();
-				else{ HealingDoneAverage = 0; }
-				if(table.Stats.ContainsKey("Defensive Assists - Average"))
-					DefensiveAssistsAverage = table.Stats["Defensive Assists - Average"].OWValToFloat();
-				else{ DefensiveAssistsAverage = 0; }
-				if(table.Stats.ContainsKey("Offensive Assists - Average"))
-					OffensiveAssistsAverage = table.Stats["Offensive Assists - Average"].OWValToFloat();
-				else{ OffensiveAssistsAverage = 0; }
+				if(table.Stats.ContainsKey("Recon Assists - Average"))
+					ReconAssistsAverage = table.Stats["Recon Assists - Average"].OWValToFloat();
+				else{ ReconAssistsAverage = 0; }
 			}
 		}
 	}

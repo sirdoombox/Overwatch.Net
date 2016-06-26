@@ -17,13 +17,27 @@ namespace OverwatchDotNetTestbed
 
         async void PopulatePlayerWithRegionDetection()
         {
-            OverwatchPlayer player = new OverwatchPlayer("SirDoombox#2603", Region.eu);
+            OverwatchPlayer playerPC = new OverwatchPlayer("SirDoombox#2603", Platform.pc , Region.eu);
+            OverwatchPlayer playerXBL = new OverwatchPlayer("VeLo InFerno", Platform.xbl);
+            OverwatchPlayer playerPSN = new OverwatchPlayer("Eztun", Platform.psn);
             Stopwatch stopwatch = Stopwatch.StartNew();
-            //await player.DetectRegion();
-            await player.UpdateStats();
+            await playerPC.UpdateStats();
+            await playerXBL.UpdateStats();
+            await playerPSN.UpdateStats();
             stopwatch.Stop();
-            var output = player.Stats.Junkrat.GetCategoryReadout(player.Stats.Junkrat.HeroSpecific);
+            WriteLine($"Completed download/parse in: {stopwatch.Elapsed}");
+            var output = playerPC.Stats.AllHeroes.GetCategoryReadout(playerPC.Stats.AllHeroes.Game);
+            WriteLine($"{playerPC.Username} Stats:");
             output.ForEach(x => WriteLine(x));
+            WriteLine("---------------------------");
+            WriteLine($"{playerXBL.Username} Stats:");
+            output = playerXBL.Stats.AllHeroes.GetCategoryReadout(playerXBL.Stats.AllHeroes.Game);
+            output.ForEach(x => WriteLine(x));
+            WriteLine("---------------------------");
+            WriteLine($"{playerPSN.Username} Stats:");
+            output = playerPSN.Stats.AllHeroes.GetCategoryReadout(playerPSN.Stats.AllHeroes.Game);
+            output.ForEach(x => WriteLine(x));
+            WriteLine("---------------------------");
         }
     }
 }

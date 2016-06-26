@@ -9,9 +9,14 @@ namespace OverwatchAPI
             return new Regex(@"\w+#\d+").IsMatch(battletag);
         }
 
-        public static string ProfileURL(string battletag, Region region)
+        public static string ProfileURL(string username, Region region, Platform platform)
         {
-            return $"https://playoverwatch.com/en-gb/career/pc/{region}/{battletag.Replace("#", "-")}";
+            if(platform == Platform.pc)
+            {
+                return $"https://playoverwatch.com/en-gb/career/{platform}/{region}/{username.Replace("#", "-")}";
+            }
+            else
+                return $"https://playoverwatch.com/en-gb/career/{platform}/{username.Replace("#", "-")}";
         }
     }
 }

@@ -54,6 +54,7 @@
     <Compile Include="Core\StatModules\Bastion.cs" />
     <Compile Include="Core\StatModules\DVa.cs" />
     <Compile Include="Core\StatModules\Genji.cs" />
+    <Compile Include="Core\StatModules\Hanzo.cs" />
     <Compile Include="Core\StatModules\Interface\Interfaces.cs" />
     <Compile Include="Core\OverwatchTableData.cs" />
     <Compile Include="Core\StatModules\Junkrat.cs" />
@@ -73,6 +74,7 @@
     <Compile Include="Core\StatModules\Winston.cs" />
     <Compile Include="Core\StatModules\Zarya.cs" />
     <Compile Include="Core\StatModules\Zenyatta.cs" />
+    <Compile Include="Misc\Enums.cs" />
     <Compile Include="Misc\Extensions.cs" />
     <Compile Include="Misc\Helpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
