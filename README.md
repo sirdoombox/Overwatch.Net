@@ -41,7 +41,7 @@ You can cut down on some of the requests you need to make (and the time that tho
 ```csharp
 OverwatchPlayer player = new OverwatchPlayer("SirDoombox#2603", Region.eu);
 player.UpdateStats().GetAwaiter().GetResult();
-TimeSpan timePlayed = player.Stats.AllHeroes.Game.TimePlayed
+List<string> statsGroupStrings = player.Stats.Junkrat.GetCategoryReadout(player.Stats.Junkrat.HeroSpecific); // Returns a list of strings that display the name and value of all the stats inside that category to facilitate ease of use.
 ````
 There are also some helper methods available for use to simplify some common operations
 ```csharp
