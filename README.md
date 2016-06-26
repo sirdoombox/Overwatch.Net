@@ -1,6 +1,6 @@
 # Overwatch.Net
 
-An unofficial player stats API for the Blizzard game "Overwatch". **Currently only supports PC players.**
+An unofficial player stats API for the Blizzard game "Overwatch".
 
 [Available on Nuget](https://www.nuget.org/packages/Overwatch.Net "Overwatch.Net on Nuget")
 `install-package Overwatch.Net`
@@ -10,17 +10,18 @@ An unofficial player stats API for the Blizzard game "Overwatch". **Currently on
 It's a simple wrapper that grabs player stats from a users PlayOverwatch.com profile and parses it into a nice set of objects to be used however you like. It's written entirely in C# using AngleSharp to parse the data from the page. The only limiting factor is the speed at which the PlayOverwatch profile can be loaded.
 
 ## Current Features
+* Supports PC, Xbox 1 and Playstation 4 players.
 * Entirely async operation
 * Auto-generated objects - No need to compare strings, just use the statically typed objects.
 * Serializable - No complex data.
 * Region detection - Easily find the correct region for a player.
+* Batch and auto-update users - Save yourself hastle dealing with cached info and just start the timer available as part of the OverwatchPlayerCollection
 
 ## Planned Features
 Currently this is a very early working version with very few features beyond the ability to get and store data. However here is a list of things I hope to add in the near future, and I'm also happy to take suggestions/requests for features.
 * User batching and some threading support
-* Events for refreshing cached data after a given amount of time
-* Full proper error and exception handling
-* Investigate the possibility of adding support for console players
+* More robust error handling
+* Some database / serialisation support of some kind
 
 ## Dependencies
 
@@ -32,14 +33,14 @@ After you've added the necessary references to your project, using the library i
 
 The below code will create a new Overwatch player with the given Battletag, it will then detect the players region and update the users stats entirely asynchronously.
 ```csharp
-OverwatchPlayer player = new OverwatchPlayer("SirDoombox#2603");
+OverwatchPlayer player = new OverwatchPlayer("SirDoombox#2603", Platform.pc);
 await player.DetectRegion();
 await player.UpdateStats();
 TimeSpan timePlayed = player.Stats.AllHeroes.Game.TimePlayed
 ```
 You can cut down on some of the requests you need to make (and the time that those requests take up) by specifying the region at creation (if known). This snippet also uses `.GetAwaiter().GetResult()` to make the method run in a synchronous fashion.
 ```csharp
-OverwatchPlayer player = new OverwatchPlayer("SirDoombox#2603", Region.eu);
+OverwatchPlayer player = new OverwatchPlayer("SirDoombox#2603", Platform.pc, Region.eu);
 player.UpdateStats().GetAwaiter().GetResult();
 List<string> statsGroupStrings = player.Stats.Junkrat.GetCategoryReadout(player.Stats.Junkrat.HeroSpecific); // Returns a list of strings that display the name and value of all the stats inside that category to facilitate ease of use.
 ````
