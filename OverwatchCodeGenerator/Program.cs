@@ -1,8 +1,7 @@
 ﻿using AngleSharp;
 using AngleSharp.Dom;
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 
 // -- Incredibly rushed and insanely weak plaintext code generation, uses my Overwatch profile as a base to craft classes from plaintext snippets -- //
@@ -105,7 +104,8 @@ namespace OverwatchCodeGenerator
 
         static string CleansePropertyName(string input)
         {
-            return input.Replace(" ", "").Replace("-", "");
+            TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+            return textInfo.ToTitleCase(input).Replace(" ", "").Replace("-", "");
         }
 
         static string GetValueType(string inputValue)
