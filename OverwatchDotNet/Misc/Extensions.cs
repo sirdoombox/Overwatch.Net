@@ -30,15 +30,17 @@ namespace OverwatchAPI.Internal
             return float.Parse(input.Replace(",", "").Replace("%", ""));
         }
 
-        public static List<string> GetModuleReadout(this IStatModule module)
+        /// <summary>
+        /// Provides a list of strings that act as a readout of the statistic name and it's value.
+        /// </summary>
+        /// <param name="module"></param>
+        /// <returns></returns>
+        public static Dictionary<string,string> GetModuleReadout(this IStatModule module)
         {
             var propProps = module.GetType().GetProperties();
-            var stringList = new List<string>();
+            var stringList = new Dictionary<string,string>();
             foreach(var prop in propProps)
-            {
-                stringList.Add($"{prop.Name.AddSpacesToSentence(false)}: {prop.GetValue(module)}");
-
-            }
+                stringList.Add(prop.Name.AddSpacesToSentence(false), prop.GetValue(module).ToString());         
             return stringList;
         }
 
