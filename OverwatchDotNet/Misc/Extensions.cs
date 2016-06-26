@@ -30,11 +30,9 @@ namespace OverwatchAPI.Internal
             return float.Parse(input.Replace(",", "").Replace("%", ""));
         }
 
-        public static List<string> GetCategoryReadout(this IStatGroup hero, IStatModule module)
+        public static List<string> GetModuleReadout(this IStatModule module)
         {
-            var props = hero.GetType().GetProperties();
-            var theProp = props.FirstOrDefault(x => x.PropertyType == module.GetType());
-            var propProps = theProp.GetValue(hero).GetType().GetProperties();
+            var propProps = module.GetType().GetProperties();
             var stringList = new List<string>();
             foreach(var prop in propProps)
             {

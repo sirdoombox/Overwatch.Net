@@ -26,16 +26,16 @@ namespace OverwatchDotNetTestbed
             await playerPSN.UpdateStats();
             stopwatch.Stop();
             WriteLine($"Completed download/parse in: {stopwatch.Elapsed}");
-            var output = playerPC.Stats.AllHeroes.GetCategoryReadout(playerPC.Stats.AllHeroes.Game);
+            var output = playerPC.Stats.AllHeroes.Game.GetModuleReadout();
             WriteLine($"{playerPC.Username} Stats:");
             output.ForEach(x => WriteLine(x));
             WriteLine("---------------------------");
             WriteLine($"{playerXBL.Username} Stats:");
-            output = playerXBL.Stats.AllHeroes.GetCategoryReadout(playerXBL.Stats.AllHeroes.Game);
+            output = playerXBL.Stats.AllHeroes.Game.GetModuleReadout();
             output.ForEach(x => WriteLine(x));
             WriteLine("---------------------------");
             WriteLine($"{playerPSN.Username} Stats:");
-            output = playerPSN.Stats.AllHeroes.GetCategoryReadout(playerPSN.Stats.AllHeroes.Game);
+            output = playerPSN.Stats.AllHeroes.Game.GetModuleReadout();
             output.ForEach(x => WriteLine(x));
             WriteLine("---------------------------");
         }
