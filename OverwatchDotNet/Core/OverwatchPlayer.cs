@@ -35,6 +35,16 @@ namespace OverwatchAPI
         public string ProfileURL { get; private set; }
 
         /// <summary>
+        /// The Player Level of the player
+        /// </summary>
+        public ushort PlayerLevel { get; private set; }
+
+        /// <summary>
+        /// The Competitive Rank of the player
+        /// </summary>
+        public ushort CompetitiveRank { get; private set; }
+
+        /// <summary>
         /// The player's region - EU/US/None
         /// </summary>
         public Region Region { get; private set; } 
@@ -106,6 +116,12 @@ namespace OverwatchAPI
             var userpage = await DownloadUserPage();
             CasualStats.UpdateStatsFromPage(userpage, Mode.Casual);
             CompetitiveStats.UpdateStatsFromPage(userpage, Mode.Competitive);
+            ushort parsedPlayerLevel = 0;
+            if (ushort.TryParse(userpage.QuerySelector("div.player-level div").TextContent, out parsedPlayerLevel))
+                PlayerLevel = parsedPlayerLevel;
+            ushort parsedCompetitiveRank = 0;
+            if (ushort.TryParse(userpage.QuerySelector("div.competitive-rank div").TextContent, out parsedCompetitiveRank))
+                CompetitiveRank = parsedCompetitiveRank;
             ProfileLastDownloaded = DateTime.UtcNow;
         }
 
