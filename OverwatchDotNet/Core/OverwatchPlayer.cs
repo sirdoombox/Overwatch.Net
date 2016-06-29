@@ -1,4 +1,6 @@
-﻿using OverwatchAPI.Internal;
+﻿using AngleSharp;
+using AngleSharp.Dom;
+using OverwatchAPI.Internal;
 using System;
 using System.Net.Http;
 using System.Text.RegularExpressions;
@@ -43,9 +45,14 @@ namespace OverwatchAPI
         public Platform Platform { get; private set; }
 
         /// <summary>
-        /// The players stats.
+        /// The players quick-play stats.
         /// </summary>
-        public PlayerStats Stats { get; private set; }
+        public PlayerStats CasualStats { get; private set; }
+
+        /// <summary>
+        /// The players competitive stats.
+        /// </summary>
+        public PlayerStats CompetitiveStats { get; private set; }
 
         /// <summary>
         /// The last time the profile was downloaded from PlayOverwatch.
@@ -94,10 +101,21 @@ namespace OverwatchAPI
         {
             if (Region == Region.none && Platform == Platform.pc)
                 throw new UserRegionNotDefinedException();
-            Stats = new PlayerStats();
-            await Stats.UpdateStats(this);
+            CasualStats = new PlayerStats();
+            CompetitiveStats = new PlayerStats();
+            var userpage = await DownloadUserPage();
+            CasualStats.UpdateStatsFromPage(userpage, Mode.Casual);
+            CompetitiveStats.UpdateStatsFromPage(userpage, Mode.Competitive);
             ProfileLastDownloaded = DateTime.UtcNow;
-        }  
+        }
+
+        internal async Task<IDocument> DownloadUserPage()
+        {
+            var config = Configuration.Default.WithDefaultLoader();
+            if (ProfileURL == null)
+                throw new UserProfileUrlNullException();
+            return await BrowsingContext.New(config).OpenAsync(ProfileURL);
+        }
     }
 
 }

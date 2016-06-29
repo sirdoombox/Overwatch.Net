@@ -21,9 +21,14 @@ namespace OverwatchDotNetTestbed
             Stopwatch stopwatch = Stopwatch.StartNew();
             await playerPC.UpdateStats();
             stopwatch.Stop();
-            WriteLine($"Completed download/parse in: {stopwatch.Elapsed}");
-            var output = playerPC.Stats.AllHeroes.Game.GetModuleReadout();
-            WriteLine($"{playerPC.Username} Stats:");
+            WriteLine($"Completed download/parse for {playerPC.Username} in: {stopwatch.Elapsed}");
+            var output = playerPC.CasualStats.AllHeroes.Game.GetModuleReadout();
+            WriteLine($"Casual Stats:");
+            foreach (var item in output)
+                WriteLine($"{item.Key}: {item.Value}");
+            WriteLine("---------------------------");
+            output = playerPC.CompetitiveStats.AllHeroes.Game.GetModuleReadout();
+            WriteLine($"Competitive Stats:");
             foreach (var item in output)
                 WriteLine($"{item.Key}: {item.Value}");
             WriteLine("---------------------------");

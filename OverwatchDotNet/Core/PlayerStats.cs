@@ -1,8 +1,10 @@
 ﻿using AngleSharp;
+using AngleSharp.Dom;
 using OverwatchAPI.Data;
 using OverwatchAPI.Internal;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace OverwatchAPI
@@ -31,15 +33,22 @@ namespace OverwatchAPI
         public Winston Winston { get; private set; }
         public Zarya Zarya { get; private set; }
         public Zenyatta Zenyatta { get; private set; }
-        
-        internal async Task UpdateStats(OverwatchPlayer player)
+
+        internal void UpdateStatsFromPage(IDocument doc, Mode mode)
         {
-            var config = Configuration.Default.WithDefaultLoader();
-            if (player.ProfileURL == null)
-                throw new UserProfileUrlNullException();
-            var document = await BrowsingContext.New(config).OpenAsync(player.ProfileURL);
+            string divModeId = "";
+            switch (mode)
+            {
+                case Mode.Casual:
+                    divModeId = "quick-play";
+                    break;
+                case Mode.Competitive:
+                    divModeId = "competitive-play";
+                    break;
+            }
+            var innerContent = doc.QuerySelector($"div[id='{divModeId}']");
             Dictionary<string, string> idDictionary = new Dictionary<string, string>();
-            foreach (var dropdownitem in document.QuerySelectorAll("select > option"))
+            foreach (var dropdownitem in innerContent.QuerySelectorAll("select > option"))
             {
                 string id = dropdownitem.GetAttribute("value");
                 if (id.StartsWith("0x0"))
@@ -47,7 +56,7 @@ namespace OverwatchAPI
                     idDictionary.Add(id, ParseClassName(dropdownitem.TextContent));
                 }
             }
-            foreach (var section in document.QuerySelectorAll("div[data-group-id='stats']"))
+            foreach (var section in innerContent.QuerySelectorAll("div[data-group-id='stats']"))
             {
                 var catId = section.GetAttribute("data-category-id");
                 List<OverwatchDataTable> heroTableCollection = new List<OverwatchDataTable>();
@@ -65,7 +74,7 @@ namespace OverwatchAPI
                     heroTable.Stats = statDict;
                     heroTableCollection.Add(heroTable);
                 }
-                var prop = GetType().GetProperty(idDictionary[catId]);
+                PropertyInfo prop = GetType().GetProperty(idDictionary[catId]);
                 if (typeof(IStatGroup).IsAssignableFrom(prop.PropertyType))
                 {
                     IStatGroup statGroup = (IStatGroup)Activator.CreateInstance(prop.PropertyType);
