@@ -48,6 +48,7 @@ There are also some helper methods available for use to simplify some common ope
 bool validTag = OverwatchAPIHelpers.IsValidBattletag("SomePlayer#1234"); // Returns true.
 string profileUrl = OverwatchAPIHelpers.ProfileUrl("SomePlayer#1234", Region.eu); // Returns a PlayOverwatch profile URL.
 ```
+Please see the "OverwatchDotNetTestbed" project if you'd like to see an implementation.
 
 ## Contact
 If you wish to contact me about contributing to the project, or have any questions / suggestions please feel free to come find me on the [C# discord server.](https://discord.gg/0np62rq4o8GnQO9l "C# Discord") - @Doombox#0661
