@@ -16,7 +16,7 @@ namespace OverwatchAPI
                 return $"https://playoverwatch.com/en-gb/career/{platform}/{region}/{username.Replace("#", "-")}";
             }
             else
-                return $"https://playoverwatch.com/en-gb/career/{platform}/{username.Replace("#", "-")}";
+                return $"https://playoverwatch.com/en-gb/career/{platform}/{username}";
         }
     }
 }

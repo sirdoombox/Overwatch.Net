@@ -1,5 +1,6 @@
 ﻿using OverwatchAPI;
 using OverwatchAPI.Internal;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using static System.Console;
@@ -17,23 +18,36 @@ namespace OverwatchDotNetTestbed
 
         async void PopulatePlayerWithRegionDetection()
         {
-            OverwatchPlayer player = new OverwatchPlayer("SirDoombox#2603", Platform.pc, Region.eu);
-            Stopwatch stopwatch = Stopwatch.StartNew();
-            await player.UpdateStats();
-            stopwatch.Stop();
-            WriteLine($"Completed download/parse for {player.Username} in: {stopwatch.Elapsed}");
-            WriteLine($"Player Level: {player.PlayerLevel} | Player Rank: {player.CompetitiveRank}");
+            List<string> PlayerNames = new List<string> { "SirDoombox#2603", "VeLo InFerno", "Rolingachu" };
+            foreach(var username in PlayerNames)
+            {
+                OverwatchPlayer player = new OverwatchPlayer(username);
+                await player.DetectPlatform();
+                await player.DetectRegionPC();
+                await player.UpdateStats();
+                WritePlayer(player);
+            }         
+        }
+
+        void WritePlayer(OverwatchPlayer player)
+        {
+            WriteLine($"{player.Username} Level: {player.PlayerLevel} | {player.Username} Rank: {player.CompetitiveRank}");
             WriteLine($"Casual Stats:");
             var output = player.CasualStats.AllHeroes.Game.GetModuleReadout();
             foreach (var item in output)
                 WriteLine($"{item.Key}: {item.Value}");
-            WriteLine("---------------------------");  
-                    
-            WriteLine($"Competitive Stats:");
-            output = player.CompetitiveStats.AllHeroes.Game.GetModuleReadout();
-            foreach (var item in output)
-                WriteLine($"{item.Key}: {item.Value}");
             WriteLine("---------------------------");
+
+            try
+            {
+                output = player.CompetitiveStats.AllHeroes.Game.GetModuleReadout();
+                WriteLine($"Competitive Stats:");
+                foreach (var item in output)
+                    WriteLine($"{item.Key}: {item.Value}");
+                WriteLine("---------------------------");
+            }
+            catch { WriteLine("No Competitive Stats"); }
+            WriteLine("\n \n");
         }
     }
 }

@@ -39,7 +39,8 @@ namespace OverwatchAPI.Internal
             var propProps = module.GetType().GetProperties();
             var stringList = new Dictionary<string,string>();
             foreach(var prop in propProps)
-                stringList.Add(prop.Name.AddSpacesToSentence(false), prop.GetValue(module).ToString());         
+                if(prop.GetValue(module) != null)
+                    stringList.Add(prop.Name.AddSpacesToSentence(false), prop.GetValue(module).ToString());         
             return stringList;
         }
 

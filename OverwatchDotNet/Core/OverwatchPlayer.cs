@@ -11,7 +11,13 @@ namespace OverwatchAPI
 {
     public class OverwatchPlayer
     {
-        public OverwatchPlayer(string username, Platform platform = Platform.none, Region region = Region.none, string profileurl = null)
+        /// <summary>
+        /// Construct a new Overwatch player.
+        /// </summary>
+        /// <param name="username">The players Battletag (SomeUser#1234) or Username for PSN/XBL</param>
+        /// <param name="platform">The players platform - Defaults to "none" if a battletag is not given (use DetectPlatform() if platform is not known)</param>
+        /// <param name="region">The players region (only required for PC) - Defaults to "none" (use DetectRegionPC if region is not known)</param>
+        public OverwatchPlayer(string username, Platform platform = Platform.none, Region region = Region.none)
         {
             Username = username;
             Platform = platform;
@@ -23,7 +29,7 @@ namespace OverwatchAPI
                 BattletagUrlFriendly = username.Replace("#", "-");
                 Region = region;
             }
-            if((Region != Region.none || platform != Platform.pc) && profileurl == null)
+            if(Region != Region.none && Platform != Platform.none)
             {
                 ProfileURL = ProfileURL(Username, Region, Platform);
             }
@@ -96,7 +102,7 @@ namespace OverwatchAPI
             if (responseNA.IsSuccessStatusCode)
             {
                 Region = Region.us;
-                ProfileURL = ProfileURL ?? baseUrl + naAppend;
+                ProfileURL = baseUrl + naAppend;
                 return;
             }
             else
@@ -105,12 +111,44 @@ namespace OverwatchAPI
                 if (responseEU.IsSuccessStatusCode)
                 {
                     Region = Region.eu;
-                    ProfileURL = ProfileURL ?? baseUrl + euAppend;
+                    ProfileURL = baseUrl + euAppend;
                     return;
                 }
             }
             Region = Region.none;
-        }      
+        }   
+        
+        public async Task DetectPlatform()
+        {
+            if (IsValidBattletag(Username))
+            {
+                Platform = Platform.pc;
+                return;
+            }
+            string baseUrl = "http://playoverwatch.com/en-gb/career/";
+            string psnAppend = $"psn/{Username}";
+            string xblAppend = $"xbl/{Username}";
+            HttpClient _client = new HttpClient();
+            _client.BaseAddress = new Uri(baseUrl);
+            var responsePsn = await _client.GetAsync(psnAppend);
+            if(responsePsn.IsSuccessStatusCode)
+            {
+                Platform = Platform.psn;
+                ProfileURL = baseUrl + psnAppend;
+                return;
+            }
+            else
+            {
+                var responseXbl = await _client.GetAsync(xblAppend);
+                if(responseXbl.IsSuccessStatusCode)
+                {
+                    Platform = Platform.xbl;
+                    ProfileURL = baseUrl + xblAppend;
+                    return;
+                }
+            }
+            Platform = Platform.none;
+        }
         
         /// <summary>
         /// Downloads and parses the players profile
@@ -120,6 +158,8 @@ namespace OverwatchAPI
         {
             if (Region == Region.none && Platform == Platform.pc)
                 throw new UserRegionNotDefinedException();
+            if (Platform == Platform.none)
+                throw new UserPlatformNotDefinedException();
             var userpage = await DownloadUserPage();
             GetUserRanks(userpage);
             CasualStats = new PlayerStats();
