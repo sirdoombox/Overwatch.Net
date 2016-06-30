@@ -31,7 +31,7 @@ namespace OverwatchDotNetTestbed
 
         void WritePlayer(OverwatchPlayer player)
         {
-            WriteLine($"{player.Username} Level: {player.PlayerLevel} | {player.Username} Rank: {player.CompetitiveRank}");
+            WriteLine($"{player.Username} | Platform: {player.Platform} | Level: {player.PlayerLevel} | Rank: {player.CompetitiveRank}");
             WriteLine($"Casual Stats:");
             var output = player.CasualStats.AllHeroes.Game.GetModuleReadout();
             foreach (var item in output)
