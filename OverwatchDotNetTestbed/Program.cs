@@ -1,6 +1,7 @@
 ﻿using OverwatchAPI;
 using OverwatchAPI.Internal;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using static System.Console;
 
@@ -10,22 +11,29 @@ namespace OverwatchDotNetTestbed
     {
         static void Main(string[] args)
         {
-            Task runWithDetection = new Task(new Program().PopulatePlayerWithRegionDetection);
-            runWithDetection.Start();
+            new Task(new Program().RunDemo).Start();
             ReadKey();
         }
 
-        async void PopulatePlayerWithRegionDetection()
+        async void RunDemo()
         {
-            List<string> PlayerNames = new List<string> { "SirDoombox#2603", "VeLo InFerno", "Rolingachu" };
-            foreach (var username in PlayerNames)
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            OverwatchPlayerCollection playerCollection = new OverwatchPlayerCollection
             {
-                OverwatchPlayer player = new OverwatchPlayer(username);
-                await player.DetectPlatform();
-                await player.DetectRegionPC();
-                await player.UpdateStats();
+                new OverwatchPlayer("SirDoombox#2603"),
+                new OverwatchPlayer("VeLo InFerno"),
+                new OverwatchPlayer("Rolingachu")
+            };
+
+            await playerCollection.DetectPlayerPlatforms();
+            await playerCollection.DetectPlayerRegions();
+            await playerCollection.UpdatePlayers();
+
+            foreach (OverwatchPlayer player in playerCollection)
                 WritePlayer(player);
-            }         
+            stopwatch.Stop();
+            WriteLine($"\n\nOperation Completed in {stopwatch.Elapsed}");
+            ReadKey();
         }
 
         void WritePlayer(OverwatchPlayer player)

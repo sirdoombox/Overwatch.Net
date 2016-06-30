@@ -3,19 +3,52 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Timers;
 
 namespace OverwatchAPI
 {
     public delegate void PlayerCollectionStatsUpdated(object sender, EventArgs e);
 
-    class OverwatchPlayerCollection : IEnumerable<OverwatchPlayer>
+    public class OverwatchPlayerCollection : IEnumerable<OverwatchPlayer>
     {
         private List<OverwatchPlayer> OverwatchPlayers;
 
         public OverwatchPlayerCollection()
         {
             OverwatchPlayers = new List<OverwatchPlayer>();
+        }
+
+        /// <summary>
+        /// Update all players in this collection.
+        /// </summary>
+        /// <returns></returns>
+        public async Task UpdatePlayers()
+        {
+            foreach (var player in OverwatchPlayers)
+                if (player.Region != Region.none)
+                    await player.UpdateStats();
+        }
+
+        /// <summary>
+        /// Detect the region of all players in the collection who are on the PC.
+        /// </summary>
+        /// <returns></returns>
+        public async Task DetectPlayerRegions()
+        {
+            foreach (var player in OverwatchPlayers)
+                if (player.Platform == Platform.pc)
+                    await player.DetectRegionPC();
+        }
+
+        /// <summary>
+        /// Detect the platforms of all players within the collection.
+        /// </summary>
+        /// <returns></returns>
+        public async Task DetectPlayerPlatforms()
+        {
+            foreach (var player in OverwatchPlayers)
+                    await player.DetectPlatform();
         }
 
         #region AutoUpdate 
@@ -44,9 +77,7 @@ namespace OverwatchAPI
 
         private async void UpdateIntervalTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            foreach(var player in OverwatchPlayers)           
-                if(player.Region != Region.none)
-                    await player.UpdateStats();           
+            await UpdatePlayers();
             StatsUpdated?.Invoke(this, e);
         }
         #endregion
