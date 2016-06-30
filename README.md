@@ -18,10 +18,8 @@ It's a simple wrapper that grabs player stats from a users PlayOverwatch.com pro
 * Batch and auto-update users - Save yourself some hassle dealing with updating cached info and just start the timer available as part of the OverwatchPlayerCollection
 
 ## Planned Features
-Currently this is a very early working version with very few features beyond the ability to get and store data. However here is a list of things I hope to add in the near future, and I'm also happy to take suggestions/requests for features.
-* User batching and some threading support
-* More robust error handling
-* Some database / serialisation support of some kind
+The list of planned features is quite short, I'm mainly fixing bugs and making the existing codebase more robust - However if you have any suggestions or requests for features please let me know and I'd be happy to add them.
+* Achievements Support
 
 ## Dependencies
 
