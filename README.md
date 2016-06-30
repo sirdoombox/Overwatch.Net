@@ -33,8 +33,9 @@ After you've added the necessary references to your project, using the library i
 
 The below code will create a new Overwatch player with the given Battletag, it will then detect the players region and update the users stats entirely asynchronously.
 ```csharp
-OverwatchPlayer player = new OverwatchPlayer("SirDoombox#2603", Platform.pc);
-await player.DetectRegion();
+OverwatchPlayer player = new OverwatchPlayer("SirDoombox#2603");
+await player.DetectPlatform();
+await player.DetectRegionPC();
 await player.UpdateStats();
 TimeSpan timePlayed = player.CasualStats.AllHeroes.Game.TimePlayed;
 ```
