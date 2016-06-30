@@ -241,7 +241,6 @@ namespace OverwatchAPI.Data
 			public float GamesPlayed { get; private set; }
 			public TimeSpan TimeSpentOnFire { get; private set; }
 			public TimeSpan ObjectiveTime { get; private set; }
-			public float Score { get; private set; }
 			public TimeSpan TimePlayed { get; private set; }
 
 			public void SendTable(OverwatchDataTable table)
@@ -258,9 +257,6 @@ namespace OverwatchAPI.Data
 				if(table.Stats.ContainsKey("Objective Time"))
 					ObjectiveTime = table.Stats["Objective Time"].OWValToTimeSpan();
 				else{ ObjectiveTime = TimeSpan.FromSeconds(0);; }
-				if(table.Stats.ContainsKey("Score"))
-					Score = table.Stats["Score"].OWValToFloat();
-				else{ Score = 0; }
 				if(table.Stats.ContainsKey("Time Played"))
 					TimePlayed = table.Stats["Time Played"].OWValToTimeSpan();
 				else{ TimePlayed = TimeSpan.FromSeconds(0);; }

@@ -17,18 +17,20 @@ namespace OverwatchDotNetTestbed
 
         async void PopulatePlayerWithRegionDetection()
         {
-            OverwatchPlayer playerPC = new OverwatchPlayer("SirDoombox#2603", Platform.pc, Region.eu);
+            OverwatchPlayer player = new OverwatchPlayer("SirDoombox#2603", Platform.pc, Region.eu);
             Stopwatch stopwatch = Stopwatch.StartNew();
-            await playerPC.UpdateStats();
+            await player.UpdateStats();
             stopwatch.Stop();
-            WriteLine($"Completed download/parse for {playerPC.Username} in: {stopwatch.Elapsed}");
-            var output = playerPC.CasualStats.AllHeroes.Game.GetModuleReadout();
+            WriteLine($"Completed download/parse for {player.Username} in: {stopwatch.Elapsed}");
+            WriteLine($"Player Level: {player.PlayerLevel} | Player Rank: {player.CompetitiveRank}");
             WriteLine($"Casual Stats:");
+            var output = player.CasualStats.AllHeroes.Game.GetModuleReadout();
             foreach (var item in output)
                 WriteLine($"{item.Key}: {item.Value}");
-            WriteLine("---------------------------");
-            output = playerPC.CompetitiveStats.AllHeroes.Game.GetModuleReadout();
+            WriteLine("---------------------------");  
+                    
             WriteLine($"Competitive Stats:");
+            output = player.CompetitiveStats.AllHeroes.Game.GetModuleReadout();
             foreach (var item in output)
                 WriteLine($"{item.Key}: {item.Value}");
             WriteLine("---------------------------");

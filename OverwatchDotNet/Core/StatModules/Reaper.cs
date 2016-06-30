@@ -159,7 +159,6 @@ namespace OverwatchAPI.Data
 		public class BestStats : IStatModule
 		{
 			public float EliminationsMostInLife { get; private set; }
-			public float MostScoreWithinOneLife { get; private set; }
 			public float DamageDoneMostInLife { get; private set; }
 			public float HealingDoneMostInLife { get; private set; }
 			public float WeaponAccuracyBestInGame { get; private set; }
@@ -180,9 +179,6 @@ namespace OverwatchAPI.Data
 				if(table.Stats.ContainsKey("Eliminations - Most in Life"))
 					EliminationsMostInLife = table.Stats["Eliminations - Most in Life"].OWValToFloat();
 				else{ EliminationsMostInLife = 0; }
-				if(table.Stats.ContainsKey("Most Score within one Life"))
-					MostScoreWithinOneLife = table.Stats["Most Score within one Life"].OWValToFloat();
-				else{ MostScoreWithinOneLife = 0; }
 				if(table.Stats.ContainsKey("Damage Done - Most in Life"))
 					DamageDoneMostInLife = table.Stats["Damage Done - Most in Life"].OWValToFloat();
 				else{ DamageDoneMostInLife = 0; }
@@ -321,7 +317,6 @@ namespace OverwatchAPI.Data
 			public TimeSpan TimePlayed { get; private set; }
 			public float GamesPlayed { get; private set; }
 			public float GamesWon { get; private set; }
-			public float Score { get; private set; }
 			public float ObjectiveTime { get; private set; }
 			public float TimeSpentOnFire { get; private set; }
 			public float WinPercentage { get; private set; }
@@ -337,9 +332,6 @@ namespace OverwatchAPI.Data
 				if(table.Stats.ContainsKey("Games Won"))
 					GamesWon = table.Stats["Games Won"].OWValToFloat();
 				else{ GamesWon = 0; }
-				if(table.Stats.ContainsKey("Score"))
-					Score = table.Stats["Score"].OWValToFloat();
-				else{ Score = 0; }
 				if(table.Stats.ContainsKey("Objective Time"))
 					ObjectiveTime = table.Stats["Objective Time"].OWValToFloat();
 				else{ ObjectiveTime = 0; }

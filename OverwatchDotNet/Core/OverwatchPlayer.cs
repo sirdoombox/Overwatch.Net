@@ -5,22 +5,27 @@ using System;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using static OverwatchAPI.OverwatchAPIHelpers;
 
 namespace OverwatchAPI
 {
     public class OverwatchPlayer
     {
-        public OverwatchPlayer(string username, Platform platform = Platform.pc, Region region = Region.none, string profileurl = null)
+        public OverwatchPlayer(string username, Platform platform = Platform.none, Region region = Region.none, string profileurl = null)
         {
-            if (!new Regex(@"\w+#\d+").IsMatch(username) && platform == Platform.pc)
-                throw new InvalidBattletagException();
             Username = username;
-            BattletagUrlFriendly = username.Replace("#", "-");
-            Region = region;
             Platform = platform;
+            if (!IsValidBattletag(username) && platform == Platform.pc)
+                throw new InvalidBattletagException();
+            else if (IsValidBattletag(username))
+            {
+                Platform = Platform.pc;
+                BattletagUrlFriendly = username.Replace("#", "-");
+                Region = region;
+            }
             if((Region != Region.none || platform != Platform.pc) && profileurl == null)
             {
-                ProfileURL = OverwatchAPIHelpers.ProfileURL(Username, Region, Platform);
+                ProfileURL = ProfileURL(Username, Region, Platform);
             }
         }
 
@@ -80,23 +85,27 @@ namespace OverwatchAPI
         /// <returns></returns>
         public async Task DetectRegionPC()
         {
+            if (Platform != Platform.pc)
+                return;
             string baseUrl = "http://playoverwatch.com/en-gb/career/";
+            string naAppend = $"pc/us/{BattletagUrlFriendly}";
+            string euAppend = $"pc/eu/{BattletagUrlFriendly}";
             HttpClient _client = new HttpClient();
             _client.BaseAddress = new Uri(baseUrl);
-            var responseNA = await _client.GetAsync($"{Platform}/us/{BattletagUrlFriendly}");
+            var responseNA = await _client.GetAsync(naAppend);
             if (responseNA.IsSuccessStatusCode)
             {
                 Region = Region.us;
-                ProfileURL = ProfileURL ?? baseUrl + $"{Platform}/us/{BattletagUrlFriendly}";
+                ProfileURL = ProfileURL ?? baseUrl + naAppend;
                 return;
             }
             else
-            {
-                var responseEU = await _client.GetAsync($"{Platform}/eu/{BattletagUrlFriendly}");
+            {            
+                var responseEU = await _client.GetAsync(euAppend);
                 if (responseEU.IsSuccessStatusCode)
                 {
                     Region = Region.eu;
-                    ProfileURL = ProfileURL ?? baseUrl + $"{Platform}/eu/{BattletagUrlFriendly}";
+                    ProfileURL = ProfileURL ?? baseUrl + euAppend;
                     return;
                 }
             }
@@ -104,7 +113,7 @@ namespace OverwatchAPI
         }      
         
         /// <summary>
-        /// Downloads the Users Profile and parses it to
+        /// Downloads and parses the players profile
         /// </summary>
         /// <returns></returns>
         public async Task UpdateStats()
@@ -112,21 +121,24 @@ namespace OverwatchAPI
             if (Region == Region.none && Platform == Platform.pc)
                 throw new UserRegionNotDefinedException();
             var userpage = await DownloadUserPage();
-            PlayerLevel = 0;
-            var levelElement = userpage.QuerySelector("div.player-level div");
-            ushort parsedPlayerLevel = 0;
-            if (levelElement != null && ushort.TryParse(levelElement.TextContent, out parsedPlayerLevel))
-                PlayerLevel = parsedPlayerLevel;
-            CompetitiveRank = 0;
-            var rankElement = userpage.QuerySelector("div.competitive-rank div");
-            ushort parsedCompetitiveRank = 0;
-            if (rankElement != null &&ushort.TryParse(rankElement.TextContent, out parsedCompetitiveRank))
-                CompetitiveRank = parsedCompetitiveRank;
+            GetUserRanks(userpage);
             CasualStats = new PlayerStats();
             CompetitiveStats = new PlayerStats();
             CasualStats.UpdateStatsFromPage(userpage, Mode.Casual);
             CompetitiveStats.UpdateStatsFromPage(userpage, Mode.Competitive);
             ProfileLastDownloaded = DateTime.UtcNow;
+        }
+
+        internal void GetUserRanks(IDocument doc)
+        {
+            ushort parsedPlayerLevel = 0;
+            PlayerLevel = 0;
+            ushort parsedCompetitiveRank = 0;
+            CompetitiveRank = 0;
+            if (ushort.TryParse(doc.QuerySelector("div.player-level div")?.TextContent, out parsedPlayerLevel))
+                PlayerLevel = parsedPlayerLevel;
+            if (ushort.TryParse(doc.QuerySelector("div.competitive-rank div")?.TextContent, out parsedCompetitiveRank))
+                CompetitiveRank = parsedCompetitiveRank;
         }
 
         internal async Task<IDocument> DownloadUserPage()
@@ -137,5 +149,4 @@ namespace OverwatchAPI
             return await BrowsingContext.New(config).OpenAsync(ProfileURL);
         }
     }
-
 }
