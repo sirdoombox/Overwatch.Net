@@ -32,22 +32,25 @@ namespace OverwatchDotNetTestbed
         void WritePlayer(OverwatchPlayer player)
         {
             WriteLine($"{player.Username} | Platform: {player.Platform} | Level: {player.PlayerLevel} | Rank: {player.CompetitiveRank}");
+            WriteLine("---------------------------");
             WriteLine($"Casual Stats:");
             var output = player.CasualStats.AllHeroes.Game.GetModuleReadout();
             foreach (var item in output)
                 WriteLine($"{item.Key}: {item.Value}");
             WriteLine("---------------------------");
-
             try
             {
                 output = player.CompetitiveStats.AllHeroes.Game.GetModuleReadout();
                 WriteLine($"Competitive Stats:");
                 foreach (var item in output)
                     WriteLine($"{item.Key}: {item.Value}");
-                WriteLine("---------------------------");
+                
             }
-            catch { WriteLine("No Competitive Stats"); }
-            WriteLine("\n \n");
+            catch
+            {
+                WriteLine("No Competitive Stats");
+            }
+            WriteLine("---------------------------\n\n");
         }
     }
 }
