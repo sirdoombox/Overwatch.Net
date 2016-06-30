@@ -11,7 +11,7 @@ namespace OverwatchAPI
 
         public static string ProfileURL(string username, Region region, Platform platform)
         {
-            if(platform == Platform.pc)
+            if (platform == Platform.pc)
             {
                 return $"https://playoverwatch.com/en-gb/career/{platform}/{region}/{username.Replace("#", "-")}";
             }

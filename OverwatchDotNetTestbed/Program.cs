@@ -1,7 +1,6 @@
 ﻿using OverwatchAPI;
 using OverwatchAPI.Internal;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using static System.Console;
 
@@ -19,7 +18,7 @@ namespace OverwatchDotNetTestbed
         async void PopulatePlayerWithRegionDetection()
         {
             List<string> PlayerNames = new List<string> { "SirDoombox#2603", "VeLo InFerno", "Rolingachu" };
-            foreach(var username in PlayerNames)
+            foreach (var username in PlayerNames)
             {
                 OverwatchPlayer player = new OverwatchPlayer(username);
                 await player.DetectPlatform();
@@ -32,6 +31,7 @@ namespace OverwatchDotNetTestbed
         void WritePlayer(OverwatchPlayer player)
         {
             WriteLine($"{player.Username} | Platform: {player.Platform} | Level: {player.PlayerLevel} | Rank: {player.CompetitiveRank}");
+            WriteLine($"{player.ProfilePortraitURL}");
             WriteLine("---------------------------");
             WriteLine($"Casual Stats:");
             var output = player.CasualStats.AllHeroes.Game.GetModuleReadout();

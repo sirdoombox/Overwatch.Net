@@ -3,7 +3,6 @@ using AngleSharp.Dom;
 using OverwatchAPI.Internal;
 using System;
 using System.Net.Http;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static OverwatchAPI.OverwatchAPIHelpers;
 
@@ -81,6 +80,11 @@ namespace OverwatchAPI
         public DateTime ProfileLastDownloaded { get; private set; }
 
         /// <summary>
+        /// A direct link to the users profile portrait.
+        /// </summary>
+        public string ProfilePortraitURL { get; private set; }
+
+        /// <summary>
         /// The URL friendly version of the users Battletag.
         /// </summary>
         private string BattletagUrlFriendly { get; }
@@ -128,28 +132,30 @@ namespace OverwatchAPI
             string baseUrl = "http://playoverwatch.com/en-gb/career/";
             string psnAppend = $"psn/{Username}";
             string xblAppend = $"xbl/{Username}";
-            HttpClient _client = new HttpClient();
-            _client.BaseAddress = new Uri(baseUrl);
-            var responsePsn = await _client.GetAsync(psnAppend);
-            if(responsePsn.IsSuccessStatusCode)
+            using (HttpClient _client = new HttpClient())
             {
-                Platform = Platform.psn;
-                ProfileURL = baseUrl + psnAppend;
-                return;
-            }
-            else
-            {
-                var responseXbl = await _client.GetAsync(xblAppend);
-                if(responseXbl.IsSuccessStatusCode)
+                _client.BaseAddress = new Uri(baseUrl);
+                var responsePsn = await _client.GetAsync(psnAppend);
+                if (responsePsn.IsSuccessStatusCode)
                 {
-                    Platform = Platform.xbl;
-                    ProfileURL = baseUrl + xblAppend;
+                    Platform = Platform.psn;
+                    ProfileURL = baseUrl + psnAppend;
                     return;
+                }
+                else
+                {
+                    var responseXbl = await _client.GetAsync(xblAppend);
+                    if (responseXbl.IsSuccessStatusCode)
+                    {
+                        Platform = Platform.xbl;
+                        ProfileURL = baseUrl + xblAppend;
+                        return;
+                    }
                 }
             }
             Platform = Platform.none;
         }
-        
+
         /// <summary>
         /// Downloads and parses the players profile
         /// </summary>
@@ -162,6 +168,7 @@ namespace OverwatchAPI
                 throw new UserPlatformNotDefinedException();
             var userpage = await DownloadUserPage();
             GetUserRanks(userpage);
+            GetProfilePortrait(userpage);
             CasualStats = new PlayerStats();
             CompetitiveStats = new PlayerStats();
             CasualStats.UpdateStatsFromPage(userpage, Mode.Casual);
@@ -179,6 +186,11 @@ namespace OverwatchAPI
                 PlayerLevel = parsedPlayerLevel;
             if (ushort.TryParse(doc.QuerySelector("div.competitive-rank div")?.TextContent, out parsedCompetitiveRank))
                 CompetitiveRank = parsedCompetitiveRank;
+        }
+
+        internal void GetProfilePortrait(IDocument doc)
+        {
+            ProfilePortraitURL = doc.QuerySelector(".player-portrait").GetAttribute("src");
         }
 
         internal async Task<IDocument> DownloadUserPage()

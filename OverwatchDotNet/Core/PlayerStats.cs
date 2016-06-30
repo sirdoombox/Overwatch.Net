@@ -1,11 +1,9 @@
-﻿using AngleSharp;
-using AngleSharp.Dom;
+﻿using AngleSharp.Dom;
 using OverwatchAPI.Data;
 using OverwatchAPI.Internal;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace OverwatchAPI
 {
