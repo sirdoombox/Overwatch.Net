@@ -2,8 +2,7 @@
 
 An unofficial player stats API for the Blizzard game "Overwatch".
 
-[Available on Nuget](https://www.nuget.org/packages/Overwatch.Net "Overwatch.Net on Nuget")
-`install-package Overwatch.Net`
+[![NuGet version](https://badge.fury.io/nu/Overwatch.Net.svg)](https://badge.fury.io/nu/Overwatch.Net)
 
 ## What is it?
 
