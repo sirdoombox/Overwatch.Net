@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace OverwatchAPI.Data
 {
-	public class Symmetra : IStatGroup
+	public class Symmetra : IHeroStats
 	{
 		public HeroSpecificStats HeroSpecific { get; private set; }
 		public CombatStats Combat { get; private set; }

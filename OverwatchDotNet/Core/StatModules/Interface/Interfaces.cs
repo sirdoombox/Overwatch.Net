@@ -2,7 +2,7 @@
 
 namespace OverwatchAPI.Internal
 {
-    public interface IStatGroup
+    public interface IHeroStats
     {
         void SendPage(IEnumerable<OverwatchDataTable> TableCollection);
     }

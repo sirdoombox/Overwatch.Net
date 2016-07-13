@@ -33,7 +33,6 @@ namespace OverwatchDotNetTestbed
                 WritePlayer(player);
             stopwatch.Stop();
             WriteLine($"\n\nOperation Completed in {stopwatch.Elapsed}");
-            ReadKey();
         }
 
         void WritePlayer(OverwatchPlayer player)
@@ -46,18 +45,10 @@ namespace OverwatchDotNetTestbed
             foreach (var item in output)
                 WriteLine($"{item.Key}: {item.Value}");
             WriteLine("---------------------------");
-            try
-            {
-                output = player.CompetitiveStats.AllHeroes.Game.GetModuleReadout();
-                WriteLine($"Competitive Stats:");
-                foreach (var item in output)
-                    WriteLine($"{item.Key}: {item.Value}");
-                
-            }
-            catch
-            {
-                WriteLine("No Competitive Stats");
-            }
+            output = player.CompetitiveStats.AllHeroes.Game.GetModuleReadout();
+            WriteLine($"Competitive Stats:");
+            foreach (var item in output)
+                WriteLine($"{item.Key}: {item.Value}");
             WriteLine("---------------------------\n\n");
         }
     }

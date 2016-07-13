@@ -3,34 +3,35 @@ using OverwatchAPI.Data;
 using OverwatchAPI.Internal;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace OverwatchAPI
 {
     public class PlayerStats
     {
-        public AllHeroes AllHeroes { get; private set; }
-        public Bastion Bastion { get; private set; }
-        public DVa DVa { get; private set; }
-        public Genji Genji { get; private set; }
-        public Hanzo Hanzo { get; private set; }
-        public Junkrat Junkrat { get; private set; }
-        public Lucio Lucio { get; private set; }
-        public McCree McCree { get; private set; }
-        public Mei Mei { get; private set; }
-        public Mercy Mercy { get; private set; }
-        public Pharah Pharah { get; private set; }
-        public Reaper Reaper { get; private set; }
-        public Reinhardt Reinhardt { get; private set; }
-        public Roadhog Roadhog { get; private set; }
-        public Soldier76 Soldier76 { get; private set; }
-        public Symmetra Symmetra { get; private set; }
-        public Torbjorn Torbjorn { get; private set; }
-        public Tracer Tracer { get; private set; }
-        public Widowmaker Widowmaker { get; private set; }
-        public Winston Winston { get; private set; }
-        public Zarya Zarya { get; private set; }
-        public Zenyatta Zenyatta { get; private set; }
+        public AllHeroes AllHeroes { get; private set; } = new AllHeroes();
+        public Bastion Bastion { get; private set; } = new Bastion();
+        public DVa DVa { get; private set; } = new DVa();
+        public Genji Genji { get; private set; } = new Genji();
+        public Hanzo Hanzo { get; private set; } = new Hanzo();
+        public Junkrat Junkrat { get; private set; } = new Junkrat();
+        public Lucio Lucio { get; private set; } = new Lucio();
+        public McCree McCree { get; private set; } = new McCree();
+        public Mei Mei { get; private set; } = new Mei();
+        public Mercy Mercy { get; private set; } = new Mercy();
+        public Pharah Pharah { get; private set; } = new Pharah();
+        public Reaper Reaper { get; private set; } = new Reaper();
+        public Reinhardt Reinhardt { get; private set; } = new Reinhardt();
+        public Roadhog Roadhog { get; private set; } = new Roadhog();
+        public Soldier76 Soldier76 { get; private set; } = new Soldier76();
+        public Symmetra Symmetra { get; private set; } = new Symmetra();
+        public Torbjorn Torbjorn { get; private set; } = new Torbjorn();
+        public Tracer Tracer { get; private set; } = new Tracer();
+        public Widowmaker Widowmaker { get; private set; } = new Widowmaker();
+        public Winston Winston { get; private set; } = new Winston();
+        public Zarya Zarya { get; private set; } = new Zarya();
+        public Zenyatta Zenyatta { get; private set; } = new Zenyatta();
 
         internal void UpdateStatsFromPage(IDocument doc, Mode mode)
         {
@@ -73,13 +74,27 @@ namespace OverwatchAPI
                     heroTableCollection.Add(heroTable);
                 }
                 PropertyInfo prop = GetType().GetProperty(idDictionary[catId]);
-                if (typeof(IStatGroup).IsAssignableFrom(prop.PropertyType))
+                if (typeof(IHeroStats).IsAssignableFrom(prop.PropertyType))
                 {
-                    IStatGroup statGroup = (IStatGroup)Activator.CreateInstance(prop.PropertyType);
+                    IHeroStats statGroup = (IHeroStats)Activator.CreateInstance(prop.PropertyType);
                     statGroup?.SendPage(heroTableCollection);
                     prop.SetValue(this, statGroup);
                 }
             }
+            foreach (var someProp in GetType().GetProperties())
+            {
+                var somePropInstance = someProp.GetValue(this);
+                foreach(var subProp in somePropInstance.GetType().GetProperties())
+                {
+                    if (subProp.GetValue(somePropInstance) == null)
+                        subProp.SetValue(somePropInstance, Activator.CreateInstance(subProp.PropertyType));
+                }            
+            }
+        }
+
+        public IHeroStats GetHeroStats(string heroName)
+        {
+            return (IHeroStats)GetType().GetProperties().FirstOrDefault(x => string.Compare(x.Name, ParseClassName(heroName), true) == 0).GetValue(this);
         }
 
         private string ParseClassName(string input)

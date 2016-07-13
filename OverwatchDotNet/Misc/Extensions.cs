@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Reflection;
 using System.Text;
 
 namespace OverwatchAPI.Internal
@@ -36,7 +37,7 @@ namespace OverwatchAPI.Internal
         /// <returns></returns>
         public static Dictionary<string,string> GetModuleReadout(this IStatModule module)
         {
-            var propProps = module.GetType().GetProperties();
+            PropertyInfo[] propProps = module.GetType().GetProperties();        
             var stringList = new Dictionary<string,string>();
             foreach(var prop in propProps)
                 if(prop.GetValue(module) != null)
