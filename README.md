@@ -1,6 +1,7 @@
-# Overwatch.Net
+# Overwatch.Net - Currently Not Supported (No Longer Works)
+## Considering a scratch rewrite to work without needing continuous maintenance.
 
-An unofficial player stats API for the Blizzard game "Overwatch". - **Currently not supported - No longer works**
+An unofficial player stats API for the Blizzard game "Overwatch".
 
 [![NuGet version](https://badge.fury.io/nu/Overwatch.Net.svg)](https://badge.fury.io/nu/Overwatch.Net)
 
