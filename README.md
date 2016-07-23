@@ -1,4 +1,5 @@
-# Overwatch.Net
+# Overwatch.Net - Currently Not Supported (No Longer Works)
+## Considering a scratch rewrite to work without needing continuous maintenance.
 
 An unofficial player stats API for the Blizzard game "Overwatch".
 
