@@ -1,5 +1,4 @@
-# Overwatch.Net - Currently Not Supported (No Longer Works)
-## Considering a scratch rewrite to work without needing continuous maintenance.
+# Overwatch.Net
 
 An unofficial player stats API for the Blizzard game "Overwatch".
 
@@ -12,7 +11,6 @@ It's a simple wrapper that grabs player stats from a users PlayOverwatch.com pro
 ## Current Features
 * Supports PC, Xbox 1 and Playstation 4 players.
 * Entirely async operation
-* Auto-generated objects - No need to compare strings, just use the statically typed objects.
 * Serializable - No complex data.
 * Region detection - Easily find the correct region for a player.
 * Batch and auto-update users - Save yourself some hassle dealing with updating cached info and just start the timer available as part of the OverwatchPlayerCollection
@@ -35,13 +33,13 @@ OverwatchPlayer player = new OverwatchPlayer("SirDoombox#2603");
 await player.DetectPlatform();
 await player.DetectRegionPC();
 await player.UpdateStats();
-TimeSpan timePlayed = player.CasualStats.AllHeroes.Game.TimePlayed;
+Double timePlayedInSeconds = player.CasualStats.Heroes["AllHeroes"].FirstOrDefault(x => x.Name == "Game").Stats["Time Played"];
 ```
 You can cut down on some of the requests you need to make (and the time that those requests take up) by specifying the region at creation (if known). This snippet also uses `.GetAwaiter().GetResult()` to make the method run in a synchronous fashion.
 ```csharp
 OverwatchPlayer player = new OverwatchPlayer("SirDoombox#2603", Platform.pc, Region.eu);
 player.UpdateStats().GetAwaiter().GetResult();
-Dictionary<string,string> statsGroupDict = player.CompetitiveStats.Junkrat.HeroSpecific.GetModuleReadout(); // Returns the name and value of all the stats inside that category to facilitate ease of use.
+Dictionary<string,double> statsGroupDict = player.CasualStats.Heroes["Junkrat"].FirstOrDefault(x => x.Name == "Hero Specific").Stats; // Returns the name and value of all the stats inside that category to facilitate ease of use.
 ````
 There are also some helper methods available for use to simplify some common operations
 ```csharp
