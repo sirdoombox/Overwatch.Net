@@ -1,16 +1,14 @@
 ﻿using AngleSharp.Dom;
 using OverwatchAPI.Data;
-using OverwatchAPI.Internal;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
+using System.Globalization;
 
 namespace OverwatchAPI
 {
     public class PlayerStats
     {
-        public OverwatchHeroDictionary Heroes { get; private set; } = new OverwatchHeroDictionary();
+        public Dictionary<string, List<OverwatchStatTable>> Heroes { get; private set; } = new Dictionary<string, List<OverwatchStatTable>>();
 
         internal void UpdateStatsFromPage(IDocument doc, Mode mode)
         {
@@ -47,7 +45,7 @@ namespace OverwatchAPI
                     {
                         if (statDict.ContainsKey(row.Children[0].TextContent))
                             continue;
-                        statDict.Add(row.Children[0].TextContent, row.Children[1].TextContent.OWValToDouble());
+                        statDict.Add(row.Children[0].TextContent, OWValToDouble(row.Children[1].TextContent));
                     }
                     heroTable.Stats = statDict;
                     heroTableCollection.Add(heroTable);
@@ -56,7 +54,7 @@ namespace OverwatchAPI
             }
         }
 
-        public static double OWValToDouble(this string input)
+        double OWValToDouble(string input)
         {
             if (input.ToLower().Contains("hour"))
                 return TimeSpan.FromHours(int.Parse(input.Substring(0, input.IndexOf(" ")))).TotalSeconds;
