@@ -2,6 +2,7 @@
 using OverwatchAPI.Internal;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using static System.Console;
 
@@ -41,13 +42,11 @@ namespace OverwatchDotNetTestbed
             WriteLine($"{player.ProfilePortraitURL}");
             WriteLine("---------------------------");
             WriteLine($"Casual Stats:");
-            var output = player.CasualStats.AllHeroes.Game.GetModuleReadout();
-            foreach (var item in output)
+            foreach (var item in player.CasualStats.Heroes["AllHeroes"].FirstOrDefault(x => x.Name == "Game").Stats)
                 WriteLine($"{item.Key}: {item.Value}");
             WriteLine("---------------------------");
-            output = player.CompetitiveStats.AllHeroes.Game.GetModuleReadout();
             WriteLine($"Competitive Stats:");
-            foreach (var item in output)
+            foreach (var item in player.CompetitiveStats.Heroes["AllHeroes"].FirstOrDefault(x => x.Name == "Game").Stats)
                 WriteLine($"{item.Key}: {item.Value}");
             WriteLine("---------------------------\n\n");
         }

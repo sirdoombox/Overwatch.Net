@@ -43,37 +43,13 @@
     <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\Exceptions.cs" />
-    <Compile Include="Core\OverwatchPlayer.cs" />
-    <Compile Include="Core\OverwatchPlayerCollection.cs" />
-    <Compile Include="Core\PlayerStats.cs" />
-    <Compile Include="Core\StatModules\AllHeroes.cs" />
-    <Compile Include="Core\StatModules\Bastion.cs" />
-    <Compile Include="Core\StatModules\DVa.cs" />
-    <Compile Include="Core\StatModules\Genji.cs" />
-    <Compile Include="Core\StatModules\Hanzo.cs" />
-    <Compile Include="Core\StatModules\Interface\Interfaces.cs" />
-    <Compile Include="Core\OverwatchTableData.cs" />
-    <Compile Include="Core\StatModules\Junkrat.cs" />
-    <Compile Include="Core\StatModules\Lucio.cs" />
-    <Compile Include="Core\StatModules\McCree.cs" />
-    <Compile Include="Core\StatModules\Mei.cs" />
-    <Compile Include="Core\StatModules\Mercy.cs" />
-    <Compile Include="Core\StatModules\Pharah.cs" />
-    <Compile Include="Core\StatModules\Reaper.cs" />
-    <Compile Include="Core\StatModules\Reinhardt.cs" />
-    <Compile Include="Core\StatModules\Roadhog.cs" />
-    <Compile Include="Core\StatModules\Soldier76.cs" />
-    <Compile Include="Core\StatModules\Symmetra.cs" />
-    <Compile Include="Core\StatModules\Torbjorn.cs" />
-    <Compile Include="Core\StatModules\Tracer.cs" />
-    <Compile Include="Core\StatModules\Widowmaker.cs" />
-    <Compile Include="Core\StatModules\Winston.cs" />
-    <Compile Include="Core\StatModules\Zarya.cs" />
-    <Compile Include="Core\StatModules\Zenyatta.cs" />
-    <Compile Include="Misc\Enums.cs" />
-    <Compile Include="Misc\Extensions.cs" />
-    <Compile Include="Misc\Helpers.cs" />
+    <Compile Include="src\Exceptions.cs" />
+    <Compile Include="src\OverwatchPlayer.cs" />
+    <Compile Include="src\OverwatchPlayerCollection.cs" />
+    <Compile Include="src\PlayerStats.cs" />
+    <Compile Include="src\OverwatchTableData.cs" />
+    <Compile Include="src\Misc\Enums.cs" />
+    <Compile Include="src\Misc\Helpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
