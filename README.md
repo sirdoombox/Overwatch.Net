@@ -6,7 +6,7 @@ An unofficial player stats API for the Blizzard game "Overwatch".
 
 ## What is it?
 
-It's a simple wrapper that grabs player stats from a users PlayOverwatch.com profile and parses it into a nice set of objects to be used however you like. It's written entirely in C# using AngleSharp to parse the data from the page. The only limiting factor is the speed at which the PlayOverwatch profile can be loaded.
+A simple wrapper that grabs player stats from a users PlayOverwatch.com profile and parses it to be used however you like. It's written entirely in C# using AngleSharp to parse the data from the page. The only limiting factor is the speed at which the PlayOverwatch profile can be loaded.
 
 ## Current Features
 * Supports PC, Xbox 1 and Playstation 4 players.
@@ -16,11 +16,9 @@ It's a simple wrapper that grabs player stats from a users PlayOverwatch.com pro
 * Batch and auto-update users - Save yourself some hassle dealing with updating cached info and just start the timer available as part of the OverwatchPlayerCollection
 
 ## Planned Features
-The list of planned features is quite short, I'm mainly fixing bugs and making the existing codebase more robust - However if you have any suggestions or requests for features please let me know and I'd be happy to add them.
-* Achievements Support
+* None at the moment - Any feature requests will be placed here.
 
 ## Dependencies
-
 * AngleSharp - Used to parse the data from the PlayOverwatch page as no other data source is available from Blizzard.
 
 ## Usage
