@@ -33,13 +33,13 @@ OverwatchPlayer player = new OverwatchPlayer("SirDoombox#2603");
 await player.DetectPlatform();
 await player.DetectRegionPC();
 await player.UpdateStats();
-Double timePlayedInSeconds = player.CasualStats.Heroes["AllHeroes"].FirstOrDefault(x => x.Name == "Game").Stats["Time Played"];
+Double timePlayedInSeconds = player.CasualStats.GetHero("AllHeroes").GetCategory("Game").GetStat("Time Played");
 ```
 You can cut down on some of the requests you need to make (and the time that those requests take up) by specifying the region at creation (if known). This snippet also uses `.GetAwaiter().GetResult()` to make the method run in a synchronous fashion.
 ```csharp
 OverwatchPlayer player = new OverwatchPlayer("SirDoombox#2603", Platform.pc, Region.eu);
 player.UpdateStats().GetAwaiter().GetResult();
-Dictionary<string,double> statsGroupDict = player.CasualStats.Heroes["Junkrat"].FirstOrDefault(x => x.Name == "Hero Specific").Stats; // Returns the name and value of all the stats inside that category to facilitate ease of use.
+Category statCategory = player.CasualStats.GetHero("Junkrat").GetCategory("Hero Specific");
 ````
 There are also some helper methods available for use to simplify some common operations
 ```csharp
