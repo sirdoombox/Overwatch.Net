@@ -69,12 +69,12 @@ namespace OverwatchAPI
         /// <summary>
         /// The players quick-play stats.
         /// </summary>
-        public PlayerStats CasualStats { get; private set; }
+        public OverwatchStats CasualStats { get; private set; }
 
         /// <summary>
         /// The players competitive stats.
         /// </summary>
-        public PlayerStats CompetitiveStats { get; private set; }
+        public OverwatchStats CompetitiveStats { get; private set; }
 
         /// <summary>
         /// The last time the profile was downloaded from PlayOverwatch.
@@ -92,7 +92,7 @@ namespace OverwatchAPI
         private string BattletagUrlFriendly { get; }
 
         /// <summary>
-        /// Detect the region of the player (Also sets the players ProfileURL if it is currently un-set) - THIS ONLY WORKS FOR PC PLAYERS. CONSOLE PLAYERS DO NOT HAVE REGIONS.
+        /// Detect the region of the player (Also sets the players ProfileURL if it is currently un-set) - This method will simply return if the player is not on PC.
         /// </summary>
         /// <returns></returns>
         public async Task DetectRegionPC()
@@ -171,8 +171,8 @@ namespace OverwatchAPI
             var userpage = await DownloadUserPage();
             GetUserRanks(userpage);
             GetProfilePortrait(userpage);
-            CasualStats = new PlayerStats();
-            CompetitiveStats = new PlayerStats();
+            CasualStats = new OverwatchStats();
+            CompetitiveStats = new OverwatchStats();
             CasualStats.UpdateStatsFromPage(userpage, Mode.Casual);
             CompetitiveStats.UpdateStatsFromPage(userpage, Mode.Competitive);
             ProfileLastDownloaded = DateTime.UtcNow;

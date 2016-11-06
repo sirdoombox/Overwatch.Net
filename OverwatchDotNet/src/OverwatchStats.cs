@@ -6,59 +6,7 @@ using System.Linq;
 
 namespace OverwatchAPI
 {
-    public class Hero : List<Category>
-    {
-        public string Name { get; }
-
-        public Hero(string n)
-        {
-            Name = n;
-        }
-
-        /// <summary>
-        /// Get a category by name
-        /// </summary>
-        /// <param name="name">The name of the category.</param>
-        /// <returns>A category object if one by such a name exists - otherwise null.</returns>
-        public Category GetCategory(string name)
-        {
-            return this.FirstOrDefault(x => string.Compare(name, x.Name) <= 0);
-        }
-    }
-
-    public class Category : List<Stat>
-    {
-        public string Name { get; }
-
-        public Category(string n)
-        {
-            Name = n;
-        }
-
-        /// <summary>
-        /// Get a stat by name.
-        /// </summary>
-        /// <param name="name">The name of the stat.</param>
-        /// <returns>A stat object if one by such a name exists - otherwise null.</returns>
-        public Stat GetStat(string name)
-        {
-            return this.FirstOrDefault(x => string.Compare(name, x.Name) <= 0);
-        }
-    }
-
-    public class Stat
-    {
-        public string Name { get; }
-        public double Value { get; }
-
-        public Stat(string n, double v)
-        {
-            Name = n;
-            Value = v;
-        }
-    }
-
-    public class PlayerStats : List<Hero>
+    public class OverwatchStats : List<Hero>
     {        
         /// <summary>
         /// Get a hero by name.
@@ -136,6 +84,58 @@ namespace OverwatchAPI
             if (input.ToLower() == "all heroes")
                 return "AllHeroes";
             return input.Replace("ú", "u").Replace(":", "").Replace(" ", "").Replace("ö", "o").Replace(".", "");
+        }
+    }
+
+    public class Hero : List<Category>
+    {
+        public string Name { get; }
+
+        public Hero(string n)
+        {
+            Name = n;
+        }
+
+        /// <summary>
+        /// Get a category by name
+        /// </summary>
+        /// <param name="name">The name of the category.</param>
+        /// <returns>A category object if one by such a name exists - otherwise null.</returns>
+        public Category GetCategory(string name)
+        {
+            return this.FirstOrDefault(x => string.Compare(name, x.Name) <= 0);
+        }
+    }
+
+    public class Category : List<Stat>
+    {
+        public string Name { get; }
+
+        public Category(string n)
+        {
+            Name = n;
+        }
+
+        /// <summary>
+        /// Get a stat by name.
+        /// </summary>
+        /// <param name="name">The name of the stat.</param>
+        /// <returns>A stat object if one by such a name exists - otherwise null.</returns>
+        public Stat GetStat(string name)
+        {
+            return this.FirstOrDefault(x => string.Compare(name, x.Name) <= 0);
+        }
+    }
+
+    public class Stat
+    {
+        public string Name { get; }
+        public double Value { get; }
+
+        public Stat(string n, double v)
+        {
+            Name = n;
+            Value = v;
         }
     }
 }

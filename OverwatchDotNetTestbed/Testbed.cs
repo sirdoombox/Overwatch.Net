@@ -1,18 +1,15 @@
 ﻿using OverwatchAPI;
-using OverwatchAPI.Internal;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 using static System.Console;
 
 namespace OverwatchDotNetTestbed
 {
-    class Program
+    class Testbed
     {
         static void Main(string[] args)
         {
-            new Task(new Program().RunDemo).Start();
+            new Task(new Testbed().RunDemo).Start();
             ReadKey();
         }
 

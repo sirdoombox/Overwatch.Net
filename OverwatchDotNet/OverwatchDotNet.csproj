@@ -46,8 +46,8 @@
     <Compile Include="src\Misc\Exceptions.cs" />
     <Compile Include="src\OverwatchPlayer.cs" />
     <Compile Include="src\OverwatchPlayerCollection.cs" />
-    <Compile Include="src\PlayerAchievements.cs" />
-    <Compile Include="src\PlayerStats.cs" />
+    <Compile Include="src\OverwatchAchievements.cs" />
+    <Compile Include="src\OverwatchStats.cs" />
     <Compile Include="src\Misc\Enums.cs" />
     <Compile Include="src\Misc\Helpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
