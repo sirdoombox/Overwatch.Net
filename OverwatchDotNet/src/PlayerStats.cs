@@ -1,14 +1,74 @@
 ﻿using AngleSharp.Dom;
-using OverwatchAPI.Data;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 
 namespace OverwatchAPI
 {
-    public class PlayerStats
+    public class Hero : List<Category>
     {
-        public Dictionary<string, List<OverwatchStatTable>> Heroes { get; private set; } = new Dictionary<string, List<OverwatchStatTable>>();
+        public string Name { get; }
+
+        public Hero(string n)
+        {
+            Name = n;
+        }
+
+        /// <summary>
+        /// Get a category by name
+        /// </summary>
+        /// <param name="name">The name of the category.</param>
+        /// <returns>A category object if one by such a name exists - otherwise null.</returns>
+        public Category GetCategory(string name)
+        {
+            return this.FirstOrDefault(x => string.Compare(name, x.Name) <= 0);
+        }
+    }
+
+    public class Category : List<Stat>
+    {
+        public string Name { get; }
+
+        public Category(string n)
+        {
+            Name = n;
+        }
+
+        /// <summary>
+        /// Get a stat by name.
+        /// </summary>
+        /// <param name="name">The name of the stat.</param>
+        /// <returns>A stat object if one by such a name exists - otherwise null.</returns>
+        public Stat GetStat(string name)
+        {
+            return this.FirstOrDefault(x => string.Compare(name, x.Name) <= 0);
+        }
+    }
+
+    public class Stat
+    {
+        public string Name { get; }
+        public double Value { get; }
+
+        public Stat(string n, double v)
+        {
+            Name = n;
+            Value = v;
+        }
+    }
+
+    public class PlayerStats : List<Hero>
+    {        
+        /// <summary>
+        /// Get a hero by name.
+        /// </summary>
+        /// <param name="name">The name of the hero/</param>
+        /// <returns>A hero object if one by such a name exists - otherwise null.</returns>
+        public Hero GetHero(string name)
+        {
+            return this.FirstOrDefault(x => string.Compare(name, x.Name) <= 0);
+        }
 
         internal void UpdateStatsFromPage(IDocument doc, Mode mode)
         {
@@ -35,11 +95,10 @@ namespace OverwatchAPI
             foreach (var section in innerContent.QuerySelectorAll("div[data-group-id='stats']"))
             {
                 var catId = section.GetAttribute("data-category-id");
-                List<OverwatchStatTable> heroTableCollection = new List<OverwatchStatTable>();
+                Hero hero = new Hero(idDictionary[catId]);
                 foreach (var table in section.QuerySelectorAll($"div[data-category-id='{catId}'] table.data-table"))
                 {
-                    OverwatchStatTable heroTable = new OverwatchStatTable();
-                    heroTable.Name = table.QuerySelector("thead").TextContent;
+                    Category cat = new Category(table.QuerySelector("thead").TextContent);
                     var statDict = new Dictionary<string, double>();
                     foreach (var row in table.QuerySelectorAll("tbody tr"))
                     {
@@ -47,10 +106,10 @@ namespace OverwatchAPI
                             continue;
                         statDict.Add(row.Children[0].TextContent, OWValToDouble(row.Children[1].TextContent));
                     }
-                    heroTable.Stats = statDict;
-                    heroTableCollection.Add(heroTable);
+                    cat.AddRange(statDict.Select(x => new Stat(x.Key, x.Value)).ToList());
+                    hero.Add(cat);
                 }
-                Heroes.Add(idDictionary[catId], heroTableCollection);
+                this.Add(hero);
             }
         }
 

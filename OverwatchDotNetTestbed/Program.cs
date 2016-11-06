@@ -42,12 +42,12 @@ namespace OverwatchDotNetTestbed
             WriteLine($"{player.ProfilePortraitURL}");
             WriteLine("---------------------------");
             WriteLine($"Casual Stats:");
-            foreach (var item in player.CasualStats.Heroes["AllHeroes"].FirstOrDefault(x => x.Name == "Game").Stats)
-                WriteLine($"{item.Key}: {item.Value}");
+            foreach (var item in player.CasualStats.GetHero("AllHeroes").GetCategory("Game"))
+                WriteLine($"{item.Name}: {item.Value}");
             WriteLine("---------------------------");
             WriteLine($"Competitive Stats:");
-            foreach (var item in player.CompetitiveStats.Heroes["AllHeroes"].FirstOrDefault(x => x.Name == "Game").Stats)
-                WriteLine($"{item.Key}: {item.Value}");
+            foreach (var item in player.CompetitiveStats.GetHero("AllHeroes").GetCategory("Game"))
+                WriteLine($"{item.Name}: {item.Value}");
             WriteLine("---------------------------\n\n");
         }
     }

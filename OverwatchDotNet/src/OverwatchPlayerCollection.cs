@@ -12,11 +12,11 @@ namespace OverwatchAPI
 
     public class OverwatchPlayerCollection : IEnumerable<OverwatchPlayer>
     {
-        private List<OverwatchPlayer> OverwatchPlayers;
+        private List<OverwatchPlayer> overwatchPlayers;
 
         public OverwatchPlayerCollection()
         {
-            OverwatchPlayers = new List<OverwatchPlayer>();
+            overwatchPlayers = new List<OverwatchPlayer>();
         }
 
         /// <summary>
@@ -25,7 +25,7 @@ namespace OverwatchAPI
         /// <returns></returns>
         public async Task UpdatePlayers()
         {
-            foreach (var player in OverwatchPlayers)
+            foreach (var player in overwatchPlayers)
                 if (player.Region != Region.none)
                     await player.UpdateStats();
         }
@@ -36,7 +36,7 @@ namespace OverwatchAPI
         /// <returns></returns>
         public async Task DetectPlayerRegions()
         {
-            foreach (var player in OverwatchPlayers)
+            foreach (var player in overwatchPlayers)
                 if (player.Platform == Platform.pc)
                     await player.DetectRegionPC();
         }
@@ -47,7 +47,7 @@ namespace OverwatchAPI
         /// <returns></returns>
         public async Task DetectPlayerPlatforms()
         {
-            foreach (var player in OverwatchPlayers)
+            foreach (var player in overwatchPlayers)
                     await player.DetectPlatform();
         }
 
@@ -90,9 +90,9 @@ namespace OverwatchAPI
         /// <returns>True: Player added | False: Player already exists in the collection</returns>
         public bool Add(OverwatchPlayer player)
         {
-            var listContains = OverwatchPlayers.Any(x => x.Username.Equals(player.Username, StringComparison.OrdinalIgnoreCase));
+            var listContains = overwatchPlayers.Any(x => x.Username.Equals(player.Username, StringComparison.OrdinalIgnoreCase));
             if (!listContains)
-                OverwatchPlayers.Add(player);
+                overwatchPlayers.Add(player);
             return !listContains;
         }
 
@@ -103,7 +103,7 @@ namespace OverwatchAPI
         /// <returns>True: Player removed | False: No player removed</returns>
         public bool Remove(OverwatchPlayer player)
         {
-            return OverwatchPlayers.Remove(player);
+            return overwatchPlayers.Remove(player);
         }
 
         /// <summary>
@@ -114,18 +114,18 @@ namespace OverwatchAPI
         public bool Remove(string battletag)
         {
             if(!OverwatchAPIHelpers.IsValidBattletag(battletag)) throw new InvalidBattletagException();
-            return OverwatchPlayers.RemoveAll(x => x.Username.Equals(battletag, StringComparison.OrdinalIgnoreCase)) > 0;
+            return overwatchPlayers.RemoveAll(x => x.Username.Equals(battletag, StringComparison.OrdinalIgnoreCase)) > 0;
         }
 
         public OverwatchPlayer this[int index]
         {
-            get { return OverwatchPlayers[index]; }
-            set { OverwatchPlayers.Insert(index, value); }
+            get { return overwatchPlayers[index]; }
+            set { overwatchPlayers.Insert(index, value); }
         }
 
         public IEnumerator<OverwatchPlayer> GetEnumerator()
         {
-            return OverwatchPlayers.GetEnumerator();
+            return overwatchPlayers.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
