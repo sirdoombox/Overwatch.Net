@@ -15,7 +15,7 @@ namespace OverwatchAPI
         /// <returns>A hero object if one by such a name exists - otherwise null.</returns>
         public Hero GetHero(string name)
         {
-            return this.FirstOrDefault(x => string.Compare(name, x.Name) <= 0);
+            return this.FirstOrDefault(x => string.Compare(name, x.Name, StringComparison.OrdinalIgnoreCase) == 0);
         }
 
         internal void UpdateStatsFromPage(IDocument doc, Mode mode)
@@ -103,7 +103,7 @@ namespace OverwatchAPI
         /// <returns>A category object if one by such a name exists - otherwise null.</returns>
         public Category GetCategory(string name)
         {
-            return this.FirstOrDefault(x => string.Compare(name, x.Name) <= 0);
+            return this.FirstOrDefault(x => string.Compare(name, x.Name, StringComparison.OrdinalIgnoreCase) == 0);
         }
     }
 
@@ -123,7 +123,7 @@ namespace OverwatchAPI
         /// <returns>A stat object if one by such a name exists - otherwise null.</returns>
         public Stat GetStat(string name)
         {
-            return this.FirstOrDefault(x => string.Compare(name, x.Name) <= 0);
+            return this.FirstOrDefault(x => string.Compare(name, x.Name, StringComparison.OrdinalIgnoreCase) == 0);
         }
     }
 
