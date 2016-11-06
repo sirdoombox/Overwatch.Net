@@ -77,6 +77,11 @@ namespace OverwatchAPI
         public OverwatchStats CompetitiveStats { get; private set; }
 
         /// <summary>
+        /// The players achievements.
+        /// </summary>
+        public OverwatchAchievements Achievements { get; private set; }
+
+        /// <summary>
         /// The last time the profile was downloaded from PlayOverwatch.
         /// </summary>
         public DateTime ProfileLastDownloaded { get; private set; }
@@ -173,6 +178,8 @@ namespace OverwatchAPI
             GetProfilePortrait(userpage);
             CasualStats = new OverwatchStats();
             CompetitiveStats = new OverwatchStats();
+            Achievements = new OverwatchAchievements();
+            Achievements.UpdateAchievementsFromPage(userpage);
             CasualStats.UpdateStatsFromPage(userpage, Mode.Casual);
             CompetitiveStats.UpdateStatsFromPage(userpage, Mode.Competitive);
             ProfileLastDownloaded = DateTime.UtcNow;

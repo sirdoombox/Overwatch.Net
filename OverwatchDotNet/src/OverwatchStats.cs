@@ -44,9 +44,10 @@ namespace OverwatchAPI
             {
                 var catId = section.GetAttribute("data-category-id");
                 Hero hero = new Hero(idDictionary[catId]);
+                this.Add(hero);
                 foreach (var table in section.QuerySelectorAll($"div[data-category-id='{catId}'] table.data-table"))
                 {
-                    Category cat = new Category(table.QuerySelector("thead").TextContent);
+                    StatCategory cat = new StatCategory(table.QuerySelector("thead").TextContent);
                     var statDict = new Dictionary<string, double>();
                     foreach (var row in table.QuerySelectorAll("tbody tr"))
                     {
@@ -54,10 +55,9 @@ namespace OverwatchAPI
                             continue;
                         statDict.Add(row.Children[0].TextContent, OWValToDouble(row.Children[1].TextContent));
                     }
-                    cat.AddRange(statDict.Select(x => new Stat(x.Key, x.Value)).ToList());
+                    cat.AddRange(statDict.Select(x => new Stat(x.Key, x.Value)));
                     hero.Add(cat);
                 }
-                this.Add(hero);
             }
         }
 
@@ -87,7 +87,7 @@ namespace OverwatchAPI
         }
     }
 
-    public class Hero : List<Category>
+    public class Hero : List<StatCategory>
     {
         public string Name { get; }
 
@@ -101,17 +101,17 @@ namespace OverwatchAPI
         /// </summary>
         /// <param name="name">The name of the category.</param>
         /// <returns>A category object if one by such a name exists - otherwise null.</returns>
-        public Category GetCategory(string name)
+        public StatCategory GetCategory(string name)
         {
             return this.FirstOrDefault(x => string.Compare(name, x.Name, StringComparison.OrdinalIgnoreCase) == 0);
         }
     }
 
-    public class Category : List<Stat>
+    public class StatCategory : List<Stat>
     {
         public string Name { get; }
 
-        public Category(string n)
+        public StatCategory(string n)
         {
             Name = n;
         }

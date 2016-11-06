@@ -45,6 +45,10 @@ namespace OverwatchDotNetTestbed
             WriteLine($"Competitive Stats:");
             foreach (var item in player.CompetitiveStats.GetHero("AllHeroes").GetCategory("Game"))
                 WriteLine($"{item.Name}: {item.Value}");
+            WriteLine("---------------------------");
+            WriteLine($"General Achievements: ");
+            foreach (var item in player.Achievements.GetCategory("General"))
+                WriteLine($"{item.Name}: { item.IsUnlocked} ");
             WriteLine("---------------------------\n\n");
         }
     }
