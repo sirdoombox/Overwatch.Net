@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="src\Misc\Exceptions.cs" />
+    <Compile Include="src\Misc\StaticVars.cs" />
     <Compile Include="src\OverwatchPlayer.cs" />
     <Compile Include="src\OverwatchPlayerCollection.cs" />
     <Compile Include="src\OverwatchAchievements.cs" />
