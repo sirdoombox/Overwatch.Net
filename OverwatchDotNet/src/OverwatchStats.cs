@@ -37,7 +37,7 @@ namespace OverwatchAPI
                 string id = dropdownitem.GetAttribute("value");
                 if (id.StartsWith("0x0"))
                 {
-                    idDictionary.Add(id, ParseClassName(dropdownitem.TextContent));
+                    idDictionary.Add(id, ParseHeroName(dropdownitem.TextContent));
                 }
             }
             foreach (var section in innerContent.QuerySelectorAll("div[data-group-id='stats']"))
@@ -79,7 +79,7 @@ namespace OverwatchAPI
             catch { return 0; }
         }
 
-        private string ParseClassName(string input)
+        private string ParseHeroName(string input)
         {
             if (input.ToLower() == "all heroes")
                 return "AllHeroes";

@@ -1,4 +1,5 @@
 ﻿using OverwatchAPI;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using static System.Console;
@@ -16,16 +17,19 @@ namespace OverwatchDotNetTestbed
         async void RunDemo()
         {
             Stopwatch stopwatch = Stopwatch.StartNew();
-            OverwatchPlayerCollection playerCollection = new OverwatchPlayerCollection
+            List<OverwatchPlayer> playerCollection = new List<OverwatchPlayer>
             {
                 new OverwatchPlayer("SirDoombox#2603"),
                 new OverwatchPlayer("VeLo InFerno"),
                 new OverwatchPlayer("Rolingachu")
             };
 
-            await playerCollection.DetectPlayerPlatforms();
-            await playerCollection.DetectPlayerRegions();
-            await playerCollection.UpdatePlayers();
+            foreach(var player in playerCollection)
+            {
+                await player.DetectPlatform();
+                await player.DetectRegionPC();
+                await player.UpdateStats();
+            }
 
             foreach (OverwatchPlayer player in playerCollection)
                 WritePlayer(player);
