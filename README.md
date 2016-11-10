@@ -13,7 +13,7 @@ A simple wrapper that grabs player stats from a users PlayOverwatch.com profile 
 * Entirely async operation
 * Serializable - No complex data.
 * Region detection - Easily find the correct region for a player.
-* Batch and auto-update users - Save yourself some hassle dealing with updating cached info and just start the timer available as part of the OverwatchPlayerCollection
+* Platform detection - Detect which platform a player might play on.
 
 ## Planned Features
 * None at the moment - Any feature requests will be placed here.
