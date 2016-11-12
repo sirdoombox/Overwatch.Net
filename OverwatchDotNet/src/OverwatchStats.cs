@@ -24,10 +24,10 @@ namespace OverwatchAPI
             switch (mode)
             {
                 case Mode.Casual:
-                    divModeId = "quick-play";
+                    divModeId = "quickplay";
                     break;
                 case Mode.Competitive:
-                    divModeId = "competitive-play";
+                    divModeId = "competitive";
                     break;
             }
             var innerContent = doc.QuerySelector($"div[id='{divModeId}']");
