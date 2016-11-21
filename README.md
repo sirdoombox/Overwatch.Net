@@ -37,7 +37,7 @@ You can cut down on some of the requests you need to make (and the time that tho
 ```csharp
 OverwatchPlayer player = new OverwatchPlayer("SirDoombox#2603", Platform.pc, Region.eu);
 player.UpdateStats().GetAwaiter().GetResult();
-Category statCategory = player.CasualStats.GetHero("Junkrat").GetCategory("Hero Specific");
+StatCategory statCategory = player.CasualStats.GetHero("Junkrat").GetCategory("Hero Specific");
 ````
 There are also some helper methods available for use to simplify some common operations
 ```csharp
