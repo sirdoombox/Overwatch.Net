@@ -31,7 +31,7 @@ OverwatchPlayer player = new OverwatchPlayer("SirDoombox#2603");
 await player.DetectPlatform();
 await player.DetectRegionPC();
 await player.UpdateStats();
-Double timePlayedInSeconds = player.CasualStats.GetHero("AllHeroes").GetCategory("Game").GetStat("Time Played");
+Double timePlayedInSeconds = player.CasualStats.GetHero("AllHeroes").GetCategory("Game").GetStat("Time Played").Value;
 ```
 You can cut down on some of the requests you need to make (and the time that those requests take up) by specifying the region at creation (if known). This snippet also uses `.GetAwaiter().GetResult()` to make the method run in a synchronous fashion.
 ```csharp
