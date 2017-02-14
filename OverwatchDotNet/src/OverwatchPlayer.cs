@@ -98,7 +98,7 @@ namespace OverwatchAPI
         private string BattletagUrlFriendly { get; }
 
         /// <summary>
-        /// Detect the region of the player (Also sets the players ProfileURL if it is currently un-set) - This method will simply return if the player is not on PC.
+        /// Detect the region of the player - This method will simply return if the player is not on PC. - [SLOW]
         /// </summary>
         /// <returns></returns>
         public async Task DetectRegionPC()
@@ -130,6 +130,10 @@ namespace OverwatchAPI
             Region = Region.none;
         }   
         
+        /// <summary>
+        /// Detect the platform of the player [SLOW]
+        /// </summary>
+        /// <returns></returns>
         public async Task DetectPlatform()
         {
             if (IsValidBattletag(Username))
