@@ -4,6 +4,7 @@
     {
         us,
         eu,
+        kr,
         none
     }
 

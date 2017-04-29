@@ -108,25 +108,44 @@ namespace OverwatchAPI
             string baseUrl = "http://playoverwatch.com/en-gb/career/";
             string naAppend = $"pc/us/{BattletagUrlFriendly}";
             string euAppend = $"pc/eu/{BattletagUrlFriendly}";
-            HttpClient _client = new HttpClient();
-            _client.BaseAddress = new Uri(baseUrl);
-            var responseNA = await _client.GetAsync(naAppend);
-            if (responseNA.IsSuccessStatusCode)
+            string krAppend = $"pc/kr/{BattletagUrlFriendly}";
+            using (HttpClient _client = new HttpClient())
             {
-                Region = Region.us;
-                ProfileURL = baseUrl + naAppend;
-                return;
-            }
-            else
-            {            
-                var responseEU = await _client.GetAsync(euAppend);
-                if (responseEU.IsSuccessStatusCode)
+                _client.BaseAddress = new Uri(baseUrl);
+                using (var responseNA = await _client.GetAsync(naAppend))
                 {
-                    Region = Region.eu;
-                    ProfileURL = baseUrl + euAppend;
-                    return;
-                }
-            }
+                    if (responseNA.IsSuccessStatusCode)
+                    {
+                        Region = Region.us;
+                        ProfileURL = baseUrl + naAppend;
+                        return;
+                    }
+                    else
+                    {
+                        using (var responseEU = await _client.GetAsync(euAppend))
+                        {
+                            if (responseEU.IsSuccessStatusCode)
+                            {
+                                Region = Region.eu;
+                                ProfileURL = baseUrl + euAppend;
+                                return;
+                            }
+                            else
+                            {
+                                using (var responseKR = await _client.GetAsync(krAppend))
+                                {
+                                    if (responseKR.IsSuccessStatusCode)
+                                    {
+                                        Region = Region.kr;
+                                        ProfileURL = baseUrl + krAppend;
+                                        return;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }                  
+            }         
             Region = Region.none;
         }   
         
@@ -147,23 +166,27 @@ namespace OverwatchAPI
             using (HttpClient _client = new HttpClient())
             {
                 _client.BaseAddress = new Uri(baseUrl);
-                var responsePsn = await _client.GetAsync(psnAppend);
-                if (responsePsn.IsSuccessStatusCode)
+                using (var responsePsn = await _client.GetAsync(psnAppend))
                 {
-                    Platform = Platform.psn;
-                    ProfileURL = baseUrl + psnAppend;
-                    return;
-                }
-                else
-                {
-                    var responseXbl = await _client.GetAsync(xblAppend);
-                    if (responseXbl.IsSuccessStatusCode)
+                    if (responsePsn.IsSuccessStatusCode)
                     {
-                        Platform = Platform.xbl;
-                        ProfileURL = baseUrl + xblAppend;
+                        Platform = Platform.psn;
+                        ProfileURL = baseUrl + psnAppend;
                         return;
                     }
-                }
+                    else
+                    {
+                        using (var responseXbl = await _client.GetAsync(xblAppend))
+                        {
+                            if (responseXbl.IsSuccessStatusCode)
+                            {
+                                Platform = Platform.xbl;
+                                ProfileURL = baseUrl + xblAppend;
+                                return;
+                            }
+                        }                            
+                    }
+                }                    
             }
             Platform = Platform.none;
         }

@@ -19,7 +19,7 @@ namespace OverwatchDotNetTestbed
             Stopwatch stopwatch = Stopwatch.StartNew();
             List<OverwatchPlayer> playerCollection = new List<OverwatchPlayer>
             {
-                new OverwatchPlayer("Jorohara#21710"),
+                new OverwatchPlayer("GMK#11870"),
                 new OverwatchPlayer("SirDoombox#2603"),
                 new OverwatchPlayer("VeLo InFerno"),
                 new OverwatchPlayer("Rolingachu")
