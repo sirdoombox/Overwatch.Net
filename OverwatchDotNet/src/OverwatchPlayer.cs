@@ -56,6 +56,11 @@ namespace OverwatchAPI
         /// The Competitive Rank of the player
         /// </summary>
         public ushort CompetitiveRank { get; private set; }
+        
+        /// <summary>
+        ///   The Competitive Rank Image of the player
+        /// </summary>
+        public string CompetitiveRankImg { get; private set; }
 
         /// <summary>
         /// The player's region - EU/US/None
@@ -225,6 +230,9 @@ namespace OverwatchAPI
             PlayerLevel += StaticVars.prestigeDefinitions[playerLevelImageId];
             if (ushort.TryParse(doc.QuerySelector("div.competitive-rank div")?.TextContent, out parsedCompetitiveRank))
                 CompetitiveRank = parsedCompetitiveRank;
+            var compImg = doc.QuerySelector("div.competitive-rank img")?.OuterHtml;
+            if (!string.IsNullOrEmpty(compImg))
+                CompetitiveRankImg = compImg.Replace("<img src=\"", "").Replace("\">", "");
         }
 
         internal void GetProfilePortrait(IDocument doc)
