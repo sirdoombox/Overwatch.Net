@@ -104,10 +104,9 @@ namespace OverwatchAPI
 
         private async Task DetectRegion()
         {
-            string baseUrl = "http://playoverwatch.com/en-gb/career/";
-            string naUrl = $"{baseUrl}pc/us/{battletagUrlFriendly}";
-            string euUrl = $"{baseUrl}pc/eu/{battletagUrlFriendly}";
-            string krUrl = $"{baseUrl}pc/kr/{battletagUrlFriendly}";
+            string naUrl = $"http://playoverwatch.com/en-gb/career/pc/us/{battletagUrlFriendly}";
+            string euUrl = $"http://playoverwatch.com/en-gb/career/pc/eu/{battletagUrlFriendly}";
+            string krUrl = $"http://playoverwatch.com/en-gb/career/pc/kr/{battletagUrlFriendly}";
             var naRslt = await browsingContext.OpenAsync(naUrl);
             if (naRslt.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
@@ -117,11 +116,14 @@ namespace OverwatchAPI
                     var krRslt = await browsingContext.OpenAsync(krUrl);
                     if (krRslt.StatusCode != System.Net.HttpStatusCode.NotFound)
                     {
+                        Region = Region.none;
+                    }
+                    else
+                    {
                         Region = Region.kr;
                         userPage = krRslt;
                         ProfileURL = krUrl;
                     }
-                    else Region = Region.none;
                 }
                 else
                 {
@@ -138,46 +140,31 @@ namespace OverwatchAPI
             }
         }   
         
-        /// <summary>
-        /// Detect the platform of the player [SLOW]
-        /// </summary>
-        /// <returns></returns>
         private async Task DetectPlatform()
         {
-            if (IsValidBattletag(Username))
+            string psnUrl = $"http://playoverwatch.com/en-gb/career/psn/{Username}";
+            string xblUrl = $"http://playoverwatch.com/en-gb/career/xbl/{Username}";
+            var psnRslt = await browsingContext.OpenAsync(psnUrl);
+            if(psnRslt.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
-                Platform = Platform.pc;
-                return;
-            }
-            string baseUrl = "http://playoverwatch.com/en-gb/career/";
-            string psnAppend = $"psn/{Username}";
-            string xblAppend = $"xbl/{Username}";
-            using (HttpClient _client = new HttpClient())
-            {
-                _client.BaseAddress = new Uri(baseUrl);
-                using (var responsePsn = await _client.GetAsync(psnAppend))
+                var xblRslt = await browsingContext.OpenAsync(xblUrl);
+                if(xblRslt.StatusCode == System.Net.HttpStatusCode.NotFound)
                 {
-                    if (responsePsn.IsSuccessStatusCode)
-                    {
-                        Platform = Platform.psn;
-                        ProfileURL = baseUrl + psnAppend;
-                        return;
-                    }
-                    else
-                    {
-                        using (var responseXbl = await _client.GetAsync(xblAppend))
-                        {
-                            if (responseXbl.IsSuccessStatusCode)
-                            {
-                                Platform = Platform.xbl;
-                                ProfileURL = baseUrl + xblAppend;
-                                return;
-                            }
-                        }
-                    }
+                    Platform = Platform.none;
+                }
+                else
+                {
+                    Platform = Platform.xbl;
+                    userPage = xblRslt;
+                    ProfileURL = xblUrl;
                 }
             }
-            Platform = Platform.none;
+            else
+            {
+                Platform = Platform.psn;
+                userPage = psnRslt;
+                ProfileURL = psnUrl;
+            }
         }
 
         /// <summary>
@@ -199,10 +186,18 @@ namespace OverwatchAPI
                 if(IsValidBattletag(Username))
                 {
                     Platform = Platform.pc;
-                    await DetectRegion();
-                    ParseUserPage();
+                    if (Region == Region.none)
+                        await DetectRegion();
                 }
-            }       
+                else if(Platform == Platform.none)
+                {
+                    await DetectPlatform();
+                }
+                ProfileURL = ProfileURL(Username, Region, Platform);            
+            }
+            if (userPage == null)
+                await browsingContext.OpenAsync(ProfileURL);
+            ParseUserPage();
         }
 
         private void ParseUserPage()
@@ -219,7 +214,7 @@ namespace OverwatchAPI
             ProfileLastDownloaded = DateTime.UtcNow;
         }
 
-        internal void GetUserRanks()
+        private void GetUserRanks()
         {
             ushort parsedPlayerLevel = 0;
             PlayerLevel = 0;

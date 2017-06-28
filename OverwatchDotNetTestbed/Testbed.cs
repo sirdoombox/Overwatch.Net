@@ -24,12 +24,10 @@ namespace OverwatchDotNetTestbed
                 new OverwatchPlayer("SirDoombox#2603"),
                 new OverwatchPlayer("Rolingachu")
             };
-
             foreach(var player in playerCollection)
             {
                 await player.UpdateStats();
             }
-
             foreach (OverwatchPlayer player in playerCollection)
                 WritePlayer(player);
             stopwatch.Stop();
