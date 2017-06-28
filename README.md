@@ -1,12 +1,12 @@
 # Overwatch.Net
 
-An unofficial player stats API for the Blizzard game "Overwatch".
+An unofficial player stats API for the Blizzard game "Overwatch" - Targetting .NET Standard 1.1 for maximum compatibility.
 
 [![NuGet version](https://badge.fury.io/nu/Overwatch.Net.svg)](https://badge.fury.io/nu/Overwatch.Net)
 
 ## What is it?
 
-A simple wrapper that grabs player stats from a users PlayOverwatch.com profile and parses it to be used however you like. It's written entirely in C# using AngleSharp to parse the data from the page. The only limiting factor is the speed at which the PlayOverwatch profile can be loaded.
+A simple web scraper that grabs player stats from a users PlayOverwatch.com profile and parses it to be used however you like. It's written entirely in C# using AngleSharp to parse the data from the page. The only limiting factor is the speed at which the PlayOverwatch profile can be loaded.
 
 ## Current Features
 * Supports PC, Xbox 1 and Playstation 4 players.
@@ -28,8 +28,6 @@ After you've added the necessary references to your project, using the library i
 The below code will create a new Overwatch player with the given Battletag, it will then detect the players region and update the users stats entirely asynchronously.
 ```csharp
 OverwatchPlayer player = new OverwatchPlayer("SirDoombox#2603");
-await player.DetectPlatform();
-await player.DetectRegionPC();
 await player.UpdateStats();
 Double timePlayedInSeconds = player.CasualStats.GetHero("AllHeroes").GetCategory("Game").GetStat("Time Played").Value;
 ```
