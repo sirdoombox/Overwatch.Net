@@ -23,13 +23,12 @@ namespace OverwatchAPI
         {
             Username = username;
             Platform = platform;
-            browsingContext = BrowsingContext.New(Configuration.Default.WithDefaultLoader());
             if (!IsValidBattletag(username) && platform == Platform.pc)
                 throw new InvalidBattletagException();
             else if (IsValidBattletag(username))
             {
                 Platform = Platform.pc;
-                battletagUrlFriendly = username.Replace("#", "-");
+                BattletagUrlFriendly = username.Replace("#", "-");
                 Region = region;
             }
             if(Region != Region.none && Platform != Platform.none)
@@ -98,51 +97,68 @@ namespace OverwatchAPI
         /// </summary>
         public string ProfilePortraitURL { get; private set; }
 
-        private string battletagUrlFriendly;
-        private IBrowsingContext browsingContext;
-        private IDocument userPage;
+        /// <summary>
+        /// The URL friendly version of the users Battletag.
+        /// </summary>
+        private string BattletagUrlFriendly { get; }
 
-        private async Task DetectRegion()
+        /// <summary>
+        /// Detect the region of the player - This method will simply return if the player is not on PC. - [SLOW]
+        /// </summary>
+        /// <returns></returns>
+        public async Task DetectRegionPC()
         {
+            if (Platform != Platform.pc)
+                return;
             string baseUrl = "http://playoverwatch.com/en-gb/career/";
-            string naUrl = $"{baseUrl}pc/us/{battletagUrlFriendly}";
-            string euUrl = $"{baseUrl}pc/eu/{battletagUrlFriendly}";
-            string krUrl = $"{baseUrl}pc/kr/{battletagUrlFriendly}";
-            var naRslt = await browsingContext.OpenAsync(naUrl);
-            if (naRslt.StatusCode == System.Net.HttpStatusCode.NotFound)
+            string naAppend = $"pc/us/{BattletagUrlFriendly}";
+            string euAppend = $"pc/eu/{BattletagUrlFriendly}";
+            string krAppend = $"pc/kr/{BattletagUrlFriendly}";
+            using (HttpClient _client = new HttpClient())
             {
-                var euRslt = await browsingContext.OpenAsync(euUrl);
-                if (euRslt.StatusCode == System.Net.HttpStatusCode.NotFound)
+                _client.BaseAddress = new Uri(baseUrl);
+                using (var responseNA = await _client.GetAsync(naAppend))
                 {
-                    var krRslt = await browsingContext.OpenAsync(krUrl);
-                    if (krRslt.StatusCode != System.Net.HttpStatusCode.NotFound)
+                    if (responseNA.IsSuccessStatusCode)
                     {
-                        Region = Region.kr;
-                        userPage = krRslt;
-                        ProfileURL = krUrl;
+                        Region = Region.us;
+                        ProfileURL = baseUrl + naAppend;
+                        return;
                     }
-                    else Region = Region.none;
-                }
-                else
-                {
-                    Region = Region.eu;
-                    userPage = euRslt;
-                    ProfileURL = euUrl;
-                }
-            }
-            else
-            {
-                Region = Region.us;
-                userPage = naRslt;
-                ProfileURL = naUrl;
-            }
+                    else
+                    {
+                        using (var responseEU = await _client.GetAsync(euAppend))
+                        {
+                            if (responseEU.IsSuccessStatusCode)
+                            {
+                                Region = Region.eu;
+                                ProfileURL = baseUrl + euAppend;
+                                return;
+                            }
+                            else
+                            {
+                                using (var responseKR = await _client.GetAsync(krAppend))
+                                {
+                                    if (responseKR.IsSuccessStatusCode)
+                                    {
+                                        Region = Region.kr;
+                                        ProfileURL = baseUrl + krAppend;
+                                        return;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }                  
+            }         
+            Region = Region.none;
         }   
         
         /// <summary>
         /// Detect the platform of the player [SLOW]
         /// </summary>
         /// <returns></returns>
-        private async Task DetectPlatform()
+        public async Task DetectPlatform()
         {
             if (IsValidBattletag(Username))
             {
@@ -173,9 +189,9 @@ namespace OverwatchAPI
                                 ProfileURL = baseUrl + xblAppend;
                                 return;
                             }
-                        }
+                        }                            
                     }
-                }
+                }                    
             }
             Platform = Platform.none;
         }
@@ -183,62 +199,53 @@ namespace OverwatchAPI
         /// <summary>
         /// Downloads and parses the players profile
         /// </summary>
-        /// <param name="useAutoDetect">Attempt to auto-detect Region/Platform</param>
         /// <returns></returns>
-        public async Task UpdateStats(bool useAutoDetect = true)
+        public async Task UpdateStats()
         {
-            if(!useAutoDetect)
-            {
-                if (Region == Region.none && Platform == Platform.pc)
-                    throw new UserRegionNotDefinedException();
-                if (Platform == Platform.none)
-                    throw new UserPlatformNotDefinedException();
-            }
-            else
-            {
-                if(IsValidBattletag(Username))
-                {
-                    Platform = Platform.pc;
-                    await DetectRegion();
-                    ParseUserPage();
-                }
-            }       
-        }
-
-        private void ParseUserPage()
-        {
-            GetUserRanks();
-            GetProfilePortrait();
+            if (Region == Region.none && Platform == Platform.pc)
+                throw new UserRegionNotDefinedException();
+            if (Platform == Platform.none)
+                throw new UserPlatformNotDefinedException();
+            var userpage = await DownloadUserPage();
+            GetUserRanks(userpage);
+            GetProfilePortrait(userpage);
             CasualStats = new OverwatchStats();
             CompetitiveStats = new OverwatchStats();
             Achievements = new OverwatchAchievements();
-            Achievements.UpdateAchievementsFromPage(userPage);
-            CasualStats.UpdateStatsFromPage(userPage, Mode.Casual);
-            CompetitiveStats.UpdateStatsFromPage(userPage, Mode.Competitive);
-            if (CompetitiveStats.Count == 0) CompetitiveStats = null;
+            Achievements.UpdateAchievementsFromPage(userpage);
+            CasualStats.UpdateStatsFromPage(userpage, Mode.Casual);
+            CompetitiveStats.UpdateStatsFromPage(userpage, Mode.Competitive);
             ProfileLastDownloaded = DateTime.UtcNow;
         }
 
-        internal void GetUserRanks()
+        internal void GetUserRanks(IDocument doc)
         {
             ushort parsedPlayerLevel = 0;
             PlayerLevel = 0;
             ushort parsedCompetitiveRank = 0;
             CompetitiveRank = 0;
-            if (ushort.TryParse(userPage.QuerySelector("div.player-level div")?.TextContent, out parsedPlayerLevel))
+            if (ushort.TryParse(doc.QuerySelector("div.player-level div")?.TextContent, out parsedPlayerLevel))
                 PlayerLevel = parsedPlayerLevel;
-            string playerLevelImageId = StaticVars.playerRankImageRegex.Match(userPage.QuerySelector("div.player-level")?.GetAttribute("style")).Value;
+            string playerLevelImageId = StaticVars.playerRankImageRegex.Match(doc.QuerySelector("div.player-level")?.GetAttribute("style")).Value;
             PlayerLevel += StaticVars.prestigeDefinitions[playerLevelImageId];
-            if (ushort.TryParse(userPage.QuerySelector("div.competitive-rank div")?.TextContent, out parsedCompetitiveRank))
+            if (ushort.TryParse(doc.QuerySelector("div.competitive-rank div")?.TextContent, out parsedCompetitiveRank))
                 CompetitiveRank = parsedCompetitiveRank;
-            var compImg = userPage.QuerySelector("div.competitive-rank img")?.OuterHtml;
+            var compImg = doc.QuerySelector("div.competitive-rank img")?.OuterHtml;
             if (!string.IsNullOrEmpty(compImg))
                 CompetitiveRankImg = compImg.Replace("<img src=\"", "").Replace("\">", "");
         }
 
-        private void GetProfilePortrait()
+        internal void GetProfilePortrait(IDocument doc)
         {
-            ProfilePortraitURL = userPage.QuerySelector(".player-portrait").GetAttribute("src");
+            ProfilePortraitURL = doc.QuerySelector(".player-portrait").GetAttribute("src");
+        }
+
+        internal async Task<IDocument> DownloadUserPage()
+        {
+            var config = Configuration.Default.WithDefaultLoader();
+            if (ProfileURL == null)
+                throw new UserProfileUrlNullException();
+            return await BrowsingContext.New(config).OpenAsync(ProfileURL);
         }
     }
 }

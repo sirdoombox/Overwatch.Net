@@ -5,7 +5,7 @@ namespace OverwatchAPI.intrnl
 {
     public static class StaticVars
     {
-        public static Regex playerRankImageRegex = new Regex("(0x\\w*)(?=_)", RegexOptions.None);
+        public static Regex playerRankImageRegex = new Regex("(0x\\w*)(?=_)", RegexOptions.Compiled);
 
         // Ranked portrait definitions for the prestige levels.
         public static Dictionary<string, ushort> prestigeDefinitions = new Dictionary<string, ushort>

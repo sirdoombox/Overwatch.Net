@@ -1,6 +1,7 @@
 ﻿using OverwatchAPI;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 using static System.Console;
 
@@ -21,14 +22,11 @@ namespace OverwatchDotNetTestbed
             {
                 new OverwatchPlayer("GMK#11870"),
                 new OverwatchPlayer("SirDoombox#2603"),
-                new OverwatchPlayer("VeLo InFerno"),
                 new OverwatchPlayer("Rolingachu")
             };
 
             foreach(var player in playerCollection)
             {
-                await player.DetectPlatform();
-                await player.DetectRegionPC();
                 await player.UpdateStats();
             }
 
@@ -48,8 +46,11 @@ namespace OverwatchDotNetTestbed
                 WriteLine($"{item.Name}: {item.Value}");
             WriteLine("---------------------------");
             WriteLine($"Competitive Stats:");
-            foreach (var item in player.CompetitiveStats.GetHero("AllHeroes").GetCategory("Game"))
-                WriteLine($"{item.Name}: {item.Value}");
+            if(player.CompetitiveStats != null)
+            {
+                foreach (var item in player.CompetitiveStats.GetHero("AllHeroes").GetCategory("Game"))
+                    WriteLine($"{item.Name}: {item.Value}");
+            }
             WriteLine("---------------------------");
             WriteLine($"General Achievements: ");
             foreach (var item in player.Achievements.GetCategory("General"))

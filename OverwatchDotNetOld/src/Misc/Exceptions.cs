@@ -14,11 +14,11 @@ namespace OverwatchAPI.Internal
 
     class UserProfileUrlNullException : Exception
     {
-        public UserProfileUrlNullException() : base("OverwatchPlayer's profile URL has not been set - If no region/URL was entered when constructing the OverwatchPlayer then use 'player.UpdateStats(true);'") { }
+        public UserProfileUrlNullException() : base("OverwatchPlayer's profile URL has not been set - If no region/URL was entered when constructing the OverwatchPlayer then use 'player.DetectRegionPC();'") { }
     }
 
     class UserPlatformNotDefinedException : Exception
     {
-        public UserPlatformNotDefinedException() : base("User's platform has not been defined - If no Platform was entered when constructing the OverwatchPlayer then use 'player.UpdateStats(true);'") { }
+        public UserPlatformNotDefinedException() : base("User's platform has not been defined - If no Platform was entered when constructing the OverwatchPlayer then use 'player.DetectPlatform();'") { }
     }
 }
