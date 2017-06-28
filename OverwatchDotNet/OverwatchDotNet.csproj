@@ -2,6 +2,19 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard1.1</TargetFramework>
+    <PackageId>Overwatch.Net</PackageId>
+    <PackageVersion>2.0.0</PackageVersion>
+    <Authors>Doombox</Authors>
+    <Description>An unofficial player stats API targetting .NET Standard written in C#.</Description>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageReleaseNotes>.NET Standard Port</PackageReleaseNotes>
+    <Copyright>Copyright © 2017 Doombox</Copyright>
+    <PackageTags>C# .NET Standard Overwatch API Library</PackageTags>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Version>2.0.0</Version>
+    <PackageProjectUrl>https://github.com/sirdoombox/Overwatch.Net</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/sirdoombox/Overwatch.Net</RepositoryUrl>
+    <RepositoryType>Git</RepositoryType>
   </PropertyGroup>
 
   <ItemGroup>
