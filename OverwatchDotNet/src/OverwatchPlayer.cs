@@ -3,9 +3,6 @@ using AngleSharp.Dom;
 using OverwatchAPI.Internal;
 using OverwatchAPI.intrnl;
 using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static OverwatchAPI.OverwatchAPIHelpers;
 
@@ -196,7 +193,7 @@ namespace OverwatchAPI
                 ProfileURL = ProfileURL(Username, Region, Platform);            
             }
             if (userPage == null)
-                await browsingContext.OpenAsync(ProfileURL);
+                userPage = await browsingContext.OpenAsync(ProfileURL);
             ParseUserPage();
         }
 
@@ -216,15 +213,13 @@ namespace OverwatchAPI
 
         private void GetUserRanks()
         {
-            ushort parsedPlayerLevel = 0;
             PlayerLevel = 0;
-            ushort parsedCompetitiveRank = 0;
             CompetitiveRank = 0;
-            if (ushort.TryParse(userPage.QuerySelector("div.player-level div")?.TextContent, out parsedPlayerLevel))
+            if (ushort.TryParse(userPage.QuerySelector("div.player-level div")?.TextContent, out ushort parsedPlayerLevel))
                 PlayerLevel = parsedPlayerLevel;
             string playerLevelImageId = StaticVars.playerRankImageRegex.Match(userPage.QuerySelector("div.player-level")?.GetAttribute("style")).Value;
             PlayerLevel += StaticVars.prestigeDefinitions[playerLevelImageId];
-            if (ushort.TryParse(userPage.QuerySelector("div.competitive-rank div")?.TextContent, out parsedCompetitiveRank))
+            if (ushort.TryParse(userPage.QuerySelector("div.competitive-rank div")?.TextContent, out ushort parsedCompetitiveRank))
                 CompetitiveRank = parsedCompetitiveRank;
             var compImg = userPage.QuerySelector("div.competitive-rank img")?.OuterHtml;
             if (!string.IsNullOrEmpty(compImg))

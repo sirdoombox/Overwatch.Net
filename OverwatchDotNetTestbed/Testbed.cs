@@ -20,12 +20,13 @@ namespace OverwatchDotNetTestbed
             Stopwatch stopwatch = Stopwatch.StartNew();
             List<OverwatchPlayer> playerCollection = new List<OverwatchPlayer>
             {
-                new OverwatchPlayer("GMK#11870"),
-                new OverwatchPlayer("SirDoombox#2603"),
+                new OverwatchPlayer("moiph#1288", Platform.pc, Region.us),
+                new OverwatchPlayer("SirDoombox#2603", Platform.pc),
                 new OverwatchPlayer("Rolingachu")
             };
-            foreach(var player in playerCollection)
+            foreach (var player in playerCollection)
             {
+                Thread.Sleep(10000); // Dirty rate limiting workaround - Seems to hang for a very long time (if not indefinitely) when making many requests quickly
                 await player.UpdateStats();
             }
             foreach (OverwatchPlayer player in playerCollection)
