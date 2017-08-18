@@ -8,37 +8,12 @@ using static OverwatchAPI.OverwatchAPIHelpers;
 
 namespace OverwatchAPI
 {
-    public class OverwatchPlayer
+    public sealed class OverwatchPlayer : IDisposable
     {
-        /// <summary>
-        /// Construct a new Overwatch player.
-        /// </summary>
-        /// <param name="username">The players Battletag (SomeUser#1234) or Username for PSN/XBL</param>
-        /// <param name="platform">The players platform - Defaults to "none" if a battletag is not given (use DetectPlatform() if platform is not known)</param>
-        /// <param name="region">The players region (only required for PC) - Defaults to "none" (use DetectRegionPC if region is not known)</param>
-        public OverwatchPlayer(string username, Platform platform = Platform.none, Region region = Region.none)
-        {
-            Username = username;
-            Platform = platform;
-            browsingContext = BrowsingContext.New(Configuration.Default.WithDefaultLoader());
-            if (!IsValidBattletag(username) && platform == Platform.pc)
-                throw new InvalidBattletagException();
-            else if (IsValidBattletag(username))
-            {
-                Platform = Platform.pc;
-                battletagUrlFriendly = username.Replace("#", "-");
-                Region = region;
-            }
-            if(Region != Region.none && Platform != Platform.none)
-            {
-                ProfileURL = ProfileURL(Username, Region, Platform);
-            }
-        }
-
         /// <summary>
         /// The players Battletag with Discriminator - e.g. "SomeUser#1234"
         /// </summary>
-        public string Username { get; private set; }
+        public string Username { get; }
 
         /// <summary>
         /// The PlayOverwatch profile of the player - This is only available if the user has set a region
@@ -98,46 +73,59 @@ namespace OverwatchAPI
         private string battletagUrlFriendly;
         private IBrowsingContext browsingContext;
         private IDocument userPage;
+        private RegionDetectionSettings regionSettings;
 
-        private async Task DetectRegion()
+        /// <summary>
+        /// Construct a new Overwatch player.
+        /// </summary>
+        /// <param name="username">The players Battletag (SomeUser#1234) or Username for PSN/XBL</param>
+        /// <param name="platform">The players platform - Defaults to "none" if a battletag is not given (use DetectPlatform() if platform is not known)</param>
+        /// <param name="region">The players region (only required for PC) - Defaults to "none" (use DetectRegionPC if region is not known)</param>
+        /// <param name="settings">The region detection settings (only required for PC) - defaults to all regions in this order: NA, EU, KR</param>
+        public OverwatchPlayer(string username, Platform platform = Platform.none, Region region = Region.none, RegionDetectionSettings settings = null)
         {
-            string naUrl = $"http://playoverwatch.com/en-gb/career/pc/us/{battletagUrlFriendly}";
-            string euUrl = $"http://playoverwatch.com/en-gb/career/pc/eu/{battletagUrlFriendly}";
-            string krUrl = $"http://playoverwatch.com/en-gb/career/pc/kr/{battletagUrlFriendly}";
-            var naRslt = await browsingContext.OpenAsync(naUrl);
-            if (naRslt.StatusCode == System.Net.HttpStatusCode.NotFound)
+            Username = username;
+            Platform = platform;
+            browsingContext = BrowsingContext.New(Configuration.Default.WithDefaultLoader());
+            this.regionSettings = settings ?? new RegionDetectionSettings();
+            if (!IsValidBattletag(username) && platform == Platform.pc)
+                throw new InvalidBattletagException();
+            else if (IsValidBattletag(username))
             {
-                var euRslt = await browsingContext.OpenAsync(euUrl);
-                if (euRslt.StatusCode == System.Net.HttpStatusCode.NotFound)
-                {
-                    var krRslt = await browsingContext.OpenAsync(krUrl);
-                    if (krRslt.StatusCode != System.Net.HttpStatusCode.NotFound)
-                    {
-                        Region = Region.none;
-                    }
-                    else
-                    {
-                        Region = Region.kr;
-                        userPage = krRslt;
-                        ProfileURL = krUrl;
-                    }
-                }
-                else
-                {
-                    Region = Region.eu;
-                    userPage = euRslt;
-                    ProfileURL = euUrl;
-                }
+                Platform = Platform.pc;
+                battletagUrlFriendly = username.Replace("#", "-");
+                Region = region;
             }
-            else
+            if (Region != Region.none && Platform != Platform.none)
             {
-                Region = Region.us;
-                userPage = naRslt;
-                ProfileURL = naUrl;
+                ProfileURL = ProfileURL(Username, Region, Platform);
+            }
+        }
+
+        private async Task DetectRegionAsync()
+        {
+            foreach(var region in regionSettings.regions)
+            {
+                if (await DetectRegionSpecificAsync(region))
+                    return;
             }
         }   
+
+        private async Task<bool> DetectRegionSpecificAsync(Region r)
+        {
+            string url = $"http://playoverwatch.com/en-gb/career/pc/{r}/{battletagUrlFriendly}";
+            var rslt = await browsingContext.OpenAsync(url);
+            if(rslt.StatusCode == (System.Net.HttpStatusCode)200)
+            {
+                Region = r;
+                userPage = rslt;
+                ProfileURL = url;
+                return true;
+            }
+            return false;
+        }
         
-        private async Task DetectPlatform()
+        private async Task DetectPlatformAsync()
         {
             string psnUrl = $"http://playoverwatch.com/en-gb/career/psn/{Username}";
             string xblUrl = $"http://playoverwatch.com/en-gb/career/xbl/{Username}";
@@ -169,7 +157,7 @@ namespace OverwatchAPI
         /// </summary>
         /// <param name="useAutoDetect">Attempt to auto-detect Region/Platform</param>
         /// <returns></returns>
-        public async Task UpdateStats(bool useAutoDetect = true)
+        public async Task UpdateStatsAsync(bool useAutoDetect = true)
         {
             if(!useAutoDetect)
             {
@@ -184,11 +172,11 @@ namespace OverwatchAPI
                 {
                     Platform = Platform.pc;
                     if (Region == Region.none)
-                        await DetectRegion();
+                        await DetectRegionAsync();
                 }
                 else if(Platform == Platform.none)
                 {
-                    await DetectPlatform();
+                    await DetectPlatformAsync();
                 }
                 ProfileURL = ProfileURL(Username, Region, Platform);            
             }
@@ -200,7 +188,7 @@ namespace OverwatchAPI
         private void ParseUserPage()
         {
             GetUserRanks();
-            GetProfilePortrait();
+            ProfilePortraitURL = userPage.QuerySelector(".player-portrait").GetAttribute("src");
             CasualStats = new OverwatchStats();
             CompetitiveStats = new OverwatchStats();
             Achievements = new OverwatchAchievements();
@@ -209,7 +197,6 @@ namespace OverwatchAPI
             CompetitiveStats.UpdateStatsFromPage(userPage, Mode.Competitive);
             if (CompetitiveStats.Count == 0) CompetitiveStats = null;
             ProfileLastDownloaded = DateTime.UtcNow;
-            userPage.Dispose();
         }
 
         private void GetUserRanks()
@@ -227,9 +214,9 @@ namespace OverwatchAPI
                 CompetitiveRankImg = compImg.Replace("<img src=\"", "").Replace("\">", "");
         }
 
-        private void GetProfilePortrait()
+        public void Dispose()
         {
-            ProfilePortraitURL = userPage.QuerySelector(".player-portrait").GetAttribute("src");
+            userPage.Dispose();
         }
     }
 }

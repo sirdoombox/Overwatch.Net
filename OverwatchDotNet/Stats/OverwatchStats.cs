@@ -9,7 +9,7 @@ namespace OverwatchAPI
     /// <summary>
     /// Represents a collection of Heroes for which the player has recorded at least one game of play with.
     /// </summary>
-    public class OverwatchStats : IReadOnlyDictionary<string, Hero>
+    public sealed class OverwatchStats : IReadOnlyDictionary<string, Hero>
     {
         private Dictionary<string, Hero> contents = new Dictionary<string, Hero>();
 

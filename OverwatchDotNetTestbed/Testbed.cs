@@ -26,7 +26,7 @@ namespace OverwatchDotNetTestbed
             };
             foreach (var player in playerCollection)
             {
-                await player.UpdateStats();
+                await player.UpdateStatsAsync();
                 Thread.Sleep(10000); // Dirty rate limiting workaround - Seems to hang for a very long time (if not indefinitely) when making many requests quickly               
             }
             foreach (OverwatchPlayer player in playerCollection)

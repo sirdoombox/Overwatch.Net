@@ -6,7 +6,7 @@ namespace OverwatchAPI
     /// <summary>
     /// Represents a collection of statistics categories available for this hero.
     /// </summary>
-    public class Hero : IReadOnlyDictionary<string, StatCategory>
+    public sealed class Hero : IReadOnlyDictionary<string, StatCategory>
     {
         internal Dictionary<string, StatCategory> contents = new Dictionary<string, StatCategory>();
 
