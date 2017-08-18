@@ -28,15 +28,26 @@ After you've added the necessary references to your project, using the library i
 The below code will create a new Overwatch player with the given Battletag, it will then detect the players region and update the users stats entirely asynchronously.
 ```csharp
 OverwatchPlayer player = new OverwatchPlayer("SirDoombox#2603");
-await player.UpdateStats();
-Double timePlayedInSeconds = player.CasualStats.GetHero("AllHeroes").GetCategory("Game").GetStat("Time Played").Value;
+await player.UpdateStatsAsync();
+Double timePlayedInSeconds = player.CasualStats["AllHeroes"]["Game"]["Time Played"].Value;
 ```
 You can cut down on some of the requests you need to make (and the time that those requests take up) by specifying the region at creation (if known). This snippet also uses `.GetAwaiter().GetResult()` to make the method run in a synchronous fashion.
 ```csharp
 OverwatchPlayer player = new OverwatchPlayer("SirDoombox#2603", Platform.pc, Region.eu);
-player.UpdateStats().GetAwaiter().GetResult();
-StatCategory statCategory = player.CasualStats.GetHero("Junkrat").GetCategory("Hero Specific");
-````
+player.UpdateStatsAsync().GetAwaiter().GetResult();
+StatCategory statCategory = player.CasualStats["Junkrat"]["Hero Specific"];
+foreach(var entry in statCategory)
+{
+  string statName = entry.Key;
+  double statValue = entry.Value;
+}
+```
+If you want to cut down on request timers and/or weigh the region detection in a certain way you are able to pass a  `RegionDetectionSettings` object into the `.UpdateStatsAsync()` method. Note: The order in which you specify the regions is the order they will be checked in.
+```csharp
+await player.UpdateStatsAsync(RegionDetectionSettings.Default);
+// or...
+await player.UpdateStatsAsync(new RegionDetectionSettings(Region.eu, Region.kr));
+```
 There are also some helper methods available for use to simplify some common operations
 ```csharp
 bool validTag = OverwatchAPIHelpers.IsValidBattletag("SomePlayer#1234"); // Returns true.
