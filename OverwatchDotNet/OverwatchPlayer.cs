@@ -81,13 +81,11 @@ namespace OverwatchAPI
         /// <param name="username">The players Battletag (SomeUser#1234) or Username for PSN/XBL</param>
         /// <param name="platform">The players platform - Defaults to "none" if a battletag is not given (use DetectPlatform() if platform is not known)</param>
         /// <param name="region">The players region (only required for PC) - Defaults to "none" (use DetectRegionPC if region is not known)</param>
-        /// <param name="settings">The region detection settings (only required for PC) - defaults to all regions in this order: NA, EU, KR</param>
-        public OverwatchPlayer(string username, Platform platform = Platform.none, Region region = Region.none, RegionDetectionSettings settings = null)
+        public OverwatchPlayer(string username, Platform platform = Platform.none, Region region = Region.none)
         {
             Username = username;
             Platform = platform;
             browsingContext = BrowsingContext.New(Configuration.Default.WithDefaultLoader());
-            this.regionSettings = settings ?? new RegionDetectionSettings();
             if (!IsValidBattletag(username) && platform == Platform.pc)
                 throw new InvalidBattletagException();
             else if (IsValidBattletag(username))
@@ -155,10 +153,12 @@ namespace OverwatchAPI
         /// <summary>
         /// Downloads and parses the players profile
         /// </summary>
+        /// <param name="settings">The region detection settings (only required for PC) - defaults to all regions in this order: NA, EU, KR</param>
         /// <param name="useAutoDetect">Attempt to auto-detect Region/Platform</param>
         /// <returns></returns>
-        public async Task UpdateStatsAsync(bool useAutoDetect = true)
+        public async Task UpdateStatsAsync(RegionDetectionSettings settings = null, bool useAutoDetect = true)
         {
+            regionSettings = settings ?? new RegionDetectionSettings();
             if(!useAutoDetect)
             {
                 if (Region == Region.none && Platform == Platform.pc)

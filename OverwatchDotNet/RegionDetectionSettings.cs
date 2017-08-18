@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OverwatchAPI
+﻿namespace OverwatchAPI
 {
     public sealed class RegionDetectionSettings
     {
         internal Region[] regions;
 
+        /// <summary>
+        /// Default Configuration - US -> EU -> KR
+        /// </summary>
         public RegionDetectionSettings Default
         {
             get { return new RegionDetectionSettings(); }
