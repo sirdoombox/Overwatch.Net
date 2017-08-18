@@ -4,6 +4,9 @@ using System.Collections;
 
 namespace OverwatchAPI
 {
+    /// <summary>
+    /// Represents a set of achievment categories.
+    /// </summary>
     public class OverwatchAchievements : IReadOnlyDictionary<string, AchievementCategory>
     {
         private Dictionary<string, AchievementCategory> contents = new Dictionary<string, AchievementCategory>();
