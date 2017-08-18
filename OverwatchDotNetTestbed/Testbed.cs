@@ -26,8 +26,8 @@ namespace OverwatchDotNetTestbed
             };
             foreach (var player in playerCollection)
             {
-                Thread.Sleep(10000); // Dirty rate limiting workaround - Seems to hang for a very long time (if not indefinitely) when making many requests quickly
                 await player.UpdateStats();
+                Thread.Sleep(10000); // Dirty rate limiting workaround - Seems to hang for a very long time (if not indefinitely) when making many requests quickly               
             }
             foreach (OverwatchPlayer player in playerCollection)
                 WritePlayer(player);
@@ -41,19 +41,19 @@ namespace OverwatchDotNetTestbed
             WriteLine($"{player.ProfilePortraitURL}");
             WriteLine("---------------------------");
             WriteLine($"Casual Stats:");
-            foreach (var item in player.CasualStats.GetHero("AllHeroes").GetCategory("Game"))
-                WriteLine($"{item.Name}: {item.Value}");
+            foreach (var item in player.CasualStats["AllHeroes"]["Game"])
+                WriteLine($"{item.Key}: {item.Value}");
             WriteLine("---------------------------");
             WriteLine($"Competitive Stats:");
-            if(player.CompetitiveStats != null)
+            if (player.CompetitiveStats != null)
             {
-                foreach (var item in player.CompetitiveStats.GetHero("AllHeroes").GetCategory("Game"))
-                    WriteLine($"{item.Name}: {item.Value}");
+                foreach (var item in player.CompetitiveStats["AllHeroes"]["Game"])
+                    WriteLine($"{item.Key}: {item.Value}");
             }
             WriteLine("---------------------------");
             WriteLine($"General Achievements: ");
-            foreach (var item in player.Achievements.GetCategory("General"))
-                WriteLine($"{item.Name}: { item.IsUnlocked} ");
+            foreach (var item in player.Achievements["General"])
+                WriteLine($"{item.Key}: { item.Value} ");
             WriteLine("---------------------------\n\n");
         }
     }

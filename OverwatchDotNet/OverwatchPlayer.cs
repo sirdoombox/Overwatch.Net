@@ -56,7 +56,7 @@ namespace OverwatchAPI
         public ushort CompetitiveRank { get; private set; }
         
         /// <summary>
-        ///   The Competitive Rank Image of the player
+        /// The Competitive Rank Image of the player
         /// </summary>
         public string CompetitiveRankImg { get; private set; }
 
@@ -209,6 +209,7 @@ namespace OverwatchAPI
             CompetitiveStats.UpdateStatsFromPage(userPage, Mode.Competitive);
             if (CompetitiveStats.Count == 0) CompetitiveStats = null;
             ProfileLastDownloaded = DateTime.UtcNow;
+            userPage.Dispose();
         }
 
         private void GetUserRanks()
