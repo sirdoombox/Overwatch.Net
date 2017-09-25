@@ -8,14 +8,14 @@ using OverwatchAPI.Internal;
 
 namespace OverwatchAPI
 {
-    public sealed class Overwatch : IDisposable
+    public sealed class OverwatchClient : IDisposable
     {
         public OverwatchConfig Config { get; set; }
 
         private readonly HttpClient httpClient;
         private readonly HtmlParser htmlParser;
 
-        public Overwatch()
+        public OverwatchClient()
         {
             httpClient = new HttpClient();
             httpClient.BaseAddress = new Uri("https://playoverwatch.com/en-gb/career/");
@@ -23,7 +23,7 @@ namespace OverwatchAPI
             Config = Config ?? new OverwatchConfig.Builder().Default();
         }
 
-        public Overwatch(OverwatchConfig config) : this()
+        public OverwatchClient(OverwatchConfig config) : this()
         {
             Config = config ?? throw new ArgumentNullException("config");
         }
@@ -50,7 +50,7 @@ namespace OverwatchAPI
         /// <param name="username"></param>
         /// <param name="platform"></param>
         /// <param name="region"></param>
-        /// <returns></returns>
+        /// <returns>A "Player" object if it was succesfully found, otherwise returns null.</returns>
         public Task<Player> GetPlayerAsync(string username, Platform platform, Region region = Region.none)
         {
             if (platform != Platform.pc && region != Region.none) throw new ArgumentException("Console players do not have regions.");
@@ -67,6 +67,21 @@ namespace OverwatchAPI
                 if(region == Region.none) return DetectRegionAndParse(player);
                 return GetPlayerExact(player);
             }
+            return GetPlayerExact(player);
+        }
+
+        /// <summary>
+        /// Updates a Players stats using a pre-existing Player object as the basis for the request.
+        /// </summary>
+        /// <param name="player">An existing "Player" object</param>
+        /// <returns>A "Player" object if it was succesfully found, otherwise returns null.</returns>
+        public Task<Player> UpdatePlayerAsync(Player player)
+        {
+            if (string.IsNullOrEmpty(player.Username)) throw new ArgumentException("Player Username is Null or Empty","player");
+            if (player.Username.IsValidBattletag() && player.Platform != Platform.pc) throw new ArgumentException("Invalid Username for Platform", "player");
+            if (!player.Username.IsValidBattletag() && player.Platform == Platform.pc) throw new ArgumentException("Invalid Username for PC", "player");
+            if (player.Region == Region.none && player.Platform == Platform.pc) throw new ArgumentException("PC players must have a region", "player");
+            if (player.Region != Region.none && player.Platform != Platform.pc) throw new ArgumentException("Console players cannot have a region", "player");
             return GetPlayerExact(player);
         }
 
