@@ -40,7 +40,6 @@ using(var owClient = new OverwatchClient())
   }
 }
 ```
-Cli
 NOTE: If you plan on making many requests over the lifetime of your application, I recommend keeping an instance of `OverwatchClient` around and disposing of it explicitly later.
 
 ## Contact
