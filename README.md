@@ -10,10 +10,9 @@ A simple web scraper that grabs player stats from a users PlayOverwatch.com prof
 
 ## Current Features
 * Supports PC, Xbox 1 and Playstation 4 players.
-* Entirely async operation
+* Entirely async
 * Serializable - No complex data.
-* Region detection - Easily find the correct region for a player.
-* Platform detection - Detect which platform a player might play on.
+* Region / Platform detection
 
 ## Planned Features
 * None at the moment - Any feature requests will be placed here.
@@ -22,38 +21,27 @@ A simple web scraper that grabs player stats from a users PlayOverwatch.com prof
 * AngleSharp - Used to parse the data from the PlayOverwatch page as no other data source is available from Blizzard.
 
 ## Usage
-
-After you've added the necessary references to your project, using the library is incredibly simple.
-
-The below code will create a new Overwatch player with the given Battletag, it will then detect the players region and update the users stats entirely asynchronously.
 ```csharp
-OverwatchPlayer player = new OverwatchPlayer("SirDoombox#2603");
-await player.UpdateStatsAsync();
-Double timePlayedInSeconds = player.CasualStats["AllHeroes"]["Game"]["Time Played"].Value;
-```
-You can cut down on some of the requests you need to make (and the time that those requests take up) by specifying the region at creation (if known). This snippet also uses `.GetAwaiter().GetResult()` to make the method run in a synchronous fashion.
-```csharp
-OverwatchPlayer player = new OverwatchPlayer("SirDoombox#2603", Platform.pc, Region.eu);
-player.UpdateStatsAsync().GetAwaiter().GetResult();
-StatCategory statCategory = player.CasualStats["Junkrat"]["Hero Specific"];
-foreach(var entry in statCategory)
+using(var owClient = new OverwatchClient())
 {
-  string statName = entry.Key;
-  double statValue = entry.Value;
+  Player player = owClient.GetPlayerAsync("SirDoombox#2603");
+  // it is possible to get values individually, however it is not recommended.
+  double allHeroesHealingDone = player.CasualStats["AllHeroes"]["Assists"]["Healing Done"];
+  foreach(var hero in player.CasualStats)
+  {
+    foreach(var category in hero.Value)
+    {
+      foreach(var stat in category.Value)
+      {
+        string name = stat.Key;
+        double value = stat.Value;
+      }
+    }
+  }
 }
 ```
-If you want to cut down on request timers and/or weigh the region detection in a certain way you are able to pass a  `RegionDetectionSettings` object into the `.UpdateStatsAsync()` method. Note: The order in which you specify the regions is the order they will be checked in.
-```csharp
-await player.UpdateStatsAsync(RegionDetectionSettings.Default);
-// or...
-await player.UpdateStatsAsync(new RegionDetectionSettings(Region.eu, Region.kr));
-```
-There are also some helper methods available for use to simplify some common operations
-```csharp
-bool validTag = OverwatchAPIHelpers.IsValidBattletag("SomePlayer#1234"); // Returns true.
-string profileUrl = OverwatchAPIHelpers.ProfileUrl("SomePlayer#1234", Region.eu); // Returns a PlayOverwatch profile URL.
-```
-Please see the "OverwatchDotNetTestbed" project if you'd like to see an implementation.
+Cli
+NOTE: If you plan on making many requests over the lifetime of your application, I recommend keeping an instance of `OverwatchClient` around and disposing of it explicitly later.
 
 ## Contact
 If you wish to contact me about contributing to the project, or have any questions / suggestions please feel free to come find me on the [C# discord server.](https://discord.gg/0np62rq4o8GnQO9l "C# Discord") - @Doombox#0661
