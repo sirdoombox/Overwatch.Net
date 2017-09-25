@@ -1,5 +1,4 @@
-﻿using AngleSharp.Dom;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections;
 
 namespace OverwatchAPI
@@ -7,7 +6,7 @@ namespace OverwatchAPI
     /// <summary>
     /// Represents a set of achievment categories.
     /// </summary>
-    public sealed class OverwatchAchievements : IReadOnlyDictionary<string, AchievementCategory>
+    public sealed class Achievements : IReadOnlyDictionary<string, AchievementCategory>
     {
         private Dictionary<string, AchievementCategory> contents = new Dictionary<string, AchievementCategory>();
 
@@ -32,20 +31,6 @@ namespace OverwatchAPI
 
         public bool TryGetValue(string key, out AchievementCategory value) => contents.TryGetValue(key, out value);
 
-        internal void UpdateAchievementsFromPage(IDocument doc)
-        {
-            var innerContent = doc.QuerySelector("section[id='achievements-section']");
-            foreach (var dropdownitem in innerContent.QuerySelectorAll("select > option"))
-            {
-                var achievementBlock = innerContent.QuerySelector($"div[data-category-id='{dropdownitem.GetAttribute("value")}']");
-                var cat = new AchievementCategory();
-                contents.Add(dropdownitem.GetAttribute("option-id"), cat);
-                foreach (var achievement in achievementBlock.QuerySelectorAll("div.achievement-card"))
-                {
-                    cat.contents.Add(achievement.QuerySelector("div.media-card-title").TextContent,
-                                     !achievement.GetAttribute("class").Contains("m-disabled"));
-                }
-            }
-        }
+        internal void Add(string catId, AchievementCategory cat) => contents.Add(catId, cat);        
     }
 }
