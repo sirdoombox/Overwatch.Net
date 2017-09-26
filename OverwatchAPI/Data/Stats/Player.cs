@@ -3,6 +3,7 @@
     public sealed class Player
     {
         public string Username { get; set; }
+        internal string UsernameUrlFriendly => Username.BattletagToUrlFriendlyString();
         public Region Region { get; set; }
         public Platform Platform { get; set; }
         public string ProfileUrl { get; set; }
@@ -14,7 +15,5 @@
         public Achievements Achievements { get; set; }
         public string CompetitiveRankImageUrl { get; set; }
         public string ProfilePortraitUrl { get; set; }
-
-        public Player() { }
     }
 }

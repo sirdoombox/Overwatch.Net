@@ -12,7 +12,7 @@ namespace Tests
         {
             using (var ow = new OverwatchClient())
             {
-                await Assert.ThrowsAsync<ArgumentException>(async () => await ow.GetPlayerAsync("SirDoombox", Platform.pc));
+                await Assert.ThrowsAsync<ArgumentException>(async () => await ow.GetPlayerAsync("SirDoombox", Platform.Pc));
             }
         }
 
@@ -21,7 +21,7 @@ namespace Tests
         {
             using (var ow = new OverwatchClient())
             {
-                await Assert.ThrowsAsync<ArgumentException>(async () => await ow.GetPlayerAsync("SomeUsername", Platform.psn, Region.kr));
+                await Assert.ThrowsAsync<ArgumentException>(async () => await ow.GetPlayerAsync("SomeUsername", Platform.Psn, Region.Kr));
             }
         }
 
@@ -31,8 +31,8 @@ namespace Tests
             using (var ow = new OverwatchClient())
             {
                 var rslt = await ow.GetPlayerAsync("SirDoombox#2603");
-                Assert.Equal(rslt.Region, Region.eu);
-                Assert.Equal(rslt.Platform, Platform.pc);
+                Assert.Equal(rslt.Region, Region.Eu);
+                Assert.Equal(rslt.Platform, Platform.Pc);
             }
         }
 
@@ -54,8 +54,8 @@ namespace Tests
                 var testPlayer = new Player
                 {
                     Username = "SirDoombox#2603",
-                    Platform = Platform.pc,
-                    Region = Region.eu
+                    Platform = Platform.Pc,
+                    Region = Region.Eu
                 };
                 var rslt = await ow.UpdatePlayerAsync(testPlayer);
                 Assert.NotNull(rslt);
@@ -70,8 +70,8 @@ namespace Tests
                 var testPlayer = new Player
                 {
                     Username = "SirDoombox#2603",
-                    Platform = Platform.psn,
-                    Region = Region.eu
+                    Platform = Platform.Psn,
+                    Region = Region.Eu
                 };
                 await Assert.ThrowsAnyAsync<Exception>(async () => await ow.UpdatePlayerAsync(testPlayer));
             }

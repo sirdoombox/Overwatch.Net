@@ -1,10 +1,9 @@
-﻿using AngleSharp.Parser.Html;
-using OverwatchAPI.Config;
+﻿using OverwatchAPI.Config;
 using System;
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
-using OverwatchAPI.Internal;
+using OverwatchAPI.WebClient;
+using OverwatchAPI.Parser;
 
 namespace OverwatchAPI
 {
@@ -12,33 +11,34 @@ namespace OverwatchAPI
     {
         public OverwatchConfig Config { get; set; }
 
-        private readonly HttpClient httpClient;
-        private readonly HtmlParser htmlParser;
+        private readonly ProfileClient _profileClient;
+        private readonly ProfileParser _profileParser;
 
-        public OverwatchClient()
+        public OverwatchClient(OverwatchConfig config = null)
         {
-            httpClient = new HttpClient();
-            httpClient.BaseAddress = new Uri("https://playoverwatch.com/en-gb/career/");
-            htmlParser = new HtmlParser();
-            Config = Config ?? new OverwatchConfig.Builder().Default();
+            _profileParser = new ProfileParser();
+            Config = config ?? new OverwatchConfig.Builder().Default();
+            _profileClient = new HttpProfileClient(Config);
         }
 
-        public OverwatchClient(OverwatchConfig config) : this()
+        internal OverwatchClient(ProfileClient profileClient, OverwatchConfig config)
         {
-            Config = config ?? throw new ArgumentNullException("config");
+            _profileClient = profileClient;
+            _profileParser = new ProfileParser();
+            Config = config;
         }
 
         /// <summary>
         /// Uses both region and platform detection to find a player.
         /// </summary>
         /// <param name="username"></param>
-        /// <returns>A "Player" object if it was succesfully found, otherwise returns null.</returns>
+        /// <returns>A <see cref="Player"/> if it was succesfully found, otherwise returns null.</returns>
         public async Task<Player> GetPlayerAsync(string username)
         {
             if (username.IsValidBattletag())
-                return await GetPlayerAsync(username, Platform.pc);
+                return await GetPlayerAsync(username, Platform.Pc);
             if (!username.IsValidPsnId() && !username.IsValidXblId())
-                throw new ArgumentException("Not a valid XBL, PSN or Battlenet ID", "username");
+                throw new ArgumentException("Not a valid XBL, PSN or Battlenet ID", nameof(username));
             var player = new Player { Username = username };
             return await DetectPlatformAndParse(player);
         }
@@ -50,24 +50,20 @@ namespace OverwatchAPI
         /// <param name="username"></param>
         /// <param name="platform"></param>
         /// <param name="region"></param>
-        /// <returns>A "Player" object if it was succesfully found, otherwise returns null.</returns>
-        public Task<Player> GetPlayerAsync(string username, Platform platform, Region region = Region.none)
+        /// <returns>A <see cref="Player"/> object if it was succesfully found, otherwise returns null.</returns>
+        public Task<Player> GetPlayerAsync(string username, Platform platform, Region region = Region.None)
         {
-            if (platform != Platform.pc && region != Region.none) throw new ArgumentException("Console players do not have regions.");
-            Player player = new Player()
+            if (platform != Platform.Pc && region != Region.None) throw new ArgumentException("Console players do not have regions.");
+            var player = new Player()
             {
                 Username = username,
                 Platform = platform,
                 Region = region
             };
-            if (platform == Platform.pc)
-            {
-                if (!username.IsValidBattletag())
-                    throw new ArgumentException("Not a valid battletag for the PC platform - valid example: Example#1234", "username");              
-                if(region == Region.none) return DetectRegionAndParse(player);
-                return GetPlayerExact(player);
-            }
-            return GetPlayerExact(player);
+            if (platform != Platform.Pc) return GetPlayerExact(player);
+            if (!username.IsValidBattletag())
+                throw new ArgumentException("Not a valid battletag for the PC platform - valid example: Example#1234", nameof(username));         
+            return region == Region.None ? DetectRegionAndParse(player) : GetPlayerExact(player);
         }
 
         /// <summary>
@@ -77,80 +73,46 @@ namespace OverwatchAPI
         /// <returns>A "Player" object if it was succesfully found, otherwise returns null.</returns>
         public Task<Player> UpdatePlayerAsync(Player player)
         {
-            if (string.IsNullOrEmpty(player.Username)) throw new ArgumentException("Player Username is Null or Empty","player");
-            if (player.Username.IsValidBattletag() && player.Platform != Platform.pc) throw new ArgumentException("Invalid Username for Platform", "player");
-            if (!player.Username.IsValidBattletag() && player.Platform == Platform.pc) throw new ArgumentException("Invalid Username for PC", "player");
-            if (player.Region == Region.none && player.Platform == Platform.pc) throw new ArgumentException("PC players must have a region", "player");
-            if (player.Region != Region.none && player.Platform != Platform.pc) throw new ArgumentException("Console players cannot have a region", "player");
+            if (string.IsNullOrEmpty(player.Username)) throw new ArgumentException("Player Username is Null or Empty",nameof(player));
+            if (player.Username.IsValidBattletag() && player.Platform != Platform.Pc) throw new ArgumentException("Invalid Username for Platform", nameof(player));
+            if (!player.Username.IsValidBattletag() && player.Platform == Platform.Pc) throw new ArgumentException("Invalid Username for PC", nameof(player));
+            if (player.Region == Region.None && player.Platform == Platform.Pc) throw new ArgumentException("PC players must have a region", nameof(player));
+            if (player.Region != Region.None && player.Platform != Platform.Pc) throw new ArgumentException("Console players cannot have a region", nameof(player));
             return GetPlayerExact(player);
         }
 
         internal async Task<Player> DetectRegionAndParse(Player player)
         {
-            foreach(var region in Config.Regions.Where(x => x != Region.none))
+            foreach(var region in Config.Regions.Where(x => x != Region.None))
             {
-                using (var rslt = await httpClient.GetAsync($"pc/{region}/{player.Username.BattletagToUrlFriendlyString()}"))
-                {
-                    if (rslt.IsSuccessStatusCode)
-                    {
-                        player.Region = region;
-                        player.Platform = Platform.pc;
-                        player.ProfileUrl = rslt.RequestMessage.RequestUri.ToString();
-                        return await Parse(player, await rslt.Content.ReadAsStringAsync());
-                    }
-                }                  
+                var result = await _profileClient.GetProfileExact(player.UsernameUrlFriendly, player.Platform, region);
+                if (result == null) continue;
+                player.Region = region;
+                player.ProfileUrl = result.ReqUrl;
+                return await _profileParser.Parse(player, result);
             }
             return null;
         }
 
         internal async Task<Player> DetectPlatformAndParse(Player player)
         {
-            foreach(var platform in Config.Platforms.Where(x => x != Platform.pc))
+            foreach(var platform in Config.Platforms.Where(x => x != Platform.Pc))
             {
-                using (var rslt = await httpClient.GetAsync($"{platform}/{player.Username}"))
-                {
-                    if (rslt.IsSuccessStatusCode)
-                    {
-                        player.Region = Region.none;
-                        player.Platform = platform;
-                        player.ProfileUrl = rslt.RequestMessage.RequestUri.ToString();
-                        return await Parse(player, await rslt.Content.ReadAsStringAsync());
-                    }
-                }
+                var result = await _profileClient.GetProfileExact(player.Username, platform);
+                if(result == null) continue;
+                player.Platform = platform;
+                return await _profileParser.Parse(player,result);
             }
             return null;
         }
 
         internal async Task<Player> GetPlayerExact(Player player)
         {
-            var reqString = $"{player.Platform}/{(player.Platform == Platform.pc ? player.Region+"/" : "")}{player.Username.BattletagToUrlFriendlyString()}";
-            using (var rslt = await httpClient.GetAsync(reqString))
-            {
-                if (rslt.IsSuccessStatusCode)
-                {
-                    player.ProfileUrl = rslt.RequestMessage.RequestUri.ToString();
-                    return await Parse(player, await rslt.Content.ReadAsStringAsync());
-                }
-            }
-            return null;
+            var result = await _profileClient.GetProfile(player);
+            if (result == null) return null;
+            return await _profileParser.Parse(player,result);
         }
 
-        internal async Task<Player> Parse(Player player, string pageHtml)
-        {
-            using (var doc = await htmlParser.ParseAsync(pageHtml))
-            {
-                player.CompetitiveRank = doc.CompetitiveRank();
-                player.CompetitiveRankImageUrl = doc.CompetitiveRankImage();
-                player.CompetitiveStats = doc.Stats(Mode.Competitive);
-                player.CasualStats = doc.Stats(Mode.Casual);
-                player.Achievements = doc.Achievements();
-                player.PlayerLevel = doc.PlayerLevel();
-                player.ProfilePortraitUrl = doc.PortraitImage();
-                player.PlayerLevelImage = doc.PlayerLevelImage();
-                return player;
-            }
-        }
-
-        public void Dispose() => httpClient.Dispose();
+        public void Dispose() => _profileClient.Dispose();
     }
 }

@@ -60,7 +60,7 @@
   <ItemGroup>
     <Compile Include="Config\Config.cs" />
     <Compile Include="Core\Intergration.cs" />
-    <Compile Include="Parser\Parser.cs" />
+    <Compile Include="Core\Parser\Parser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

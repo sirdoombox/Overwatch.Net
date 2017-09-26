@@ -8,7 +8,7 @@ namespace OverwatchAPI
     /// </summary>
     public sealed class AchievementCategory : IReadOnlyDictionary<string, bool>
     {
-        internal Dictionary<string, bool> contents = new Dictionary<string, bool>();
+        internal Dictionary<string, bool> Contents = new Dictionary<string, bool>();
 
         internal AchievementCategory() { }
 
@@ -17,20 +17,20 @@ namespace OverwatchAPI
         /// </summary>
         /// <param key="key">The name of the achievement.</param>
         /// <returns>The bool value of the achievement.</returns>
-        public bool this[string key] => contents[key];
+        public bool this[string key] => Contents[key];
 
-        public IEnumerable<string> Keys => contents.Keys;
+        public IEnumerable<string> Keys => Contents.Keys;
 
-        public IEnumerable<bool> Values => contents.Values;
+        public IEnumerable<bool> Values => Contents.Values;
 
-        public int Count => contents.Count;
+        public int Count => Contents.Count;
 
-        public bool ContainsKey(string key) => contents.ContainsKey(key);
+        public bool ContainsKey(string key) => Contents.ContainsKey(key);
 
-        public IEnumerator<KeyValuePair<string, bool>> GetEnumerator() => contents.GetEnumerator();
+        public IEnumerator<KeyValuePair<string, bool>> GetEnumerator() => Contents.GetEnumerator();
 
-        public bool TryGetValue(string key, out bool value) => contents.TryGetValue(key, out value);
+        public bool TryGetValue(string key, out bool value) => Contents.TryGetValue(key, out value);
 
-        IEnumerator IEnumerable.GetEnumerator() => contents.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => Contents.GetEnumerator();
     }
 }

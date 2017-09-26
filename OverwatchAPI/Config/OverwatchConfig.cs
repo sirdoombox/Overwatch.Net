@@ -14,8 +14,8 @@ namespace OverwatchAPI.Config
 
         public sealed class Builder
         {
-            private List<Region> regions = new List<Region>();
-            private List<Platform> platforms = new List<Platform>();
+            private List<Region> _regions = new List<Region>();
+            private List<Platform> _platforms = new List<Platform>();
 
             public Builder() { }
 
@@ -27,7 +27,7 @@ namespace OverwatchAPI.Config
             /// <returns></returns>
             public Builder WithRegions(params Region[] regions)
             {
-                this.regions = regions.Distinct().ToList();
+                this._regions = regions.Distinct().ToList();
                 return this;
             }
 
@@ -37,8 +37,8 @@ namespace OverwatchAPI.Config
             /// <returns></returns>
             public Builder WithAllRegions()
             {
-                regions = Enum.GetValues(typeof(Region)).Cast<Region>().ToList();
-                regions.Remove(Region.none);
+                _regions = Enum.GetValues(typeof(Region)).Cast<Region>().ToList();
+                _regions.Remove(Region.None);
                 return this;
             }
             
@@ -50,7 +50,7 @@ namespace OverwatchAPI.Config
             /// <returns></returns>
             public Builder WithPlatforms(params Platform[] platforms)
             {
-                this.platforms = platforms.Distinct().ToList();
+                this._platforms = platforms.Distinct().ToList();
                 return this;
             }
 
@@ -60,7 +60,7 @@ namespace OverwatchAPI.Config
             /// <returns></returns>
             public Builder WithAllPlatforms()
             {
-                platforms = Enum.GetValues(typeof(Platform)).Cast<Platform>().ToList();
+                _platforms = Enum.GetValues(typeof(Platform)).Cast<Platform>().ToList();
                 return this;
             }
 
@@ -73,8 +73,8 @@ namespace OverwatchAPI.Config
             {
                 return new OverwatchConfig()
                 {
-                    Regions = regions,
-                    Platforms = platforms
+                    Regions = _regions,
+                    Platforms = _platforms
                 };
             }
 

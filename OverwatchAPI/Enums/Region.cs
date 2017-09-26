@@ -2,9 +2,9 @@
 {
     public enum Region
     {
-        none,
-        us,
-        eu,
-        kr
+        None,
+        Us,
+        Eu,
+        Kr
     }
 }

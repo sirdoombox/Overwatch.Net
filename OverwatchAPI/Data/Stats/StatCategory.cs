@@ -8,7 +8,7 @@ namespace OverwatchAPI
     /// </summary>
     public sealed class StatCategory : IReadOnlyDictionary<string, double>
     {
-        internal Dictionary<string, double> contents = new Dictionary<string, double>();
+        internal Dictionary<string, double> Contents = new Dictionary<string, double>();
 
         internal StatCategory() { }
 
@@ -17,20 +17,20 @@ namespace OverwatchAPI
         /// </summary>
         /// <param key="key">The name of the stat.</param>
         /// <returns>The double value of the stat.</returns>
-        public double this[string key] => contents[key];
+        public double this[string key] => Contents[key];
 
-        public IEnumerable<string> Keys => contents.Keys;
+        public IEnumerable<string> Keys => Contents.Keys;
 
-        public IEnumerable<double> Values => contents.Values;
+        public IEnumerable<double> Values => Contents.Values;
 
-        public int Count => contents.Count;
+        public int Count => Contents.Count;
 
-        public bool ContainsKey(string key) => contents.ContainsKey(key);
+        public bool ContainsKey(string key) => Contents.ContainsKey(key);
 
-        public IEnumerator<KeyValuePair<string, double>> GetEnumerator() => contents.GetEnumerator();
+        public IEnumerator<KeyValuePair<string, double>> GetEnumerator() => Contents.GetEnumerator();
 
-        public bool TryGetValue(string key, out double value) => contents.TryGetValue(key, out value);
+        public bool TryGetValue(string key, out double value) => Contents.TryGetValue(key, out value);
 
-        IEnumerator IEnumerable.GetEnumerator() => contents.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => Contents.GetEnumerator();
     }
 }

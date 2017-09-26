@@ -1,17 +1,16 @@
-﻿using OverwatchAPI;
-using OverwatchAPI.Config;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using OverwatchAPI;
+using OverwatchAPI.Config;
 using Xunit;
 
-namespace Tests
+namespace Tests.Config
 {
-    [Trait("Config Tests", "")]
     public class Config
     {
         [Theory]
-        [InlineData(Platform.pc)]
-        [InlineData(Platform.pc, Platform.psn)]
+        [InlineData(Platform.Pc)]
+        [InlineData(Platform.Pc, Platform.Psn)]
         public void WithPlatforms_ValidArgs_ValidConfig(params Platform[] platforms)
         {
             var testConfig = new OverwatchConfig.Builder()
@@ -21,8 +20,8 @@ namespace Tests
         }
 
         [Theory]
-        [InlineData(Region.kr)]
-        [InlineData(Region.eu, Region.us)]
+        [InlineData(Region.Kr)]
+        [InlineData(Region.Eu, Region.Us)]
         public void WithRegions_ValidArgs_ValidConfig(params Region[] regions)
         {
             var testConfig = new OverwatchConfig.Builder()
@@ -38,19 +37,19 @@ namespace Tests
                 .WithAllPlatforms()
                 .WithAllRegions()
                 .Build();
-            Assert.Equal(new List<Platform> { Platform.pc, Platform.xbl, Platform.psn }, testConfig.Platforms);
-            Assert.Equal(new List<Region> { Region.us, Region.eu, Region.kr }, testConfig.Regions);
+            Assert.Equal(new List<Platform> { Platform.Pc, Platform.Xbl, Platform.Psn }, testConfig.Platforms);
+            Assert.Equal(new List<Region> { Region.Us, Region.Eu, Region.Kr }, testConfig.Regions);
         }
 
         [Fact]
         public void FullMethodChain_ValidArgs_ValidConfig()
         {
             var testConfig = new OverwatchConfig.Builder()
-                .WithPlatforms(Platform.pc, Platform.psn)
-                .WithRegions(Region.eu, Region.kr)
+                .WithPlatforms(Platform.Pc, Platform.Psn)
+                .WithRegions(Region.Eu, Region.Kr)
                 .Build();
-            Assert.Equal(new List<Platform> { Platform.pc, Platform.psn }, testConfig.Platforms);
-            Assert.Equal(new List<Region> { Region.eu, Region.kr }, testConfig.Regions);
+            Assert.Equal(new List<Platform> { Platform.Pc, Platform.Psn }, testConfig.Platforms);
+            Assert.Equal(new List<Region> { Region.Eu, Region.Kr }, testConfig.Regions);
         }
     }
 }
