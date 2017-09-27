@@ -15,7 +15,7 @@ namespace OverwatchAPI.WebClient
 
         public virtual void Dispose() { }
 
-        internal Task<ProfileRequestData> GetProfile(Player player) =>
+        internal Task<ProfileRequestData> GetProfileExact(Player player) =>
             GetProfileExact(player.UsernameUrlFriendly, player.Platform, player.Region);
 
         internal abstract Task<ProfileRequestData> GetProfileExact(string username, Platform platform,

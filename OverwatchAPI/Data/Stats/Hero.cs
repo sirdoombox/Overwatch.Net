@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace OverwatchAPI
 {
+    /// <inheritdoc />
     /// <summary>
     /// Represents a collection of statistics categories available for this hero.
     /// </summary>

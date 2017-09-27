@@ -3,6 +3,7 @@ using System;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using OverwatchAPI.Extensions;
 
 namespace OverwatchAPI.WebClient
 {
@@ -24,7 +25,7 @@ namespace OverwatchAPI.WebClient
         {
             string reqUrl;
             if (region == Region.None && platform != Platform.Pc) reqUrl = $"{platform}/{username}";
-            else if (region != Region.None && platform == Platform.Pc) reqUrl = $"{platform}/{region}/{username.BattletagToUrlFriendlyString()}";
+            else if (region != Region.None && platform == Platform.Pc) reqUrl = $"{platform}/{region.ToLowerString()}/{username.BattletagToUrlFriendlyString()}";
             else throw new ArgumentException("Invalid combination of Platform/Region.");
             return GetProfileUrl(reqUrl);
         }
@@ -45,7 +46,7 @@ namespace OverwatchAPI.WebClient
         {
             foreach(var region in _config.Regions.Where(x => x != Region.None))
             {
-                var result = await GetProfileUrl($"pc/{region}/{username}");
+                var result = await GetProfileUrl($"pc/{region.ToLowerString()}/{username}");
                 if (result == null) continue;
                 return result;
             }

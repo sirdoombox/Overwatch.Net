@@ -3,6 +3,7 @@ using System.Collections;
 
 namespace OverwatchAPI
 {
+    /// <inheritdoc />
     /// <summary>
     /// Represents a set of achievment categories.
     /// </summary>

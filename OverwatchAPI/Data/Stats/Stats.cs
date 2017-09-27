@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace OverwatchAPI
 {
+    /// <inheritdoc />
     /// <summary>
     /// Represents a collection of Heroes for which the player has recorded at least one game of play with.
     /// </summary>

@@ -59,8 +59,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config\Config.cs" />
-    <Compile Include="Core\Intergration.cs" />
+    <Compile Include="Core\OverwatchClient.cs" />
     <Compile Include="Core\Parser\Parser.cs" />
+    <Compile Include="Core\WebClient\MockProfileClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
