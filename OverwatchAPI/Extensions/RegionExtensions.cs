@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OverwatchAPI.Extensions
+﻿namespace OverwatchAPI.Extensions
 {
     public static class RegionExtensions
     {

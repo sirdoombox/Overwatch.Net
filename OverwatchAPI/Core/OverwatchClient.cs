@@ -54,18 +54,23 @@ namespace OverwatchAPI
         /// <returns>A <see cref="Player"/> object if it was succesfully found, otherwise returns null.</returns>
         public async Task<Player> GetPlayerAsync(string username, Platform platform, Region region = Region.None)
         {
-            if (platform != Platform.Pc && region != Region.None) throw new ArgumentException("Console players do not have regions.");
+            if (platform != Platform.Pc && region != Region.None)
+                throw new ArgumentException("Console players do not have regions.");
+            if (!username.IsValidBattletag() && platform == Platform.Pc)
+                throw new ArgumentException("Not a valid battletag for the PC platform - valid example: Example#1234", nameof(username));
+            if (Config.Platforms.All(x => x != Platform.Pc) && username.IsValidBattletag())
+                throw new ArgumentException($"{username} is a PC username, however your config does not allow for PC.", nameof(username));
+
             var player = new Player()
             {
                 Username = username,
                 Platform = platform,
                 Region = region
             };
+
             ProfileClient.ProfileRequestData pageData;
             if (platform != Platform.Pc)
                 pageData = await _profileClient.GetProfileExact(player);
-            else if (!username.IsValidBattletag())
-                throw new ArgumentException("Not a valid battletag for the PC platform - valid example: Example#1234", nameof(username));
             else if (region == Region.None)
                 pageData = await _profileClient.GetProfileDetectRegion(player);
             else
@@ -80,11 +85,17 @@ namespace OverwatchAPI
         /// <returns>A "Player" object if it was succesfully found, otherwise returns null.</returns>
         public async Task<Player> UpdatePlayerAsync(Player player)
         {
-            if (string.IsNullOrEmpty(player.Username)) throw new ArgumentException("Player Username is Null or Empty",nameof(player));
-            if (player.Username.IsValidBattletag() && player.Platform != Platform.Pc) throw new ArgumentException("Invalid Username for Platform", nameof(player));
-            if (!player.Username.IsValidBattletag() && player.Platform == Platform.Pc) throw new ArgumentException("Invalid Username for PC", nameof(player));
-            if (player.Region == Region.None && player.Platform == Platform.Pc) throw new ArgumentException("PC players must have a region", nameof(player));
-            if (player.Region != Region.None && player.Platform != Platform.Pc) throw new ArgumentException("Console players cannot have a region", nameof(player));
+            if (string.IsNullOrEmpty(player.Username))
+                throw new ArgumentException("Player Username is Null or Empty",nameof(player));
+            if (player.Username.IsValidBattletag() && player.Platform != Platform.Pc)
+                throw new ArgumentException("Invalid Username for Platform", nameof(player));
+            if (!player.Username.IsValidBattletag() && player.Platform == Platform.Pc)
+                throw new ArgumentException("Invalid Username for PC", nameof(player));
+            if (player.Region == Region.None && player.Platform == Platform.Pc)
+                throw new ArgumentException("PC players must have a region", nameof(player));
+            if (player.Region != Region.None && player.Platform != Platform.Pc)
+                throw new ArgumentException("Console players cannot have a region", nameof(player));
+
             var pageData = await _profileClient.GetProfileExact(player);
             return pageData == null ? null : await _profileParser.Parse(player, pageData);
         }
