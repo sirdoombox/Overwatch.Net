@@ -9,7 +9,7 @@ namespace Tests.Core
     public class OverwatchClientTest
     {
         [Fact]
-        public async void GetPlayerUsernameOnly_ValidUsernameValidConfig_CorrectPage()
+        public async void GetPlayer_Username_Only_Overload_With_Battletag_Argument_Returns_Valid_Page()
         {
             var config = new OverwatchConfig.Builder().Default();
             var mockWebClient = new MockProfileClient(config);
@@ -21,7 +21,7 @@ namespace Tests.Core
         }
 
         [Fact]
-        public async void GetPlayerUsernameOnly_DoesNotExistInGivenRegions_IsNull()
+        public async void GetPlayer_Username_Only_Overload_With_Battletag_Argument_With_Player_Not_Existing_In_Region_Should_Return_Null()
         {
             var config = new OverwatchConfig.Builder()
                 .WithAllPlatforms()
@@ -35,10 +35,9 @@ namespace Tests.Core
         }
 
         [Fact]
-        public async void GetPlayerUsernameOnly_ConfigNoPC_ThrowsException()
+        public async void GetPlayer_Username_Only_Overload_With_Battletag_Argument_And_Config_With_No_Pc_Region_Should_Throw_Exception()
         {
             var config = new OverwatchConfig.Builder()
-                .WithAllRegions()
                 .WithPlatforms(Platform.Psn, Platform.Xbl);
             var mockWebClient = new MockProfileClient(config);
             using (var owClient = new OverwatchClient(mockWebClient, config))

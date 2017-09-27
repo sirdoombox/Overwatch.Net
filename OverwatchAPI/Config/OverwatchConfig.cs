@@ -17,8 +17,6 @@ namespace OverwatchAPI.Config
             private List<Region> _regions = new List<Region>();
             private List<Platform> _platforms = new List<Platform>();
 
-            public Builder() { }
-
             /// <summary>
             /// Set the regions to use when auto-detecting. Order is preserved and will dictate the order that regions are detected in.
             /// Auto-detect will return the first succesful result.
@@ -27,7 +25,7 @@ namespace OverwatchAPI.Config
             /// <returns></returns>
             public Builder WithRegions(params Region[] regions)
             {
-                this._regions = regions.Distinct().ToList();
+                _regions = regions.Distinct().ToList();
                 return this;
             }
 
@@ -50,7 +48,7 @@ namespace OverwatchAPI.Config
             /// <returns></returns>
             public Builder WithPlatforms(params Platform[] platforms)
             {
-                this._platforms = platforms.Distinct().ToList();
+                _platforms = platforms.Distinct().ToList();
                 return this;
             }
 
@@ -71,6 +69,14 @@ namespace OverwatchAPI.Config
 
             public OverwatchConfig Build()
             {
+                if (_platforms.Count <= 0 && _regions.Count <= 0)
+                    throw new InvalidOperationException("A Configuration must have at least 1 platform.");
+                if (_regions.Count <= 0)
+                    _regions.Add(Region.None);
+                if (_platforms.Any(x => x == Platform.Pc) && _regions.All(x => x == Region.None))
+                    throw new InvalidOperationException("In order to search for PC players, at least 1 Region (excluding None) must be specified.");
+                if(_platforms.All(x => x != Platform.Pc) && _regions.Any(x => x != Region.None))
+                    throw new InvalidOperationException("Console players do not have regions, as such a region does not need to be specified.");
                 return new OverwatchConfig()
                 {
                     Regions = _regions,

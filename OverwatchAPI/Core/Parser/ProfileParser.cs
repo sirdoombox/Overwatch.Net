@@ -44,9 +44,7 @@ namespace OverwatchAPI.Parser
         private static string CompetitiveRankImage(IHtmlDocument doc)
         {
             var compImg = doc.QuerySelector("div.competitive-rank img")?.OuterHtml;
-            if (!string.IsNullOrEmpty(compImg))
-                return compImg.Replace("<img src=\"", "").Replace("\">", "");
-            return string.Empty;
+            return !string.IsNullOrEmpty(compImg) ? compImg.Replace("<img src=\"", "").Replace("\">", "") : string.Empty;
         }
 
         private static ushort PlayerLevel(IHtmlDocument doc)
@@ -86,7 +84,7 @@ namespace OverwatchAPI.Parser
         private static Stats Stats(IHtmlDocument doc, Mode mode)
         {
             var contents = new Stats();
-            var divModeId = "";
+            string divModeId;
             switch (mode)
             {
                 case Mode.Casual:
@@ -131,9 +129,9 @@ namespace OverwatchAPI.Parser
         private static double OwValToDouble(string input)
         {
             if (input.ToLower().Contains("hour"))
-                return TimeSpan.FromHours(int.Parse(input.Substring(0, input.IndexOf(" ")))).TotalSeconds;
+                return TimeSpan.FromHours(int.Parse(input.Substring(0, input.IndexOf(" ", StringComparison.Ordinal)))).TotalSeconds;
             if (input.ToLower().Contains("minute"))
-                return TimeSpan.FromMinutes(int.Parse(input.Substring(0, input.IndexOf(" ")))).TotalSeconds;
+                return TimeSpan.FromMinutes(int.Parse(input.Substring(0, input.IndexOf(" ", StringComparison.Ordinal)))).TotalSeconds;
             if (!input.Contains(":"))
                 return double.TryParse(input.Replace(",", "").Replace("%", ""), out var rslt1) ? rslt1 : 0;
             if (TimeSpan.TryParseExact(input, @"mm\:ss", CultureInfo.CurrentCulture, out var outputTime))
