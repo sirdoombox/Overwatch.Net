@@ -22,21 +22,17 @@ A simple web scraper that grabs player stats from a users PlayOverwatch.com prof
 
 ## Usage
 ```csharp
-using(var owClient = new OverwatchClient())
+using(var owClient = new OverwatchClient()) // Initialising without an "OverwatchConfig" will use the Default config.
 {
   Player player = owClient.GetPlayerAsync("SirDoombox#2603");
-  // it is possible to get values individually, however it is not recommended.
-  double allHeroesHealingDone = player.CasualStats["AllHeroes"]["Assists"]["Healing Done"];
-  foreach(var hero in player.CasualStats)
+  double allHeroesHealingDone = player.CasualStats.GetStatExact("All Heroes", "Assists", "Healing Done");
+  IEnumerable<Stat> allHealingDoneStats = player.CasualStats.FilterByName("Healing Done");
+  foreach(var stat in player.CasualStats)
   {
-    foreach(var category in hero.Value)
-    {
-      foreach(var stat in category.Value)
-      {
-        string name = stat.Key;
-        double value = stat.Value;
-      }
-    }
+    string statHeroName = stat.HeroName
+    string statName = stat.Name;
+    string statCategoryName = stat.CategoryName;
+    string statValue = stat.Value;
   }
 }
 ```
