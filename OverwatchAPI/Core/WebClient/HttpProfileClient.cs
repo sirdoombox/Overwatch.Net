@@ -24,8 +24,8 @@ namespace OverwatchAPI.WebClient
         internal override Task<ProfileRequestData> GetProfileExact(string username, Platform platform, Region region = Region.None)
         {
             string reqUrl;
-            if (region == Region.None && platform != Platform.Pc) reqUrl = $"{platform}/{username}";
-            else if (region != Region.None && platform == Platform.Pc) reqUrl = $"{platform}/{region.ToLowerString()}/{username.BattletagToUrlFriendlyString()}";
+            if (region == Region.None && platform != Platform.Pc) reqUrl = $"{platform.ToLowerString()}/{username}";
+            else if (region != Region.None && platform == Platform.Pc) reqUrl = $"{platform.ToLowerString()}/{region.ToLowerString()}/{username.BattletagToUrlFriendlyString()}";
             else throw new ArgumentException("Invalid combination of Platform/Region.");
             return GetProfileUrl(reqUrl);
         }
@@ -35,7 +35,7 @@ namespace OverwatchAPI.WebClient
             if (username.IsValidBattletag()) return await GetProfileDetectRegion(username, Platform.Pc);
             foreach(var platform in _config.Platforms.Where(x => x != Platform.Pc))
             {
-                var result = await GetProfileUrl($"{platform}/{username.BattletagToUrlFriendlyString()}");
+                var result = await GetProfileUrl($"{platform.ToLowerString()}/{username.BattletagToUrlFriendlyString()}");
                 if (result == null) continue;
                 return result;
             }
@@ -46,7 +46,7 @@ namespace OverwatchAPI.WebClient
         {
             foreach(var region in _config.Regions.Where(x => x != Region.None))
             {
-                var result = await GetProfileUrl($"pc/{region.ToLowerString()}/{username}");
+                var result = await GetProfileUrl($"{platform.ToLowerString()}/{region.ToLowerString()}/{username}");
                 if (result == null) continue;
                 return result;
             }

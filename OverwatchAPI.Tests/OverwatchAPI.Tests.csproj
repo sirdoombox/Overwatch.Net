@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config\OverwatchConfigTest.cs" />
+    <Compile Include="Core\OverwatchClientIntergrationTests.cs" />
     <Compile Include="Core\OverwatchClientTest.cs" />
     <Compile Include="Core\Parser\ProfileParserTest.cs" />
     <Compile Include="Core\WebClient\MockProfileClient.cs" />

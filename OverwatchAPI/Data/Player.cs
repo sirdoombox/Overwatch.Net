@@ -1,4 +1,7 @@
-﻿namespace OverwatchAPI
+﻿using System.Collections.Generic;
+using OverwatchAPI.Data;
+
+namespace OverwatchAPI
 {
     public sealed class Player
     {
@@ -10,9 +13,9 @@
         public ushort PlayerLevel { get; set; }
         public string PlayerLevelImage { get; set; }
         public ushort CompetitiveRank { get; set; }
-        public Stats CasualStats { get; set; }
-        public Stats CompetitiveStats { get; set; }
-        public Achievements Achievements { get; set; }
+        public List<Stat> CasualStats { get; set; }
+        public List<Stat> CompetitiveStats { get; set; }
+        public List<Achievement> Achievements { get; set; }
         public string CompetitiveRankImageUrl { get; set; }
         public string ProfilePortraitUrl { get; set; }
     }

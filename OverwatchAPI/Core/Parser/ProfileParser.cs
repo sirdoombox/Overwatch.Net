@@ -5,6 +5,7 @@ using AngleSharp.Parser.Html;
 using System.Globalization;
 using AngleSharp.Dom.Html;
 using System.Text.RegularExpressions;
+using OverwatchAPI.Data;
 using OverwatchAPI.StaticResources;
 using OverwatchAPI.WebClient;
 
@@ -63,28 +64,31 @@ namespace OverwatchAPI.Parser
             return str.Substring(startIndex, str.IndexOf(')') - startIndex);
         }
 
-        private static Achievements Achievements(IHtmlDocument doc)
+        private static List<Achievement> Achievements(IHtmlDocument doc)
         {
-            var contents = new Achievements();
+            var contents = new List<Achievement>();
             var innerContent = doc.QuerySelector("section[id='achievements-section']");
             foreach (var dropdownitem in innerContent.QuerySelectorAll("select > option"))
             {
                 var achievementBlock = innerContent.QuerySelector($"div[data-category-id='{dropdownitem.GetAttribute("value")}']");
-                var cat = new AchievementCategory();
-                contents.Add(dropdownitem.GetAttribute("option-id"), cat);
+                var categoryName = dropdownitem.GetAttribute("option-id");
                 foreach (var achievement in achievementBlock.QuerySelectorAll("div.achievement-card"))
                 {
-                    cat.Contents.Add(achievement.QuerySelector("div.media-card-title").TextContent,
-                                     !achievement.GetAttribute("class").Contains("m-disabled"));
+                    contents.Add(new Achievement
+                    {
+                        CategoryName = categoryName,
+                        Name = achievement.QuerySelector("div.media-card-title").TextContent,
+                        IsEarned = !achievement.GetAttribute("class").Contains("m-disabled")
+                    });
                 }
             }
             return contents;
         }
 
-        private static Stats Stats(IHtmlDocument doc, Mode mode)
+        private static List<Stat> Stats(IHtmlDocument doc, Mode mode)
         {
-            var contents = new Stats();
-            string divModeId;
+            var contents = new List<Stat>();
+            var divModeId = string.Empty;
             switch (mode)
             {
                 case Mode.Casual:
@@ -93,8 +97,6 @@ namespace OverwatchAPI.Parser
                 case Mode.Competitive:
                     divModeId = "competitive";
                     break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(mode), mode, null);
             }
             var innerContent = doc.QuerySelector($"div[id='{divModeId}']");
             var idDictionary = new Dictionary<string, string>();
@@ -109,17 +111,19 @@ namespace OverwatchAPI.Parser
             foreach (var section in innerContent.QuerySelectorAll("div[data-group-id='stats']"))
             {
                 var catId = section.GetAttribute("data-category-id");
-                var hero = new Hero();
-                contents.Add(idDictionary[catId], hero);
+                var heroName = idDictionary[catId];
                 foreach (var table in section.QuerySelectorAll($"div[data-category-id='{catId}'] table.data-table"))
                 {
-                    var cat = new StatCategory();
-                    hero.Contents.Add(table.QuerySelector("thead").TextContent, cat);
+                    var catName = table.QuerySelector("thead").TextContent;
                     foreach (var row in table.QuerySelectorAll("tbody tr"))
                     {
-                        if (cat.ContainsKey(row.Children[0].TextContent))
-                            continue;
-                        cat.Contents.Add(row.Children[0].TextContent, OwValToDouble(row.Children[1].TextContent));
+                        contents.Add(new Stat
+                        {
+                            CategoryName = catName,
+                            HeroName = heroName,
+                            Name = row.Children[0].TextContent,
+                            Value = OwValToDouble(row.Children[1].TextContent)
+                        });
                     }
                 }
             }

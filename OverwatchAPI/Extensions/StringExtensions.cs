@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Text.RegularExpressions;
 
 namespace OverwatchAPI
 {
@@ -16,12 +17,14 @@ namespace OverwatchAPI
 
         internal static string ToProfileUrl(this string username, Region region, Platform platform)
         {
-            if (platform == Platform.Pc)
-                return $"https://playoverwatch.com/en-gb/career/{platform}/{region}/{username.Replace("#", "-")}";
-            else
-                return $"https://playoverwatch.com/en-gb/career/{platform}/{username}";
+            return platform == Platform.Pc 
+                ? $"https://playoverwatch.com/en-gb/career/{platform}/{region}/{username.Replace("#", "-")}" 
+                : $"https://playoverwatch.com/en-gb/career/{platform}/{username}";
         }
 
         internal static string BattletagToUrlFriendlyString(this string battletag) => battletag.Replace('#','-');
+
+        internal static bool EqualsIgnoreCase(this string source, string toCompare) =>
+            string.Equals(source, toCompare, StringComparison.OrdinalIgnoreCase);
     }
 }

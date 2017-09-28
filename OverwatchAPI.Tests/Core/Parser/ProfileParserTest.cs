@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using OverwatchAPI;
+using OverwatchAPI.Extensions;
 using OverwatchAPI.Parser;
 using OverwatchAPI.WebClient;
 using Xunit;
@@ -33,17 +34,17 @@ namespace Tests.Core.Parser
 
         [Fact]
         public void Parsed_Profile_CasualStats_Should_Be_Correct() => 
-            Assert.Equal(652428, _testPlayer.CasualStats["AllHeroes"]["Assists"]["Healing Done"]);
+            Assert.Equal(652428, _testPlayer.CasualStats.GetStatExact("All Heroes", "Assists", "Healing Done").Value);
 
         [Fact]
         public void Parsed_Profile_CompetitiveStats_Should_Be_Correct() => 
-            Assert.Equal(7200, _testPlayer.CompetitiveStats["Lucio"]["Game"]["Time Played"]);
+            Assert.Equal(7200, _testPlayer.CompetitiveStats.GetStatExact("Lucio", "Game", "Time Played").Value);
 
         [Fact]
         public void Parsed_Profile_Achievements_Should_Be_Correct()
         {
-            Assert.Equal(true, _testPlayer.Achievements["Tank"]["Hog Wild"]);
-            Assert.Equal(false, _testPlayer.Achievements["Defense"]["Did That Sting?"]);
+            Assert.Equal(true, _testPlayer.Achievements.FilterByName("Hog Wild").IsEarned);
+            Assert.Equal(false, _testPlayer.Achievements.FilterByName("Did That Sting?").IsEarned);
         }
 
         [Fact]
