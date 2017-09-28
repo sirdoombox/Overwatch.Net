@@ -2,11 +2,7 @@
 
 An unofficial player stats API for the Blizzard game "Overwatch" - Targetting .NET Standard 1.1 for maximum compatibility.
 
-Source | Status
------ | -----
-**Build** | [![Build status](https://ci.appveyor.com/api/projects/status/github/sirdoombox/overwatch.net?svg=true)](https://ci.appveyor.com/project/sirdoombox/overwatch-net)
-**Nuget** | [![NuGet version](https://badge.fury.io/nu/Overwatch.Net.svg)](https://badge.fury.io/nu/Overwatch.Net)
-
+[![Build status](https://ci.appveyor.com/api/projects/status/github/sirdoombox/overwatch.net?svg=true)](https://ci.appveyor.com/project/sirdoombox/overwatch-net)[![NuGet version](https://badge.fury.io/nu/Overwatch.Net.svg)](https://badge.fury.io/nu/Overwatch.Net)
 
 ## What is it?
 
