@@ -4,7 +4,7 @@
     <TargetFramework>netstandard1.1</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Version>3.0.0</Version>
-    <PackageVersion>3.0.0-alpha</PackageVersion>
+    <PackageVersion>3.0.0</PackageVersion>
     <Authors>Doombox</Authors>
     <Company />
     <Description>An unofficial player stats API targetting .NET Standard 1.1 - Written in C#.</Description>
