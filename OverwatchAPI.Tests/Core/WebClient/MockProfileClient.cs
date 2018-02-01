@@ -17,28 +17,14 @@ namespace Tests.Core.WebClient
             _mockData = new ProfileRequestData("https://playoverwatch.com/en-gb/career/pc/eu/SirDoombox-2603", File.ReadAllText("TestSource.txt"));
         }
 
-        internal override Task<ProfileRequestData> GetProfileExact(string username, Platform platform, Region region = Region.None)
+        internal override Task<ProfileRequestData> GetProfileExact(string username, Platform platform)
         {
-            switch (region)
-            {
-                case Region.None when platform != Platform.Pc:
-                    return Task.FromResult<ProfileRequestData>(null);
-                case Region.Eu when platform == Platform.Pc:
-                    return Task.FromResult(_mockData);
-            }
-            throw new ArgumentException("Invalid combination of Platform/Region.");
-        }
-
-        internal override Task<ProfileRequestData> GetProfileDetectRegion(string username, Platform platform)
-        {
-            if (platform != Platform.Pc) return null;
-            var any = _config.Regions.Where(x => x != Region.None).Any(x => x == Region.Eu);
-            return any ? Task.FromResult(_mockData) : Task.FromResult<ProfileRequestData>(null);
+            return Task.FromResult(_mockData);
         }
 
         internal override Task<ProfileRequestData> GetProfileDetectPlatform(string username)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException(); // TODO: no real way to test this but maybe someday...
         }
     }
 }

@@ -7,7 +7,6 @@ namespace OverwatchAPI
     {
         public string Username { get; set; }
         internal string UsernameUrlFriendly => Username.BattletagToUrlFriendlyString();
-        public Region Region { get; set; }
         public Platform Platform { get; set; }
         public string ProfileUrl { get; set; }
         public ushort PlayerLevel { get; set; }

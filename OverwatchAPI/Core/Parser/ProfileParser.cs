@@ -15,6 +15,11 @@ namespace OverwatchAPI.Parser
     {
         private readonly HtmlParser _parser = new HtmlParser();
 
+        internal static bool IsValidPlayerProfile(ProfileClient.ProfileRequestData pageData)
+        {
+            return !pageData.ReqContent.Contains("Profile Not Found");
+        }
+
         internal async Task<Player> Parse(Player player, ProfileClient.ProfileRequestData pageData)
         {
             using (var doc = await _parser.ParseAsync(pageData.ReqContent))

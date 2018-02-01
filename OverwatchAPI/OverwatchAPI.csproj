@@ -3,13 +3,16 @@
   <PropertyGroup>
     <TargetFramework>netstandard1.1</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>3.0.0</Version>
-    <PackageVersion>3.0.0</PackageVersion>
+    <Version>3.1.0</Version>
+    <PackageVersion>3.1.0</PackageVersion>
     <Authors>Doombox</Authors>
     <Company />
     <Description>An unofficial player stats API targetting .NET Standard 1.1 - Written in C#.</Description>
-    <PackageReleaseNotes>-Major ground-up rewrite.
-</PackageReleaseNotes>
+    <PackageReleaseNotes>
+      -Bandaid fixes to major Blizzard changes
+        -- Removal of regions
+        -- No 404 code return on invalid profile
+    </PackageReleaseNotes>
     <Copyright>Copyright © 2017 Doombox</Copyright>
     <PackageId>Overwatch.Net</PackageId>
     <Product>Overwatch.Net</Product>

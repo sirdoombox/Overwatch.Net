@@ -21,20 +21,6 @@ namespace Tests.Core
         }
 
         [Fact]
-        public async void GetPlayer_Username_Only_Overload_With_Battletag_Argument_With_Player_Not_Existing_In_Region_Should_Return_Null()
-        {
-            var config = new OverwatchConfig.Builder()
-                .WithAllPlatforms()
-                .WithRegions(Region.Kr, Region.Us);
-            var mockWebClient = new MockProfileClient(config);
-            using (var owClient = new OverwatchClient(mockWebClient, config))
-            {
-                var result = await owClient.GetPlayerAsync("SirDoombox#2603");
-                Assert.Null(result);
-            }
-        }
-
-        [Fact]
         public async void GetPlayer_Username_Only_Overload_With_Battletag_Argument_And_Config_With_No_Pc_Region_Should_Throw_Exception()
         {
             var config = new OverwatchConfig.Builder()

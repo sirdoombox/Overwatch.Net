@@ -15,12 +15,8 @@ namespace OverwatchAPI
 
         internal static bool IsValidPsnId(this string psnId) => PsnIdRegex.IsMatch(psnId);
 
-        internal static string ToProfileUrl(this string username, Region region, Platform platform)
-        {
-            return platform == Platform.Pc 
-                ? $"https://playoverwatch.com/en-gb/career/{platform}/{region}/{username.Replace("#", "-")}" 
-                : $"https://playoverwatch.com/en-gb/career/{platform}/{username}";
-        }
+        internal static string ToProfileUrl(this string username, Platform platform) => 
+            $"https://playoverwatch.com/en-gb/career/{platform}/{username.BattletagToUrlFriendlyString()}";
 
         internal static string BattletagToUrlFriendlyString(this string battletag) => battletag.Replace('#','-');
 
