@@ -29,7 +29,7 @@ namespace OverwatchAPI
         }
 
         /// <summary>
-        /// Uses both region and platform detection to find a player.
+        /// Uses both platform detection to find a player. Not as accurate or fast as providing a platform.
         /// </summary>
         /// <param name="username"></param>
         /// <returns>A <see cref="Player"/> if it was succesfully found, otherwise returns null.</returns>
@@ -46,7 +46,6 @@ namespace OverwatchAPI
 
         /// <summary>
         /// The fastest and most precise method of finding a player.
-        /// Note: Consoles do not have seperate regions for profiles.
         /// </summary>
         /// <param name="username"></param>
         /// <param name="platform"></param>

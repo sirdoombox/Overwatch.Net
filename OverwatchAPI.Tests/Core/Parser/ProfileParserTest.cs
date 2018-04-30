@@ -18,7 +18,7 @@ namespace Tests.Core.Parser
         static ProfileParserTest()
         {
             var source = File.ReadAllText("TestSource.txt");
-            var data = new ProfileClient.ProfileRequestData("", source);
+            var data = new ProfileClient.ProfileRequestData("", source, Platform.Pc);
             var parser = new ProfileParser();
             _testPlayer = new Player();
             parser.Parse(_testPlayer, data).GetAwaiter().GetResult();

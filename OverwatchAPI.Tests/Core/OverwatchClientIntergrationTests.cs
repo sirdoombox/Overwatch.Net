@@ -16,6 +16,7 @@ namespace Tests.Core
         { 
             var result = await _client.GetPlayerAsync(psnUsername);
             Assert.Equal(psnUrl, result.ProfileUrl);
+            Assert.Equal(Platform.Psn, result.Platform);
         }
 
         [Fact]
@@ -23,6 +24,7 @@ namespace Tests.Core
         {
             var result = await _client.GetPlayerAsync(pcUsername);
             Assert.Equal(pcUrl, result.ProfileUrl);
+            Assert.Equal(Platform.Pc, result.Platform);
         }
     }
 }

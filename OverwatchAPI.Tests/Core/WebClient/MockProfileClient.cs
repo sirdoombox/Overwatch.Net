@@ -1,7 +1,6 @@
 ﻿using OverwatchAPI.WebClient;
 using System;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using OverwatchAPI;
 using OverwatchAPI.Config;
@@ -14,7 +13,7 @@ namespace Tests.Core.WebClient
 
         public MockProfileClient(OverwatchConfig config) : base(config)
         {
-            _mockData = new ProfileRequestData("https://playoverwatch.com/en-gb/career/pc/eu/SirDoombox-2603", File.ReadAllText("TestSource.txt"));
+            _mockData = new ProfileRequestData("https://playoverwatch.com/en-gb/career/pc/eu/SirDoombox-2603", File.ReadAllText("TestSource.txt"), Platform.Pc);
         }
 
         internal override Task<ProfileRequestData> GetProfileExact(string username, Platform platform)

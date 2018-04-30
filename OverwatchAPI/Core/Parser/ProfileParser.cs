@@ -33,6 +33,7 @@ namespace OverwatchAPI.Parser
                 player.PlayerLevel = PlayerLevel(doc);
                 player.ProfilePortraitUrl = PortraitImage(doc);
                 player.PlayerLevelImage = PlayerLevelImage(doc);
+                player.Platform = pageData.PlayerPlatform;
                 return player;
             }
         }

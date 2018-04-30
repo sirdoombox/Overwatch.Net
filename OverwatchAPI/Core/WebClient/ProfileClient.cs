@@ -29,11 +29,13 @@ namespace OverwatchAPI.WebClient
         {
             internal string ReqUrl;
             internal string ReqContent;
+            internal Platform PlayerPlatform;
 
-            internal ProfileRequestData(string reqUrl, string reqContent)
+            internal ProfileRequestData(string reqUrl, string reqContent, Platform playerPlatform)
             {
                 ReqUrl = reqUrl;
                 ReqContent = reqContent;
+                PlayerPlatform = playerPlatform;
             }
         }
     }
