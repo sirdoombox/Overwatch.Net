@@ -1,21 +1,23 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>3.1.1</Version>
-    <PackageVersion>3.1.1</PackageVersion>
+    <Version>4.0</Version>
+    <PackageVersion>4.0</PackageVersion>
     <Authors>Doombox</Authors>
     <Company />
-    <Description>An unofficial player stats API targetting .NET Standard 1.1 - Written in C#.</Description>
+    <Description>An unofficial player stats API targetting .NET Standard 2.0 - Written in C#.</Description>
     <PackageReleaseNotes>
-      - Fix player platform always returning PC.
+      - Upgrade to NetStandard 2.0 (TLS1.2 Support)
+      - Addition of Endorsements
+      - Add support for detecting private profiles and handling them correctly
     </PackageReleaseNotes>
-    <Copyright>Copyright © 2017 Doombox</Copyright>
+    <Copyright>Copyright © 2018 Doombox</Copyright>
     <PackageId>Overwatch.Net</PackageId>
     <Product>Overwatch.Net</Product>
     <Title>Overwatch.Net</Title>
-    <PackageTags>C# .NET Standard 1.1 Overwatch API Library</PackageTags>
+    <PackageTags>C# .NET Standard 2.0 Overwatch API Library</PackageTags>
     <PackageProjectUrl>https://github.com/sirdoombox/Overwatch.Net</PackageProjectUrl>
     <RepositoryUrl>https://github.com/sirdoombox/Overwatch.Net</RepositoryUrl>
     <PackageLicenseUrl>https://github.com/sirdoombox/Overwatch.Net/blob/master/License.md</PackageLicenseUrl>
