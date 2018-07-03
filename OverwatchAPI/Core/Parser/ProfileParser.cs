@@ -34,6 +34,8 @@ namespace OverwatchAPI.Parser
                 player.ProfilePortraitUrl = PortraitImage(doc);
                 player.PlayerLevelImage = PlayerLevelImage(doc);
                 player.Platform = pageData.PlayerPlatform;
+                player.EndorsementLevel = EndorsementLevel(doc);
+                player.Endorsements = Endorsements(doc);
                 return player;
             }
         }
@@ -70,6 +72,12 @@ namespace OverwatchAPI.Parser
             return str.Substring(startIndex, str.IndexOf(')') - startIndex);
         }
 
+        private static ushort EndorsementLevel(IHtmlDocument doc)
+        {
+            ushort.TryParse(doc.QuerySelector("div.endorsement-level div.u-center")?.TextContent, out ushort parsedEndorsementLevel);
+            return parsedEndorsementLevel;
+        }
+
         private static List<Achievement> Achievements(IHtmlDocument doc)
         {
             var contents = new List<Achievement>();
@@ -88,6 +96,39 @@ namespace OverwatchAPI.Parser
                     });
                 }
             }
+            return contents;
+        }
+
+        private static List<Stat> Endorsements(IHtmlDocument doc)
+        {
+            var contents = new List<Stat>();
+
+            var innerContent = doc.QuerySelector("div.endorsement-level");
+
+            if (innerContent != null)
+            {
+                foreach (var endorsement in innerContent.QuerySelectorAll("svg"))
+                {
+                    var dataValue = endorsement.GetAttribute("data-value");
+
+                    if (dataValue != null)
+                    {
+                        var className = endorsement.GetAttribute("class");
+                        // parse the endorsement type out of the class name
+                        const string endorsementTypeSeparator = "--";
+                        var endorsementName = className.Substring(className.IndexOf(endorsementTypeSeparator) + endorsementTypeSeparator.Length);
+
+                        contents.Add(new Stat
+                        {
+                            HeroName = "AllHeroes",
+                            CategoryName = "Endorsements",
+                            Name = ParseEndorsementName(endorsementName),
+                            Value = OwValToDouble(dataValue),
+                        });
+                    }
+                }
+            }
+
             return contents;
         }
 
@@ -154,6 +195,21 @@ namespace OverwatchAPI.Parser
         private static string ParseHeroName(string input)
         {
             return input.ToLower() == "all heroes" ? "AllHeroes" : input.Replace("ú", "u").Replace(":", "").Replace(" ", "").Replace("ö", "o").Replace(".", "");
+        }
+
+        private static string ParseEndorsementName(string input)
+        {
+            switch (input)
+            {
+                case "teammate":
+                    return "GoodTeammate";
+                case "sportsmanship":
+                    return "Sportsmanship";
+                case "shotcaller":
+                    return "ShotCaller";
+            }
+
+            return input;
         }
     }
 }
