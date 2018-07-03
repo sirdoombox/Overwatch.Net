@@ -13,7 +13,7 @@ namespace Tests.Core.WebClient
 
         public MockProfileClient(OverwatchConfig config) : base(config)
         {
-            _mockData = new ProfileRequestData("https://playoverwatch.com/en-gb/career/pc/eu/SirDoombox-2603", File.ReadAllText("TestSource.txt"), Platform.Pc);
+            _mockData = new ProfileRequestData("https://playoverwatch.com/en-gb/career/pc/eu/moiph-1288", File.ReadAllText("TestSource.txt"), Platform.Pc);
         }
 
         internal override Task<ProfileRequestData> GetProfileExact(string username, Platform platform)

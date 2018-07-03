@@ -41,7 +41,7 @@ namespace OverwatchAPI
                 throw new ArgumentException("Not a valid XBL, PSN or Battlenet ID", nameof(username));
             var player = new Player { Username = username };
             var result = await _profileClient.GetProfileDetectPlatform(player);
-            return result == null ? null : await _profileParser.Parse(player, result);
+            return await _profileParser.Parse(player, result);
         }
 
         /// <summary>

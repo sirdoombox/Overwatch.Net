@@ -15,9 +15,10 @@ namespace OverwatchAPI.Parser
     {
         private readonly HtmlParser _parser = new HtmlParser();
 
-        internal static bool IsValidPlayerProfile(ProfileClient.ProfileRequestData pageData)
+        // todo: find a more concrete solution to this problem.
+        private static bool IsPlayerProfilePrivate(IHtmlDocument pageData)
         {
-            return !pageData.ReqContent.Contains("Profile Not Found");
+            return pageData.QuerySelector(".masthead-permission-level-text")?.TextContent == "Private Profile";
         }
 
         internal async Task<Player> Parse(Player player, ProfileClient.ProfileRequestData pageData)
@@ -27,15 +28,20 @@ namespace OverwatchAPI.Parser
                 player.ProfileUrl = pageData.ReqUrl;
                 player.CompetitiveRank = CompetitiveRank(doc);
                 player.CompetitiveRankImageUrl = CompetitiveRankImage(doc);
-                player.CompetitiveStats = Stats(doc, Mode.Competitive);
-                player.CasualStats = Stats(doc, Mode.Casual);
-                player.Achievements = Achievements(doc);
                 player.PlayerLevel = PlayerLevel(doc);
                 player.ProfilePortraitUrl = PortraitImage(doc);
                 player.PlayerLevelImage = PlayerLevelImage(doc);
                 player.Platform = pageData.PlayerPlatform;
                 player.EndorsementLevel = EndorsementLevel(doc);
                 player.Endorsements = Endorsements(doc);
+                if (IsPlayerProfilePrivate(doc))
+                {
+                    player.IsProfilePrivate = true;
+                    return player;
+                }
+                player.CompetitiveStats = Stats(doc, Mode.Competitive);
+                player.CasualStats = Stats(doc, Mode.Casual);
+                player.Achievements = Achievements(doc);
                 return player;
             }
         }

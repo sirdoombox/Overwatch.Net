@@ -1,10 +1,10 @@
 ﻿using OverwatchAPI.Config;
 using System;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using OverwatchAPI.Extensions;
-using OverwatchAPI.Parser;
 
 namespace OverwatchAPI.WebClient
 {
@@ -14,6 +14,7 @@ namespace OverwatchAPI.WebClient
 
         internal HttpProfileClient(OverwatchConfig config) : base(config)
         {
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls11;
             _client = new HttpClient
             {
                 BaseAddress = new Uri("https://playoverwatch.com/en-gb/career/")
@@ -47,10 +48,10 @@ namespace OverwatchAPI.WebClient
             using (var result = await _client.GetAsync(reqString))
             {
                 if (!result.IsSuccessStatusCode) return null;
+                if ((await result.Content.ReadAsStringAsync()).Contains("Profile Not Found")) return null;
                 var rsltContent = await result.Content.ReadAsStringAsync();
                 var rsltUrl = result.RequestMessage.RequestUri.ToString();
-                var rslt = new ProfileRequestData(rsltUrl, rsltContent,platform);
-                return ProfileParser.IsValidPlayerProfile(rslt) ? rslt : null;
+                return new ProfileRequestData(rsltUrl, rsltContent,platform);
             }
         }
     }

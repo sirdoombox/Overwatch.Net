@@ -13,6 +13,10 @@ namespace OverwatchAPI
         public string PlayerLevelImage { get; set; }
         public ushort CompetitiveRank { get; set; }
         public ushort EndorsementLevel { get; set; }
+        /// <summary>
+        /// If the players profile is private - No stats will be available.
+        /// </summary>
+        public bool IsProfilePrivate { get; set; }
         public List<Stat> CasualStats { get; set; }
         public List<Stat> CompetitiveStats { get; set; }
         public List<Stat> Endorsements { get; set; }

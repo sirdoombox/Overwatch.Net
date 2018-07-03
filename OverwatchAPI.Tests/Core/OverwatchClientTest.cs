@@ -15,8 +15,8 @@ namespace Tests.Core
             var mockWebClient = new MockProfileClient(config);
             using (var owClient = new OverwatchClient(mockWebClient, config))
             {
-                var result = await owClient.GetPlayerAsync("SirDoombox#2603");
-                Assert.Equal("https://playoverwatch.com/en-gb/career/pc/eu/SirDoombox-2603", result.ProfileUrl);
+                var result = await owClient.GetPlayerAsync("moiph#1288");
+                Assert.Equal("https://playoverwatch.com/en-gb/career/pc/eu/moiph-1288", result.ProfileUrl);
             }
         }
 
@@ -28,7 +28,7 @@ namespace Tests.Core
             var mockWebClient = new MockProfileClient(config);
             using (var owClient = new OverwatchClient(mockWebClient, config))
             {
-                await Assert.ThrowsAsync<ArgumentException>(async () => await owClient.GetPlayerAsync("SirDoombox#2603"));
+                await Assert.ThrowsAsync<ArgumentException>(async () => await owClient.GetPlayerAsync("moiph#1288"));
             }
         }
     }
