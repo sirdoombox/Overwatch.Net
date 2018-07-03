@@ -1,6 +1,6 @@
 # Overwatch.Net
 
-An unofficial player stats API for the Blizzard game "Overwatch" - Targetting .NET Standard 1.1 for maximum compatibility.
+An unofficial player stats API for the Blizzard game "Overwatch" - Targetting .NET Standard 2.0.
 
 [![Build status](https://ci.appveyor.com/api/projects/status/github/sirdoombox/overwatch.net?svg=true)](https://ci.appveyor.com/project/sirdoombox/overwatch-net)[![NuGet version](https://badge.fury.io/nu/Overwatch.Net.svg)](https://badge.fury.io/nu/Overwatch.Net)
 
@@ -12,7 +12,8 @@ A simple web scraper that grabs player stats from a users PlayOverwatch.com prof
 * Supports PC, Xbox 1 and Playstation 4 players.
 * Entirely async
 * Serializable - No complex data.
-* Region / Platform detection
+* Platform detection
+* Identifies and gracefully handles private profiles - parsing as much data as is available.
 
 ## Planned Features
 * None at the moment - Any feature requests will be placed here.
