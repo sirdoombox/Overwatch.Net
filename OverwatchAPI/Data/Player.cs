@@ -12,8 +12,10 @@ namespace OverwatchAPI
         public ushort PlayerLevel { get; set; }
         public string PlayerLevelImage { get; set; }
         public ushort CompetitiveRank { get; set; }
+        public ushort EndorsementLevel { get; set; }
         public List<Stat> CasualStats { get; set; }
         public List<Stat> CompetitiveStats { get; set; }
+        public List<Stat> Endorsements { get; set; }
         public List<Achievement> Achievements { get; set; }
         public string CompetitiveRankImageUrl { get; set; }
         public string ProfilePortraitUrl { get; set; }
