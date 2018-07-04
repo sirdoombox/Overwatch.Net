@@ -1,5 +1,4 @@
-﻿using OverwatchAPI.Config;
-using System;
+﻿using System;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -12,9 +11,10 @@ namespace OverwatchAPI.WebClient
     {
         private readonly HttpClient _client;
 
-        internal HttpProfileClient(OverwatchConfig config) : base(config)
+        internal HttpProfileClient()
         {
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls11;
+            // TODO: Figure out a way to support TLS 1.2 based on framework - 1.1 will have to do for now.
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11;
             _client = new HttpClient
             {
                 BaseAddress = new Uri("https://playoverwatch.com/en-gb/career/")
@@ -34,7 +34,7 @@ namespace OverwatchAPI.WebClient
         internal override async Task<ProfileRequestData> GetProfileDetectPlatform(string username)
         {
             if (username.IsValidBattletag()) return await GetProfileUrl($"pc/{username.BattletagToUrlFriendlyString()}", Platform.Pc);
-            foreach(var platform in _config.Platforms.Where(x => x != Platform.Pc))
+            foreach(var platform in Enum.GetValues(typeof(Platform)).Cast<Platform>().Where(x => x != Platform.Pc))
             {
                 var result = await GetProfileUrl($"{platform.ToLowerString()}/{username.BattletagToUrlFriendlyString()}", platform);
                 if (result == null) continue;

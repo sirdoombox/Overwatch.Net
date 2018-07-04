@@ -1,5 +1,5 @@
-﻿using OverwatchAPI.Config;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using OverwatchAPI.WebClient;
@@ -7,25 +7,40 @@ using OverwatchAPI.Parser;
 
 namespace OverwatchAPI
 {
+    /// <summary>
+    /// The client for making requests and receiving player data, if you plan to make multiple requests it is recommended to use only one instance.
+    /// Ensure that you dispose of this object when complete.
+    /// <see cref="IDisposable"/>
+    /// </summary>
     public sealed class OverwatchClient : IDisposable
     {
-        public OverwatchConfig Config { get; set; }
+        public IReadOnlyList<Platform> DetectedPlatforms { get; private set; }
 
         private readonly ProfileClient _profileClient;
         private readonly ProfileParser _profileParser;
 
-        public OverwatchClient(OverwatchConfig config = null)
+        /// <summary>
+        /// Create a new instance of the OverwatchClient.
+        /// </summary>
+        /// <param name="platforms">If you only wish to detect certain platforms, provide them here - otherwise all platforms will be used.</param>
+        public OverwatchClient(params Platform[] platforms)
         {
             _profileParser = new ProfileParser();
-            Config = config ?? new OverwatchConfig.Builder().Default();
-            _profileClient = new HttpProfileClient(Config);
+            _profileClient = new HttpProfileClient();
+            if (platforms == null || platforms.Length == 0)
+                DetectedPlatforms = Enum.GetValues(typeof(Platform)).Cast<Platform>().ToList();
+            else
+                DetectedPlatforms = platforms.Distinct().ToList();
         }
 
-        internal OverwatchClient(ProfileClient profileClient, OverwatchConfig config)
+        internal OverwatchClient(ProfileClient profileClient, params Platform[] platforms)
         {
             _profileClient = profileClient;
             _profileParser = new ProfileParser();
-            Config = config;
+            if (platforms == null || platforms.Length == 0)
+                DetectedPlatforms = Enum.GetValues(typeof(Platform)).Cast<Platform>().ToList();
+            else
+                DetectedPlatforms = platforms.Distinct().ToList();
         }
 
         /// <summary>
@@ -35,7 +50,7 @@ namespace OverwatchAPI
         /// <returns>A <see cref="Player"/> if it was succesfully found, otherwise returns null.</returns>
         public async Task<Player> GetPlayerAsync(string username)
         {
-            if (username.IsValidBattletag())
+            if (username.IsValidBattletag() && DetectedPlatforms.Contains(Platform.Pc))
                 return await GetPlayerAsync(username, Platform.Pc);
             if (!username.IsValidPsnId() && !username.IsValidXblId())
                 throw new ArgumentException("Not a valid XBL, PSN or Battlenet ID", nameof(username));
@@ -53,10 +68,12 @@ namespace OverwatchAPI
         /// <returns>A <see cref="Player"/> object if it was succesfully found, otherwise returns null.</returns>
         public async Task<Player> GetPlayerAsync(string username, Platform platform)
         {
-            if (!username.IsValidBattletag() && platform == Platform.Pc)
-                throw new ArgumentException("Not a valid battletag for the PC platform - valid example: Example#1234", nameof(username));
-            if (Config.Platforms.All(x => x != Platform.Pc) && username.IsValidBattletag())
-                throw new ArgumentException($"{username} is a PC username, however your config does not allow for PC.", nameof(username));
+            if (platform == Platform.Pc && !username.IsValidBattletag())
+                throw new ArgumentException($"{username} is not a valid BattleTag - valid example: Example#1234", nameof(username));
+            if (platform == Platform.Psn && !username.IsValidPsnId())
+                throw new ArgumentException($"{username} is not a valid PSN ID.", nameof(username));
+            if (platform == Platform.Xbl && !username.IsValidXblId())
+                throw new ArgumentException($"{username} is not a valid XBL ID.", nameof(username));
 
             var player = new Player()
             {

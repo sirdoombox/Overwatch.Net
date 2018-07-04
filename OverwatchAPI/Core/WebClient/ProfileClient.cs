@@ -1,18 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
-using OverwatchAPI.Config;
 
 namespace OverwatchAPI.WebClient
 {
     internal abstract class ProfileClient : IDisposable
     {
-        protected readonly OverwatchConfig _config;
-
-        protected ProfileClient(OverwatchConfig config)
-        {
-            _config = config;
-        }
-
         public virtual void Dispose() { }
 
         internal Task<ProfileRequestData> GetProfileExact(Player player) =>

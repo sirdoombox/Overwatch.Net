@@ -3,7 +3,6 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using OverwatchAPI;
-using OverwatchAPI.Config;
 
 namespace Tests.Core.WebClient
 {
@@ -11,7 +10,7 @@ namespace Tests.Core.WebClient
     {
         private readonly ProfileRequestData _mockData;
 
-        public MockProfileClient(OverwatchConfig config) : base(config)
+        public MockProfileClient()
         {
             _mockData = new ProfileRequestData("https://playoverwatch.com/en-gb/career/pc/eu/moiph-1288", File.ReadAllText("TestSource.txt"), Platform.Pc);
         }

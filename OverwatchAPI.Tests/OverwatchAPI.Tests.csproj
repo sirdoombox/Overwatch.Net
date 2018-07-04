@@ -59,7 +59,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Config\OverwatchConfigTest.cs" />
     <Compile Include="Core\OverwatchClientIntergrationTests.cs" />
     <Compile Include="Core\OverwatchClientTest.cs" />
     <Compile Include="Core\Parser\ProfileParserTest.cs" />
@@ -67,7 +66,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OverwatchAPI\OverwatchAPI.csproj">
