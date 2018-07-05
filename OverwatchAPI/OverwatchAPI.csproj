@@ -26,6 +26,7 @@
 
   <ItemGroup>
     <PackageReference Include="anglesharp" Version="0.9.9.2" />
+    <PackageReference Include="newtonsoft.json" Version="11.0.2" />
   </ItemGroup>
 
 </Project>

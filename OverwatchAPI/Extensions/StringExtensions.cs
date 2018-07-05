@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using System.Text.RegularExpressions;
+using OverwatchAPI.Extensions;
 
 namespace OverwatchAPI
 {
@@ -22,5 +24,12 @@ namespace OverwatchAPI
 
         internal static bool EqualsIgnoreCase(this string source, string toCompare) =>
             string.Equals(source, toCompare, StringComparison.OrdinalIgnoreCase);
+
+        internal static Platform PlatformStringToEnum(this string platformString)
+        {
+            return Enum.GetValues(typeof(Platform))
+                .Cast<Platform>()
+                .FirstOrDefault(platform => string.Equals(platformString.ToLower(), platform.ToLowerString()));
+        }
     }
 }

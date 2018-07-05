@@ -106,6 +106,32 @@ namespace OverwatchAPI
             return pageData == null ? null : await _profileParser.Parse(player, pageData);
         }
 
+        /// <summary>
+        /// Get the information about other profiles connected to this player
+        /// The player MUST have been loaded first with <see cref="GetPlayerAsync(string)"/> or <seealso cref="GetPlayerAsync(string,Platform)"/>
+        /// The player object will be updated, the <see cref="Player.OtherKnownProfiles"/> property of the player will be populated with data.
+        /// </summary>
+        /// <param name="player">A populated player profile.</param>
+        public async Task GetOtherProfileInfo(Player player)
+        {
+            player.OtherKnownProfiles = new Dictionary<Player.Alias, Player>();
+            var rslt = await _profileClient.GetAliases(player.PlayerId);
+            var profiles = rslt.Where(x => !string.Equals(x.platform, player.Platform.ToString(), StringComparison.OrdinalIgnoreCase));
+            foreach (var profile in profiles)
+            {
+                player.OtherKnownProfiles.Add(new Player.Alias()
+                {
+                    UrlName = profile.urlName,
+                    Username = profile.name,
+                    Platform = profile.platform.PlatformStringToEnum(),
+                    ProfileVisibility = 
+                        profile.visibility.isFriendsOnly ? Visibility.FriendsOnly 
+                        : profile.visibility.isPrivate ? Visibility.Private
+                        : Visibility.Public
+                }, null);
+            }
+        }
+
         public void Dispose() => _profileClient.Dispose();
     }
 }

@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using AngleSharp.Parser.Html;
 using System.Globalization;
+using System.Linq;
 using AngleSharp.Dom.Html;
 using System.Text.RegularExpressions;
+using AngleSharp.Extensions;
 using OverwatchAPI.Data;
 using OverwatchAPI.StaticResources;
 using OverwatchAPI.WebClient;
@@ -34,6 +36,7 @@ namespace OverwatchAPI.Parser
                 player.Platform = pageData.PlayerPlatform;
                 player.EndorsementLevel = EndorsementLevel(doc);
                 player.Endorsements = Endorsements(doc);
+                player.PlayerId = PlayerId(doc);
                 if (IsPlayerProfilePrivate(doc))
                 {
                     player.IsProfilePrivate = true;
@@ -47,6 +50,13 @@ namespace OverwatchAPI.Parser
         }
 
         private static readonly Regex PlayerLevelImageRegex = new Regex("(0x\\w*)(?=_)");
+        private static readonly Regex PlayerIdRegex = new Regex("\\d+");
+
+        private static string PlayerId(IHtmlDocument doc)
+        {
+            var lastScript = doc.QuerySelectorAll("script").Last().TextContent;
+            return PlayerIdRegex.Match(lastScript).Value;
+        }
 
         private static string PortraitImage(IHtmlDocument doc) => doc.QuerySelector(".player-portrait").GetAttribute("src");
 
@@ -102,6 +112,7 @@ namespace OverwatchAPI.Parser
                     });
                 }
             }
+
             return contents;
         }
 
@@ -122,7 +133,7 @@ namespace OverwatchAPI.Parser
                         var className = endorsement.GetAttribute("class");
                         // parse the endorsement type out of the class name
                         const string endorsementTypeSeparator = "--";
-                        var endorsementName = className.Substring(className.IndexOf(endorsementTypeSeparator) + endorsementTypeSeparator.Length);
+                        var endorsementName = className.Substring(className.IndexOf(endorsementTypeSeparator, StringComparison.Ordinal) + endorsementTypeSeparator.Length);
 
                         contents.Add(new Stat
                         {
@@ -136,6 +147,26 @@ namespace OverwatchAPI.Parser
             }
 
             return contents;
+        }
+
+        private static List<Platform> Platforms(IHtmlDocument doc)
+        {
+            var platformDiv = doc.QuerySelector("#profile-platforms");
+            if (platformDiv == null) return null;
+            var platforms = new List<Platform>();
+            var html = platformDiv.ToHtml();
+            foreach (var platform in platformDiv.QuerySelectorAll("a[href]"))
+            {
+                var platformString = platform.TextContent;
+                if(string.Equals(platformString, Platform.Pc.ToString(), StringComparison.OrdinalIgnoreCase))
+                    platforms.Add(Platform.Pc);
+                if (string.Equals(platformString, Platform.Psn.ToString(), StringComparison.OrdinalIgnoreCase))
+                    platforms.Add(Platform.Psn);
+                if (string.Equals(platformString, Platform.Xbl.ToString(), StringComparison.OrdinalIgnoreCase))
+                    platforms.Add(Platform.Xbl);
+            }
+
+            return platforms;
         }
 
         private static List<Stat> Stats(IHtmlDocument doc, Mode mode)
@@ -180,6 +211,7 @@ namespace OverwatchAPI.Parser
                     }
                 }
             }
+
             return contents;
         }
 
@@ -200,6 +232,7 @@ namespace OverwatchAPI.Parser
 
         private static string ParseHeroName(string input)
         {
+            // todo: This is disgusting I don't know how this line has survived so long.
             return input.ToLower() == "all heroes" ? "AllHeroes" : input.Replace("ú", "u").Replace(":", "").Replace(" ", "").Replace("ö", "o").Replace(".", "");
         }
 

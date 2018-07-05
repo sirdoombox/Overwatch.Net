@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using OverwatchAPI.Extensions;
 
 namespace OverwatchAPI.WebClient
@@ -13,8 +15,9 @@ namespace OverwatchAPI.WebClient
 
         internal HttpProfileClient()
         {
-            // TODO: Figure out a way to support TLS 1.2 based on framework - 1.1 will have to do for now.
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11;
+            // TODO: Keep an eye on this to see if TLS 1.2 support makes it's way into older framework versions - seems unlikely though.
+            try { ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12; }
+            catch { ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11; }
             _client = new HttpClient
             {
                 BaseAddress = new Uri("https://playoverwatch.com/en-gb/career/")
@@ -48,10 +51,21 @@ namespace OverwatchAPI.WebClient
             using (var result = await _client.GetAsync(reqString))
             {
                 if (!result.IsSuccessStatusCode) return null;
-                if ((await result.Content.ReadAsStringAsync()).Contains("Profile Not Found")) return null;
                 var rsltContent = await result.Content.ReadAsStringAsync();
+                if (rsltContent.Contains("Profile Not Found")) return null;
                 var rsltUrl = result.RequestMessage.RequestUri.ToString();
                 return new ProfileRequestData(rsltUrl, rsltContent,platform);
+            }
+        }
+
+        internal override async Task<List<Alias>> GetAliases(string id)
+        {
+            var anus = _client.BaseAddress + $"platforms/{id}";
+            using (var result = await _client.GetAsync($"platforms/{id}"))
+            {
+                if (!result.IsSuccessStatusCode) return null;
+                var jsonText = await result.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<List<Alias>>(jsonText);
             }
         }
     }
