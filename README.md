@@ -14,12 +14,14 @@ A simple web scraper that grabs player stats from a users PlayOverwatch.com prof
 * Serializable - No complex data.
 * Platform detection
 * Identifies and gracefully handles private profiles - parsing as much data as is available.
+* Finding player aliases where a player plays on multiple platforms.
 
 ## Planned Features
-* None at the moment - Any feature requests will be placed here.
+* None at the moment - Any feature requests will be placed here, however new features do make themselves into the library from time to time.
 
 ## Dependencies
 * AngleSharp - Used to parse the data from the PlayOverwatch page as no other data source is available from Blizzard.
+* Newtonsoft.Json - Used to parse XHR requests for player aliases.
 
 ## Usage
 ```csharp
