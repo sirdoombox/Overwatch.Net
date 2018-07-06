@@ -112,14 +112,19 @@ namespace OverwatchAPI
         /// The player object will be updated, the <see cref="Player.OtherKnownProfiles"/> property of the player will be populated with data.
         /// </summary>
         /// <param name="player">A populated player profile.</param>
-        public async Task GetOtherProfileInfo(Player player)
+        public async Task GetAliasesAsync(Player player)
         {
-            player.OtherKnownProfiles = new Dictionary<Player.Alias, Player>();
+            if(player == null)
+                throw new ArgumentNullException(nameof(player));
+            if(string.IsNullOrWhiteSpace(player.ProfileUrl))
+                throw new ArgumentException("Player has not had their profile loaded", nameof(player));
+            
+            player.Aliases = new List<Player.Alias>();
             var rslt = await _profileClient.GetAliases(player.PlayerId);
             var profiles = rslt.Where(x => !string.Equals(x.platform, player.Platform.ToString(), StringComparison.OrdinalIgnoreCase));
             foreach (var profile in profiles)
             {
-                player.OtherKnownProfiles.Add(new Player.Alias()
+                player.Aliases.Add(new Player.Alias()
                 {
                     UrlName = profile.urlName,
                     Username = profile.name,
@@ -128,9 +133,30 @@ namespace OverwatchAPI
                         profile.visibility.isFriendsOnly ? Visibility.FriendsOnly 
                         : profile.visibility.isPrivate ? Visibility.Private
                         : Visibility.Public
-                }, null);
+                });
             }
         }
+
+        /// <summary>
+        /// Load any other profiles associated with the player
+        /// The player MUST have had their Aliases populated via <see cref="GetAliasesAsync(Player)"/> first.
+        /// </summary>
+        /// <param name="player">A loaded player profile that has been passed through <see cref="GetAliasesAsync(Player)"/></param>
+        /// <returns>A List of player profiles connected with the given player, or null if no other profiles are found.</returns>
+        public async Task<List<Player>> GetOtherProfilesAsync(Player player)
+        {
+            if (player.Aliases == null)
+                throw new ArgumentException("Player has no aliases loaded, use GetAliasesAsync first.", nameof(player));
+            if (player.Aliases.Count == 0)
+                return null;
+            var profiles = new List<Player>();
+            foreach (var alias in player.Aliases)
+                profiles.Add(await GetOtherProfileFromAliasAsync(alias));
+            return profiles;
+        }
+
+        public async Task<Player> GetOtherProfileFromAliasAsync(Player.Alias playerAlias) =>
+            await GetPlayerAsync(playerAlias.Username, playerAlias.Platform);
 
         public void Dispose() => _profileClient.Dispose();
     }

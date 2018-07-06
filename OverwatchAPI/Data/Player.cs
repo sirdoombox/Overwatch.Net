@@ -13,11 +13,11 @@ namespace OverwatchAPI
         /// </summary>
         public Platform Platform { get; set; }
         /// <summary>
-        /// If a player has profiles on other systems they can be gathered using <see cref="OverwatchClient.GetOtherProfileInfo(Player)"/>
+        /// If a player has profiles on other systems they can be gathered using <see cref="OverwatchClient.GetAliasesAsync"/>
         /// The keys will be populated by gathering profile info (if there are any other profiles
         /// The values will be only populated if you use "GetOtherProfiles" method of <see cref="OverwatchClient"/>
         /// </summary>
-        public Dictionary<Alias,Player> OtherKnownProfiles { get; set; }
+        public List<Alias> Aliases { get; set; }
 
         /// <summary>
         /// Hidden Blizzard ID for the player - this ties accounts on seperate platforms together.
