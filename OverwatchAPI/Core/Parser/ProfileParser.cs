@@ -116,9 +116,9 @@ namespace OverwatchAPI.Parser
             return contents;
         }
 
-        private static List<Stat> Endorsements(IHtmlDocument doc)
+        private static Dictionary<Endorsement, decimal> Endorsements(IHtmlDocument doc)
         {
-            var contents = new List<Stat>();
+            var contents = new Dictionary<Endorsement, decimal>();
 
             var innerContent = doc.QuerySelector("div.endorsement-level");
 
@@ -134,18 +134,10 @@ namespace OverwatchAPI.Parser
                         // parse the endorsement type out of the class name
                         const string endorsementTypeSeparator = "--";
                         var endorsementName = className.Substring(className.IndexOf(endorsementTypeSeparator, StringComparison.Ordinal) + endorsementTypeSeparator.Length);
-
-                        contents.Add(new Stat
-                        {
-                            HeroName = "AllHeroes",
-                            CategoryName = "Endorsements",
-                            Name = ParseEndorsementName(endorsementName),
-                            Value = OwValToDouble(dataValue),
-                        });
+                        contents.Add(ParseEndorsementName(endorsementName), decimal.Parse(dataValue));
                     }
                 }
             }
-
             return contents;
         }
 
@@ -236,19 +228,19 @@ namespace OverwatchAPI.Parser
             return input.ToLower() == "all heroes" ? "AllHeroes" : input.Replace("ú", "u").Replace(":", "").Replace(" ", "").Replace("ö", "o").Replace(".", "");
         }
 
-        private static string ParseEndorsementName(string input)
+        private static Endorsement ParseEndorsementName(string input)
         {
             switch (input)
             {
                 case "teammate":
-                    return "GoodTeammate";
+                    return Endorsement.GoodTeammate;
                 case "sportsmanship":
-                    return "Sportsmanship";
+                    return Endorsement.Sportsmanship;
                 case "shotcaller":
-                    return "ShotCaller";
+                    return Endorsement.Shotcaller;
+                default:
+                    return Endorsement.GoodTeammate;
             }
-
-            return input;
         }
     }
 }

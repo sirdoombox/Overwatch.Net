@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
 using OverwatchAPI.Data;
 
 namespace OverwatchAPI
@@ -29,12 +28,15 @@ namespace OverwatchAPI
         public ushort CompetitiveRank { get; set; }
         public ushort EndorsementLevel { get; set; }
         /// <summary>
+        /// Player endorsements are represented as a percentage - all numbers in here should add up to 1.
+        /// </summary>
+        public Dictionary<Endorsement, decimal> Endorsements { get; set; }
+        /// <summary>
         /// If the players profile is private - No stats/achievements will be available.
         /// </summary>
         public bool IsProfilePrivate { get; set; }
         public List<Stat> CasualStats { get; set; }
         public List<Stat> CompetitiveStats { get; set; }
-        public List<Stat> Endorsements { get; set; }
         public List<Achievement> Achievements { get; set; }
         public string CompetitiveRankImageUrl { get; set; }
         public string ProfilePortraitUrl { get; set; }        

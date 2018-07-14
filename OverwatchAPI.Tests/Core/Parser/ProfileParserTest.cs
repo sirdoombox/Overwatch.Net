@@ -26,15 +26,15 @@ namespace Tests.Core.Parser
 
         [Fact]
         public void Parsed_Profile_PlayerLevel_Should_Be_Correct() => 
-            Assert.Equal(860, _testPlayer.PlayerLevel);
+            Assert.Equal(867, _testPlayer.PlayerLevel);
 
         [Fact]
         public void Parsed_Profile_EndorsementLevel_Should_Be_Correct() =>
-            Assert.Equal(1, _testPlayer.EndorsementLevel);
+            Assert.Equal(2, _testPlayer.EndorsementLevel);
 
         [Fact]
         public void Parsed_Profile_EndorsementStats_Should_Be_Correct() =>
-            Assert.Equal(27, _testPlayer.Endorsements.GetStatExact("AllHeroes", "Endorsements", "GoodTeammate").Value);
+            Assert.Equal(0.6111111111111112m, _testPlayer.Endorsements[Endorsement.GoodTeammate]);
 
         [Fact]
         public void Parsed_Profile_CompetitiveRank_Should_Be_Correct() => 
@@ -42,7 +42,7 @@ namespace Tests.Core.Parser
 
         [Fact]
         public void Parsed_Profile_CasualStats_Should_Be_Correct() => 
-            Assert.Equal(2557735, _testPlayer.CasualStats.GetStatExact("All Heroes", "Assists", "Healing Done").Value);
+            Assert.Equal(2576219, _testPlayer.CasualStats.GetStatExact("AllHeroes", "Assists", "Healing Done").Value);
 
         [Fact]
         public void Parsed_Profile_CompetitiveStats_Should_Be_Correct() => 
@@ -65,6 +65,6 @@ namespace Tests.Core.Parser
 
         [Fact]
         public void Parsed_Profile_PlayerLevelImage_Should_Be_Correct() => 
-            Assert.Equal("https://d1u1mce87gyfbn.cloudfront.net/game/playerlevelrewards/0x0250000000000973_Border.png", _testPlayer.PlayerLevelImage);
+            Assert.Equal("https://d1u1mce87gyfbn.cloudfront.net/game/playerlevelrewards/0x0250000000000974_Border.png", _testPlayer.PlayerLevelImage);
     }
 }

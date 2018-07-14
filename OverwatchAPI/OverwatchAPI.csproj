@@ -2,14 +2,13 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>4.1</Version>
-    <PackageVersion>4.1</PackageVersion>
+    <Version>4.2</Version>
+    <PackageVersion>4.2</PackageVersion>
     <Authors>Doombox</Authors>
     <Company />
     <Description>An unofficial player stats API targetting .NET Standard 2.0 - Written in C#.</Description>
     <PackageReleaseNotes>
-      - Fixed TLS 1.2 and 1.1 support.
-      - Addition of aliases and loading profiles from aliases.
+      - Fix endorsements change, moved to new property and clarified documentation.
     </PackageReleaseNotes>
     <Copyright>Copyright © 2018 Doombox</Copyright>
     <PackageId>Overwatch.Net</PackageId>
