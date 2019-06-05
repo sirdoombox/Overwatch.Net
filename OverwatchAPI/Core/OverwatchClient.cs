@@ -129,10 +129,7 @@ namespace OverwatchAPI
                     UrlName = profile.urlName,
                     Username = profile.name,
                     Platform = profile.platform.PlatformStringToEnum(),
-                    ProfileVisibility = 
-                        profile.visibility.isFriendsOnly ? Visibility.FriendsOnly 
-                        : profile.visibility.isPrivate ? Visibility.Private
-                        : Visibility.Public
+                    ProfileVisibility = profile.isPublic ? Visibility.Public : Visibility.Private
                 });
             }
         }

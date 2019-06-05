@@ -188,7 +188,7 @@ namespace OverwatchAPI.Parser
             {
                 var catId = section.GetAttribute("data-category-id");
                 var heroName = idDictionary[catId];
-                foreach (var table in section.QuerySelectorAll($"div[data-category-id='{catId}'] table.data-table"))
+                foreach (var table in section.QuerySelectorAll($"div[data-category-id='{catId}'] table.DataTable"))
                 {
                     var catName = table.QuerySelector("thead").TextContent;
                     foreach (var row in table.QuerySelectorAll("tbody tr"))
