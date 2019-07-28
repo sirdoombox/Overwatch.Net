@@ -224,7 +224,6 @@ namespace OverwatchAPI.Parser
             var parts = input.Split(':');
             if (parts.Length == 3 && int.TryParse(parts[0], out var hours) && int.TryParse(parts[1], out var minutes) && int.TryParse(parts[2], out var seconds))
             {
-                
                 return new TimeSpan(hours, minutes, seconds).TotalSeconds;
             }
 
