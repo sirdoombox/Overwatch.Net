@@ -10,7 +10,7 @@ namespace Tests.Core.Parser
     public class ProfileParserTest
     {
         // These tests are run on the source from this page: http://playoverwatch.com/en-us/career/pc/moiph-1288
-        // The source of the page was downloaded and stored on 02/07/2018
+        // The source of the page was downloaded and stored on 07/10/2018
         // Will serve as the basis for parser tests barring a more reliable solution.
 
         private static readonly Player _testPlayer;
@@ -26,27 +26,27 @@ namespace Tests.Core.Parser
 
         [Fact]
         public void Parsed_Profile_PlayerLevel_Should_Be_Correct() => 
-            Assert.Equal(867, _testPlayer.PlayerLevel);
+            Assert.Equal(19, _testPlayer.PlayerLevel);
 
         [Fact]
         public void Parsed_Profile_EndorsementLevel_Should_Be_Correct() =>
-            Assert.Equal(2, _testPlayer.EndorsementLevel);
+            Assert.Equal(3, _testPlayer.EndorsementLevel);
 
         [Fact]
         public void Parsed_Profile_EndorsementStats_Should_Be_Correct() =>
-            Assert.Equal(0.6111111111111112m, _testPlayer.Endorsements[Endorsement.GoodTeammate]);
+            Assert.Equal(0.53m, _testPlayer.Endorsements[Endorsement.GoodTeammate]);
 
         [Fact]
         public void Parsed_Profile_CompetitiveRank_Should_Be_Correct() => 
-            Assert.Equal(2377, _testPlayer.CompetitiveRank);
+            Assert.Equal(0, _testPlayer.CompetitiveRank);
 
         [Fact]
         public void Parsed_Profile_CasualStats_Should_Be_Correct() => 
-            Assert.Equal(2576219, _testPlayer.CasualStats.GetStatExact("AllHeroes", "Assists", "Healing Done").Value);
+            Assert.Equal(3342873, _testPlayer.CasualStats.GetStatExact("AllHeroes", "Assists", "Healing Done").Value);
 
         [Fact]
         public void Parsed_Profile_CompetitiveStats_Should_Be_Correct() => 
-            Assert.Equal(1560, _testPlayer.CompetitiveStats.GetStatExact("Lucio", "Game", "Time Played").Value);
+            Assert.Equal(1957, _testPlayer.CompetitiveStats.GetStatExact("Lucio", "Game", "Time Played").Value);
 
         [Fact]
         public void Parsed_Profile_Achievements_Should_Be_Correct()
@@ -57,14 +57,14 @@ namespace Tests.Core.Parser
 
         [Fact]
         public void Parsed_Profile_PortraitImage_Should_Be_Correct() => 
-            Assert.Equal("https://assets.webn.mobi/overwatch/5122deb567422e30496f656856f70d028bfc70a89eaa28d8ea662308b5df42fa.png", _testPlayer.ProfilePortraitUrl);
+            Assert.Equal("https://d15f34w2p8l1cc.cloudfront.net/overwatch/70652fca537bcd2aef36608fb308353c9004961672f83929ad949095e2192d3b.png", _testPlayer.ProfilePortraitUrl);
 
         [Fact]
         public void Parsed_Profile_CompetitiveRankImage_Should_Be_Correct() => 
-            Assert.Equal("https://d1u1mce87gyfbn.cloudfront.net/game/rank-icons/season-2/rank-3.png", _testPlayer.CompetitiveRankImageUrl);
+            Assert.Equal("", _testPlayer.CompetitiveRankImageUrl);
 
         [Fact]
         public void Parsed_Profile_PlayerLevelImage_Should_Be_Correct() => 
-            Assert.Equal("https://d1u1mce87gyfbn.cloudfront.net/game/playerlevelrewards/0x0250000000000974_Border.png", _testPlayer.PlayerLevelImage);
+            Assert.Equal("https://d15f34w2p8l1cc.cloudfront.net/overwatch/7fd73e680007054dbb8ac5ea8757a565858b9d7dba19f389228101bda18f36b0.png", _testPlayer.PlayerLevelImage);
     }
 }
