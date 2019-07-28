@@ -222,10 +222,10 @@ namespace OverwatchAPI.Parser
 
             // hours may be greater than 24, and TryParseExact will fail on that
             var parts = input.Split(':');
-            if (parts.Length == 3)
+            if (parts.Length == 3 && int.TryParse(parts[0], out var hours) && int.TryParse(parts[1], out var minutes) && int.TryParse(parts[2], out var seconds))
             {
-                var timeSpan = new TimeSpan(int.Parse(parts[0]), int.Parse(parts[1]), int.Parse(parts[2]));
-                return timeSpan.TotalSeconds;
+                
+                return new TimeSpan(hours, minutes, seconds).TotalSeconds;
             }
 
             return double.TryParse(input.Replace(",", "").Replace("%", ""), out var rslt2) ? rslt2 : 0;
