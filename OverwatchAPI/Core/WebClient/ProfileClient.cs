@@ -48,7 +48,7 @@ namespace OverwatchAPI.WebClient
             public int id { get; set; }
             public string name { get; set; }
             public string urlName { get; set; }
-            public Visibility visibility { get; set; }
+            public bool isPublic { get; set; }
         }
     }
 }

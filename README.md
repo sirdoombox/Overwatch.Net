@@ -42,6 +42,6 @@ using(var owClient = new OverwatchClient()) // Initialising without an "Overwatc
 NOTE: If you plan on making many requests over the lifetime of your application, I recommend keeping an instance of `OverwatchClient` around and disposing of it explicitly later.
 
 ## Contact
-If you wish to contact me about contributing to the project, or have any questions / suggestions please feel free to come find me on the [C# discord server.](https://discord.gg/0np62rq4o8GnQO9l "C# Discord") - @Doombox#0661
+If you wish to contact me about contributing to the project, or have any questions / suggestions please feel free to come find me on the [C# discord server.](https://discordapp.com/invite/ccyrDKv "C# Discord") - @Doombox#0661
 
 Please report any issues or bugs that you may find at your earliest convenience so I can get them fixed ASAP.

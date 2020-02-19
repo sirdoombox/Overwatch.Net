@@ -85,7 +85,7 @@ namespace OverwatchAPI.Parser
         {
             var str = doc.QuerySelector("div.player-level").GetAttribute("style");
             var startIndex = str.IndexOf('(') + 1;
-            return str.Substring(startIndex, str.IndexOf(')') - startIndex);
+            return str.Substring(startIndex, str.IndexOf(')') - startIndex).Trim();
         }
 
         private static ushort EndorsementLevel(IHtmlDocument doc)
@@ -176,7 +176,7 @@ namespace OverwatchAPI.Parser
             }
             var innerContent = doc.QuerySelector($"div[id='{divModeId}']");
             var idDictionary = new Dictionary<string, string>();
-            foreach (var dropdownitem in innerContent.QuerySelectorAll("select > option"))
+            foreach (var dropdownitem in innerContent.QuerySelectorAll("select[data-group-id='stats'] > option"))
             {
                 var id = dropdownitem.GetAttribute("value");
                 if (id.StartsWith("0x0"))
@@ -188,7 +188,7 @@ namespace OverwatchAPI.Parser
             {
                 var catId = section.GetAttribute("data-category-id");
                 var heroName = idDictionary[catId];
-                foreach (var table in section.QuerySelectorAll($"div[data-category-id='{catId}'] table.data-table"))
+                foreach (var table in section.QuerySelectorAll($"div[data-category-id='{catId}'] table.DataTable"))
                 {
                     var catName = table.QuerySelector("thead").TextContent;
                     foreach (var row in table.QuerySelectorAll("tbody tr"))
@@ -219,6 +219,14 @@ namespace OverwatchAPI.Parser
                 return outputTime.TotalSeconds;
             if (TimeSpan.TryParseExact(input, @"hh\:mm\:ss", CultureInfo.CurrentCulture, out var outputTime1))
                 return outputTime1.TotalSeconds;
+
+            // hours may be greater than 24, and TryParseExact will fail on that
+            var parts = input.Split(':');
+            if (parts.Length == 3 && int.TryParse(parts[0], out var hours) && int.TryParse(parts[1], out var minutes) && int.TryParse(parts[2], out var seconds))
+            {
+                return new TimeSpan(hours, minutes, seconds).TotalSeconds;
+            }
+
             return double.TryParse(input.Replace(",", "").Replace("%", ""), out var rslt2) ? rslt2 : 0;
         }
 
