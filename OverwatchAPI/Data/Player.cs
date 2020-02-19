@@ -46,7 +46,6 @@ namespace OverwatchAPI
             public Platform Platform { get; set; }
             public string Username { get; set; }
             internal string UrlName;
-            public bool IsPublic { get; set; }
         }
     }
 }

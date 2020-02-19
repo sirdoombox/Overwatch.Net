@@ -57,11 +57,12 @@ namespace OverwatchAPI.WebClient
                 return new ProfileRequestData(rsltUrl, rsltContent,platform);
             }
         }
-
+        
         internal override async Task<List<Alias>> GetAliases(string id)
         {
-            var anus = _client.BaseAddress + $"platforms/{id}";
-            using (var result = await _client.GetAsync($"platforms/{id}"))
+            throw new Exception($"Called an obsolete method - {nameof(GetAliases)}");
+            var url = _client.BaseAddress + $"platforms/{id}";
+            using (var result = await _client.GetAsync(url))
             {
                 if (!result.IsSuccessStatusCode) return null;
                 var jsonText = await result.Content.ReadAsStringAsync();

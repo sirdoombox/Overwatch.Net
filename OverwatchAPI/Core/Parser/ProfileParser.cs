@@ -37,6 +37,7 @@ namespace OverwatchAPI.Parser
                 player.EndorsementLevel = EndorsementLevel(doc);
                 player.Endorsements = Endorsements(doc);
                 player.PlayerId = PlayerId(doc);
+                player.Aliases = Aliases(doc);
                 if (IsPlayerProfilePrivate(doc))
                 {
                     player.IsProfilePrivate = true;
@@ -141,21 +142,26 @@ namespace OverwatchAPI.Parser
             return contents;
         }
 
-        private static List<Platform> Platforms(IHtmlDocument doc)
+        private static List<Player.Alias> Aliases(IHtmlDocument doc)
         {
             var platformDiv = doc.QuerySelector("#profile-platforms");
             if (platformDiv == null) return null;
-            var platforms = new List<Platform>();
+            var platforms = new List<Player.Alias>();
             var html = platformDiv.ToHtml();
-            foreach (var platform in platformDiv.QuerySelectorAll("a[href]"))
+            foreach (var platform in platformDiv.QuerySelectorAll(".masthead-buttons.button-group.js-button-group").Children(":not(.is-active)"))
             {
+                var newAlias = new Player.Alias();
                 var platformString = platform.TextContent;
+                var url = platform.GetAttribute("href");
+                newAlias.UrlName = url.Substring(url.LastIndexOf('/')+1);
+                newAlias.Username = newAlias.UrlName.Replace('-', '#');
                 if(string.Equals(platformString, Platform.Pc.ToString(), StringComparison.OrdinalIgnoreCase))
-                    platforms.Add(Platform.Pc);
+                    newAlias.Platform = Platform.Pc;
                 if (string.Equals(platformString, Platform.Psn.ToString(), StringComparison.OrdinalIgnoreCase))
-                    platforms.Add(Platform.Psn);
+                    newAlias.Platform = Platform.Psn;
                 if (string.Equals(platformString, Platform.Xbl.ToString(), StringComparison.OrdinalIgnoreCase))
-                    platforms.Add(Platform.Xbl);
+                    newAlias.Platform = Platform.Xbl;
+                platforms.Add(newAlias);
             }
 
             return platforms;

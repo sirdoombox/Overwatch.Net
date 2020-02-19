@@ -112,8 +112,10 @@ namespace OverwatchAPI
         /// The player object will be updated, the <see cref="Player.OtherKnownProfiles"/> property of the player will be populated with data.
         /// </summary>
         /// <param name="player">A populated player profile.</param>
+        [Obsolete("No longer a valid way to get player aliases. - Throws exception on being called.")]
         public async Task GetAliasesAsync(Player player)
         {
+            throw new Exception($"Called obsolete method - {nameof(GetAliasesAsync)}");
             if(player == null)
                 throw new ArgumentNullException(nameof(player));
             if(string.IsNullOrWhiteSpace(player.ProfileUrl))
@@ -128,8 +130,7 @@ namespace OverwatchAPI
                 {
                     UrlName = profile.urlName,
                     Username = profile.name,
-                    Platform = profile.platform.PlatformStringToEnum(),
-                    IsPublic = profile.isPublic,
+                    Platform = profile.platform.PlatformStringToEnum()
                 });
             }
         }

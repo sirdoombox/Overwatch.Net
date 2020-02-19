@@ -22,7 +22,6 @@ namespace Tests.Core
             Assert.Equal(cootesPsnUrl, result.ProfileUrl);
             Assert.Equal(Platform.Psn, result.Platform);
             Assert.True(result.IsProfilePrivate);
-            await Client.GetAliasesAsync(result);
             Assert.Contains(result.Aliases, x => x.Platform == Platform.Pc);
             var otherProfiles = await Client.GetOtherProfilesAsync(result);
             Assert.NotEmpty(otherProfiles);
