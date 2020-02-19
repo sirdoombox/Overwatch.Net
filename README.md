@@ -1,3 +1,5 @@
+# NO LONGER MAINTAINED - If anyone wants to take over, please feel free to contact me.
+
 # Overwatch.Net
 
 An unofficial player stats API for the Blizzard game "Overwatch" - Targetting .NET Standard 2.0.
